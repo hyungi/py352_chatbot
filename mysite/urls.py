@@ -1,0 +1,32 @@
+"""mysite URL Configuration
+
+The `urlpatterns` list routes URLs to views. For more information please see:
+    https://docs.djangoproject.com/en/2.0/topics/http/urls/
+Examples:
+Function views
+    1. Add an import:  from my_app import views
+    2. Add a URL to urlpatterns:  path('', views.home, name='home')
+Class-based views
+    1. Add an import:  from other_app.views import Home
+    2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')
+Including another URLconf
+    1. Import the include() function: from django.urls import include, path
+    2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
+"""
+
+from django.conf.urls import url
+from crawler import saveNews
+from django.contrib import admin
+from article import views, answers
+from django.contrib.staticfiles.urls import staticfiles_urlpatterns
+urlpatterns = [
+
+    url(r'^crawler/', saveNews.startcrawling),
+    url(r'^keyboard/', views.keyboard),
+    url(r'^message', answers.message),
+    url(r'^admin/', admin.site.urls),
+    url(r'^friend$', views.add_friend),
+    url(r'^friend/(?P<user_key>\w+)$', views.del_friend),
+
+]
+urlpatterns += staticfiles_urlpatterns()

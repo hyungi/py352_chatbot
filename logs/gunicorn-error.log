@@ -1,0 +1,372 @@
+[2018-01-25 01:59:00 +0900] [13394] [DEBUG] Current configuration:
+  post_worker_init: <function PostWorkerInit.post_worker_init at 0x1106506a8>
+  proc_name: None
+  threads: 1
+  syslog_prefix: None
+  certfile: None
+  raw_paste_global_conf: []
+  on_reload: <function OnReload.on_reload at 0x110650048>
+  reload_engine: auto
+  tmp_upload_dir: None
+  graceful_timeout: 30
+  pre_fork: <function Prefork.pre_fork at 0x110650378>
+  user: 501
+  keepalive: 2
+  logger_class: gunicorn.glogging.Logger
+  backlog: 2048
+  pre_request: <function PreRequest.pre_request at 0x110650d08>
+  workers: 5
+  pre_exec: <function PreExec.pre_exec at 0x110650b70>
+  keyfile: None
+  enable_stdio_inheritance: False
+  on_starting: <function OnStarting.on_starting at 0x110643e18>
+  default_proc_name: mysite.wsgi
+  raw_env: []
+  pidfile: None
+  worker_tmp_dir: None
+  nworkers_changed: <function NumWorkersChanged.nworkers_changed at 0x110657378>
+  loglevel: debug
+  syslog: False
+  worker_class: sync
+  max_requests_jitter: 0
+  statsd_prefix: 
+  suppress_ragged_eofs: True
+  config: gunicorn.conf.py
+  logconfig: None
+  ssl_version: 2
+  preload_app: False
+  forwarded_allow_ips: ['127.0.0.1']
+  syslog_facility: user
+  check_config: False
+  paste: None
+  limit_request_field_size: 8190
+  proxy_allow_ips: ['127.0.0.1']
+  do_handshake_on_connect: False
+  access_log_format: %(h)s %(l)s %(u)s %(t)s "%(r)s" %(s)s %(b)s "%(f)s" "%(a)s"
+  capture_output: False
+  sendfile: None
+  group: 20
+  umask: 0
+  worker_abort: <function WorkerAbort.worker_abort at 0x1106509d8>
+  syslog_addr: unix:///var/run/syslog
+  on_exit: <function OnExit.on_exit at 0x110657510>
+  limit_request_line: 4094
+  worker_connections: 1000
+  chdir: /Users/seonghyeongi/python_projects/py352_chatbot
+  initgroups: False
+  pythonpath: None
+  proxy_protocol: False
+  accesslog: /Users/seonghyeongi/python_projects/py352_chatbot/logs/gunicorn-access.log
+  ciphers: TLSv1
+  errorlog: /Users/seonghyeongi/python_projects/py352_chatbot/logs/gunicorn-error.log
+  statsd_host: None
+  spew: False
+  timeout: 30
+  worker_int: <function WorkerInt.worker_int at 0x110650840>
+  bind: ['127.0.0.1:9000']
+  secure_scheme_headers: {'X-FORWARDED-PROTO': 'https', 'X-FORWARDED-SSL': 'on', 'X-FORWARDED-PROTOCOL': 'ssl'}
+  ca_certs: None
+  daemon: False
+  when_ready: <function WhenReady.when_ready at 0x1106501e0>
+  post_fork: <function Postfork.post_fork at 0x110650510>
+  limit_request_fields: 100
+  post_request: <function PostRequest.post_request at 0x110650e18>
+  cert_reqs: 0
+  worker_exit: <function WorkerExit.worker_exit at 0x1106571e0>
+  max_requests: 0
+  reload: False
+  child_exit: <function ChildExit.child_exit at 0x110657048>
+[2018-01-25 01:59:00 +0900] [13394] [INFO] Starting gunicorn 19.7.1
+[2018-01-25 01:59:00 +0900] [13394] [DEBUG] Arbiter booted
+[2018-01-25 01:59:00 +0900] [13394] [INFO] Listening at: http://127.0.0.1:9000 (13394)
+[2018-01-25 01:59:00 +0900] [13394] [INFO] Using worker: sync
+[2018-01-25 01:59:00 +0900] [13397] [INFO] Booting worker with pid: 13397
+[2018-01-25 01:59:00 +0900] [13398] [INFO] Booting worker with pid: 13398
+[2018-01-25 01:59:00 +0900] [13399] [INFO] Booting worker with pid: 13399
+[2018-01-25 01:59:01 +0900] [13400] [INFO] Booting worker with pid: 13400
+[2018-01-25 01:59:01 +0900] [13401] [INFO] Booting worker with pid: 13401
+[2018-01-25 01:59:01 +0900] [13394] [DEBUG] 5 workers
+[2018-01-25 01:59:08 +0900] [13400] [DEBUG] GET /
+[2018-01-25 01:59:08 +0900] [13400] [DEBUG] GET /static/admin/css/fonts.css
+[2018-01-25 01:59:08 +0900] [13400] [DEBUG] GET /favicon.ico
+[2018-01-25 01:59:13 +0900] [13394] [INFO] Handling signal: int
+[2018-01-25 01:59:13 +0900] [13400] [INFO] Worker exiting (pid: 13400)
+[2018-01-25 01:59:13 +0900] [13397] [INFO] Worker exiting (pid: 13397)
+[2018-01-25 01:59:13 +0900] [13398] [INFO] Worker exiting (pid: 13398)
+[2018-01-25 01:59:13 +0900] [13399] [INFO] Worker exiting (pid: 13399)
+[2018-01-25 01:59:13 +0900] [13401] [INFO] Worker exiting (pid: 13401)
+[2018-01-25 01:59:13 +0900] [13394] [INFO] Shutting down: Master
+[2018-01-25 02:00:54 +0900] [13637] [DEBUG] Current configuration:
+  post_worker_init: <function PostWorkerInit.post_worker_init at 0x1072b06a8>
+  child_exit: <function ChildExit.child_exit at 0x1072b7048>
+  syslog: False
+  pythonpath: None
+  workers: 5
+  pre_fork: <function Prefork.pre_fork at 0x1072b0378>
+  post_fork: <function Postfork.post_fork at 0x1072b0510>
+  capture_output: False
+  sendfile: None
+  pidfile: None
+  logger_class: gunicorn.glogging.Logger
+  statsd_host: None
+  default_proc_name: mysite.wsgi
+  ssl_version: 2
+  suppress_ragged_eofs: True
+  config: gunicorn.conf.py
+  on_reload: <function OnReload.on_reload at 0x1072b0048>
+  worker_abort: <function WorkerAbort.worker_abort at 0x1072b09d8>
+  on_exit: <function OnExit.on_exit at 0x1072b7510>
+  spew: False
+  logconfig: None
+  pre_exec: <function PreExec.pre_exec at 0x1072b0b70>
+  check_config: False
+  raw_env: []
+  worker_tmp_dir: None
+  group: 20
+  umask: 0
+  worker_class: sync
+  paste: None
+  backlog: 2048
+  proxy_protocol: False
+  proxy_allow_ips: ['127.0.0.1']
+  raw_paste_global_conf: []
+  pre_request: <function PreRequest.pre_request at 0x1072b0d08>
+  max_requests_jitter: 0
+  statsd_prefix: 
+  timeout: 30
+  ciphers: TLSv1
+  syslog_addr: unix:///var/run/syslog
+  reload: False
+  cert_reqs: 0
+  user: 501
+  threads: 1
+  certfile: None
+  access_log_format: %(h)s %(l)s %(u)s %(t)s "%(r)s" %(s)s %(b)s "%(f)s" "%(a)s"
+  tmp_upload_dir: None
+  do_handshake_on_connect: False
+  limit_request_field_size: 8190
+  when_ready: <function WhenReady.when_ready at 0x1072b01e0>
+  keyfile: None
+  on_starting: <function OnStarting.on_starting at 0x1072a3e18>
+  proc_name: None
+  chdir: /Users/seonghyeongi/python_projects/py352_chatbot
+  secure_scheme_headers: {'X-FORWARDED-PROTO': 'https', 'X-FORWARDED-SSL': 'on', 'X-FORWARDED-PROTOCOL': 'ssl'}
+  worker_int: <function WorkerInt.worker_int at 0x1072b0840>
+  post_request: <function PostRequest.post_request at 0x1072b0e18>
+  worker_exit: <function WorkerExit.worker_exit at 0x1072b71e0>
+  accesslog: /Users/seonghyeongi/python_projects/py352_chatbot/logs/gunicorn-access.log
+  enable_stdio_inheritance: False
+  worker_connections: 1000
+  limit_request_line: 4094
+  bind: ['127.0.0.1:9000']
+  ca_certs: None
+  initgroups: False
+  max_requests: 0
+  graceful_timeout: 30
+  errorlog: /Users/seonghyeongi/python_projects/py352_chatbot/logs/gunicorn-error.log
+  keepalive: 2
+  loglevel: debug
+  syslog_facility: user
+  reload_engine: auto
+  limit_request_fields: 100
+  preload_app: False
+  daemon: False
+  forwarded_allow_ips: ['127.0.0.1']
+  nworkers_changed: <function NumWorkersChanged.nworkers_changed at 0x1072b7378>
+  syslog_prefix: None
+[2018-01-25 02:00:54 +0900] [13637] [INFO] Starting gunicorn 19.7.1
+[2018-01-25 02:00:54 +0900] [13637] [DEBUG] Arbiter booted
+[2018-01-25 02:00:54 +0900] [13637] [INFO] Listening at: http://127.0.0.1:9000 (13637)
+[2018-01-25 02:00:54 +0900] [13637] [INFO] Using worker: sync
+[2018-01-25 02:00:54 +0900] [13640] [INFO] Booting worker with pid: 13640
+[2018-01-25 02:00:54 +0900] [13641] [INFO] Booting worker with pid: 13641
+[2018-01-25 02:00:54 +0900] [13642] [INFO] Booting worker with pid: 13642
+[2018-01-25 02:00:54 +0900] [13643] [INFO] Booting worker with pid: 13643
+[2018-01-25 02:00:54 +0900] [13644] [INFO] Booting worker with pid: 13644
+[2018-01-25 02:00:54 +0900] [13637] [DEBUG] 5 workers
+[2018-01-25 02:00:57 +0900] [13642] [DEBUG] GET /
+[2018-01-25 02:00:57 +0900] [13641] [DEBUG] GET /favicon.ico
+[2018-01-25 02:00:57 +0900] [13642] [DEBUG] GET /static/admin/css/fonts.css
+[2018-01-25 02:00:59 +0900] [13642] [DEBUG] GET /admin/crawler/comment/
+[2018-01-25 02:01:05 +0900] [13643] [DEBUG] GET /admin/
+[2018-01-25 02:01:05 +0900] [13640] [DEBUG] GET /admin/login/
+[2018-01-25 02:01:05 +0900] [13643] [DEBUG] GET /static/admin/css/responsive.css
+[2018-01-25 02:01:05 +0900] [13642] [DEBUG] GET /static/admin/css/login.css
+[2018-01-25 02:01:05 +0900] [13640] [DEBUG] GET /static/admin/css/base.css
+[2018-01-25 02:01:14 +0900] [13643] [DEBUG] POST /admin/login/
+[2018-01-25 02:01:14 +0900] [13644] [DEBUG] GET /admin/
+[2018-01-25 02:01:14 +0900] [13642] [DEBUG] GET /static/admin/css/responsive.css
+[2018-01-25 02:01:14 +0900] [13643] [DEBUG] GET /static/admin/css/dashboard.css
+[2018-01-25 02:01:14 +0900] [13644] [DEBUG] GET /static/admin/css/base.css
+[2018-01-25 02:01:20 +0900] [13637] [INFO] Handling signal: int
+[2018-01-25 02:01:20 +0900] [13643] [INFO] Worker exiting (pid: 13643)
+[2018-01-25 02:01:20 +0900] [13641] [INFO] Worker exiting (pid: 13641)
+[2018-01-25 02:01:20 +0900] [13640] [INFO] Worker exiting (pid: 13640)
+[2018-01-25 02:01:20 +0900] [13644] [INFO] Worker exiting (pid: 13644)
+[2018-01-25 02:01:20 +0900] [13642] [INFO] Worker exiting (pid: 13642)
+[2018-01-25 02:01:20 +0900] [13637] [INFO] Shutting down: Master
+[2018-01-25 02:18:24 +0900] [17409] [DEBUG] Current configuration:
+  worker_tmp_dir: None
+  proxy_protocol: False
+  bind: ['127.0.0.1:9000']
+  limit_request_field_size: 8190
+  max_requests: 0
+  errorlog: /Users/seonghyeongi/python_projects/py352_chatbot/logs/gunicorn-error.log
+  preload_app: False
+  syslog: False
+  pre_fork: <function Prefork.pre_fork at 0x10ce0b378>
+  logconfig: None
+  when_ready: <function WhenReady.when_ready at 0x10ce0b1e0>
+  pythonpath: None
+  on_starting: <function OnStarting.on_starting at 0x10cdfee18>
+  keyfile: None
+  reload_engine: auto
+  pre_exec: <function PreExec.pre_exec at 0x10ce0bb70>
+  certfile: None
+  access_log_format: %(h)s %(l)s %(u)s %(t)s "%(r)s" %(s)s %(b)s "%(f)s" "%(a)s"
+  raw_env: []
+  tmp_upload_dir: None
+  raw_paste_global_conf: []
+  enable_stdio_inheritance: False
+  child_exit: <function ChildExit.child_exit at 0x10ce12048>
+  limit_request_line: 4094
+  daemon: False
+  syslog_prefix: None
+  do_handshake_on_connect: False
+  spew: False
+  post_request: <function PostRequest.post_request at 0x10ce0be18>
+  limit_request_fields: 100
+  post_fork: <function Postfork.post_fork at 0x10ce0b510>
+  backlog: 2048
+  suppress_ragged_eofs: True
+  group: 20
+  ssl_version: 2
+  proc_name: None
+  statsd_host: None
+  forwarded_allow_ips: ['127.0.0.1']
+  nworkers_changed: <function NumWorkersChanged.nworkers_changed at 0x10ce12378>
+  default_proc_name: mysite.wsgi
+  config: gunicorn.conf.py
+  worker_connections: 1000
+  umask: 0
+  cert_reqs: 0
+  syslog_facility: user
+  on_exit: <function OnExit.on_exit at 0x10ce12510>
+  max_requests_jitter: 0
+  proxy_allow_ips: ['127.0.0.1']
+  graceful_timeout: 30
+  reload: False
+  check_config: False
+  pidfile: None
+  accesslog: /Users/seonghyeongi/python_projects/py352_chatbot/logs/gunicorn-access.log
+  logger_class: gunicorn.glogging.Logger
+  worker_abort: <function WorkerAbort.worker_abort at 0x10ce0b9d8>
+  user: 501
+  statsd_prefix: 
+  worker_exit: <function WorkerExit.worker_exit at 0x10ce121e0>
+  capture_output: False
+  on_reload: <function OnReload.on_reload at 0x10ce0b048>
+  paste: None
+  loglevel: debug
+  keepalive: 2
+  sendfile: None
+  ciphers: TLSv1
+  syslog_addr: unix:///var/run/syslog
+  worker_class: sync
+  ca_certs: None
+  worker_int: <function WorkerInt.worker_int at 0x10ce0b840>
+  workers: 5
+  timeout: 30
+  post_worker_init: <function PostWorkerInit.post_worker_init at 0x10ce0b6a8>
+  threads: 1
+  chdir: /Users/seonghyeongi/python_projects/py352_chatbot
+  initgroups: False
+  secure_scheme_headers: {'X-FORWARDED-PROTOCOL': 'ssl', 'X-FORWARDED-SSL': 'on', 'X-FORWARDED-PROTO': 'https'}
+  pre_request: <function PreRequest.pre_request at 0x10ce0bd08>
+[2018-01-25 02:18:24 +0900] [17409] [INFO] Starting gunicorn 19.7.1
+[2018-01-25 02:18:24 +0900] [17409] [DEBUG] Arbiter booted
+[2018-01-25 02:18:24 +0900] [17409] [INFO] Listening at: http://127.0.0.1:9000 (17409)
+[2018-01-25 02:18:24 +0900] [17409] [INFO] Using worker: sync
+[2018-01-25 02:18:24 +0900] [17412] [INFO] Booting worker with pid: 17412
+[2018-01-25 02:18:24 +0900] [17413] [INFO] Booting worker with pid: 17413
+[2018-01-25 02:18:24 +0900] [17414] [INFO] Booting worker with pid: 17414
+[2018-01-25 02:18:24 +0900] [17415] [INFO] Booting worker with pid: 17415
+[2018-01-25 02:18:24 +0900] [17416] [INFO] Booting worker with pid: 17416
+[2018-01-25 02:18:24 +0900] [17409] [DEBUG] 5 workers
+[2018-01-25 02:18:26 +0900] [17415] [DEBUG] GET /keyboard/
+[2018-01-25 02:18:31 +0900] [17413] [DEBUG] GET /admin/
+[2018-01-25 02:18:31 +0900] [17413] [DEBUG] GET /admin/login/
+[2018-01-25 02:18:31 +0900] [17412] [DEBUG] GET /static/admin/css/base.css
+[2018-01-25 02:18:31 +0900] [17413] [DEBUG] GET /static/admin/css/login.css
+[2018-01-25 02:18:31 +0900] [17413] [DEBUG] GET /static/admin/css/responsive.css
+[2018-01-25 02:18:38 +0900] [17413] [DEBUG] POST /admin/login/
+[2018-01-25 02:18:38 +0900] [17416] [DEBUG] GET /static/admin/css/login.css
+[2018-01-25 02:18:38 +0900] [17412] [DEBUG] GET /static/admin/css/responsive.css
+[2018-01-25 02:18:38 +0900] [17413] [DEBUG] GET /static/admin/css/base.css
+[2018-01-25 02:18:42 +0900] [17416] [DEBUG] POST /admin/login/
+[2018-01-25 02:18:43 +0900] [17414] [DEBUG] GET /static/admin/css/base.css
+[2018-01-25 02:18:43 +0900] [17415] [DEBUG] GET /static/admin/css/responsive.css
+[2018-01-25 02:18:43 +0900] [17416] [DEBUG] GET /static/admin/css/login.css
+[2018-01-25 02:18:53 +0900] [17416] [DEBUG] POST /admin/login/
+[2018-01-25 02:18:53 +0900] [17416] [DEBUG] GET /admin/
+[2018-01-25 02:18:53 +0900] [17415] [DEBUG] GET /static/admin/css/responsive.css
+[2018-01-25 02:18:53 +0900] [17413] [DEBUG] GET /static/admin/css/dashboard.css
+[2018-01-25 02:18:53 +0900] [17416] [DEBUG] GET /static/admin/css/base.css
+[2018-01-25 02:18:56 +0900] [17416] [DEBUG] GET /admin/auth/group/
+[2018-01-25 02:18:56 +0900] [17416] [DEBUG] GET /static/admin/css/base.css
+[2018-01-25 02:18:56 +0900] [17413] [DEBUG] GET /static/admin/css/changelists.css
+[2018-01-25 02:18:56 +0900] [17415] [DEBUG] GET /static/admin/js/core.js
+[2018-01-25 02:18:56 +0900] [17413] [DEBUG] GET /static/admin/js/jquery.init.js
+[2018-01-25 02:18:56 +0900] [17416] [DEBUG] GET /static/admin/js/vendor/jquery/jquery.js
+[2018-01-25 02:18:56 +0900] [17415] [DEBUG] GET /static/admin/js/admin/RelatedObjectLookups.js
+[2018-01-25 02:18:56 +0900] [17414] [DEBUG] GET /admin/jsi18n/
+[2018-01-25 02:18:56 +0900] [17412] [DEBUG] GET /static/admin/js/actions.js
+[2018-01-25 02:18:56 +0900] [17416] [DEBUG] GET /static/admin/js/urlify.js
+[2018-01-25 02:18:56 +0900] [17412] [DEBUG] GET /static/admin/js/prepopulate.js
+[2018-01-25 02:18:56 +0900] [17413] [DEBUG] GET /static/admin/js/vendor/xregexp/xregexp.js
+[2018-01-25 02:18:56 +0900] [17415] [DEBUG] GET /static/admin/css/responsive.css
+[2018-01-25 02:18:56 +0900] [17412] [DEBUG] GET /static/admin/img/search.svg
+[2018-01-25 02:18:56 +0900] [17416] [DEBUG] GET /static/admin/js/vendor/jquery/jquery.js
+[2018-01-25 02:18:56 +0900] [17412] [DEBUG] GET /static/admin/js/jquery.init.js
+[2018-01-25 02:18:56 +0900] [17416] [DEBUG] GET /static/admin/js/core.js
+[2018-01-25 02:18:56 +0900] [17416] [DEBUG] GET /static/admin/js/admin/RelatedObjectLookups.js
+[2018-01-25 02:18:56 +0900] [17413] [DEBUG] GET /static/admin/js/actions.js
+[2018-01-25 02:18:56 +0900] [17413] [DEBUG] GET /static/admin/js/urlify.js
+[2018-01-25 02:18:56 +0900] [17416] [DEBUG] GET /static/admin/js/prepopulate.js
+[2018-01-25 02:18:56 +0900] [17416] [DEBUG] GET /static/admin/js/vendor/xregexp/xregexp.js
+[2018-01-25 02:18:56 +0900] [17416] [DEBUG] GET /static/admin/css/responsive.css
+[2018-01-25 02:18:56 +0900] [17414] [DEBUG] GET /static/admin/img/search.svg
+[2018-01-25 02:18:57 +0900] [17414] [DEBUG] GET /admin/
+[2018-01-25 02:18:58 +0900] [17413] [DEBUG] GET /admin/auth/user/
+[2018-01-25 02:18:58 +0900] [17412] [DEBUG] GET /static/admin/css/base.css
+[2018-01-25 02:18:58 +0900] [17416] [DEBUG] GET /static/admin/css/changelists.css
+[2018-01-25 02:18:58 +0900] [17413] [DEBUG] GET /static/admin/js/vendor/jquery/jquery.js
+[2018-01-25 02:18:58 +0900] [17412] [DEBUG] GET /static/admin/js/core.js
+[2018-01-25 02:18:58 +0900] [17414] [DEBUG] GET /admin/jsi18n/
+[2018-01-25 02:18:58 +0900] [17413] [DEBUG] GET /static/admin/js/jquery.init.js
+[2018-01-25 02:18:58 +0900] [17415] [DEBUG] GET /static/admin/js/admin/RelatedObjectLookups.js
+[2018-01-25 02:18:58 +0900] [17412] [DEBUG] GET /static/admin/js/actions.js
+[2018-01-25 02:18:58 +0900] [17413] [DEBUG] GET /static/admin/js/prepopulate.js
+[2018-01-25 02:18:58 +0900] [17414] [DEBUG] GET /static/admin/js/vendor/xregexp/xregexp.js
+[2018-01-25 02:18:58 +0900] [17416] [DEBUG] GET /static/admin/js/urlify.js
+[2018-01-25 02:18:58 +0900] [17415] [DEBUG] GET /static/admin/css/responsive.css
+[2018-01-25 02:18:58 +0900] [17413] [DEBUG] GET /static/admin/js/vendor/jquery/jquery.js
+[2018-01-25 02:18:58 +0900] [17413] [DEBUG] GET /static/admin/img/search.svg
+[2018-01-25 02:18:58 +0900] [17412] [DEBUG] GET /static/admin/img/icon-yes.svg
+[2018-01-25 02:18:58 +0900] [17415] [DEBUG] GET /static/admin/js/jquery.init.js
+[2018-01-25 02:18:58 +0900] [17413] [DEBUG] GET /static/admin/js/core.js
+[2018-01-25 02:18:58 +0900] [17413] [DEBUG] GET /static/admin/js/admin/RelatedObjectLookups.js
+[2018-01-25 02:18:58 +0900] [17413] [DEBUG] GET /static/admin/js/actions.js
+[2018-01-25 02:18:58 +0900] [17413] [DEBUG] GET /static/admin/js/urlify.js
+[2018-01-25 02:18:58 +0900] [17413] [DEBUG] GET /static/admin/js/prepopulate.js
+[2018-01-25 02:18:58 +0900] [17413] [DEBUG] GET /static/admin/js/vendor/xregexp/xregexp.js
+[2018-01-25 02:18:58 +0900] [17413] [DEBUG] GET /static/admin/css/responsive.css
+[2018-01-25 02:18:58 +0900] [17412] [DEBUG] GET /static/admin/img/search.svg
+[2018-01-25 02:18:58 +0900] [17416] [DEBUG] GET /static/admin/img/icon-yes.svg
+[2018-01-25 02:19:14 +0900] [17409] [INFO] Handling signal: int
+[2018-01-25 02:19:15 +0900] [17413] [INFO] Worker exiting (pid: 17413)
+[2018-01-25 02:19:15 +0900] [17416] [INFO] Worker exiting (pid: 17416)
+[2018-01-25 02:19:15 +0900] [17415] [INFO] Worker exiting (pid: 17415)
+[2018-01-25 02:19:15 +0900] [17412] [INFO] Worker exiting (pid: 17412)
+[2018-01-25 02:19:15 +0900] [17414] [INFO] Worker exiting (pid: 17414)
+[2018-01-25 02:19:15 +0900] [17409] [INFO] Shutting down: Master
