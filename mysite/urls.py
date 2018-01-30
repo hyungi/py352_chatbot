@@ -21,7 +21,7 @@ from article import views, answers
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 urlpatterns = [
 
-    url(r'^crawler/', saveNews.startcrawling),
+    url(r'^crawler/', saveNews.start_crawling),
     url(r'^keyboard/', views.keyboard),
     url(r'^message', answers.message),
     url(r'^admin/', admin.site.urls),
