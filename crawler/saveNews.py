@@ -94,16 +94,18 @@ def saveReq(iuser_key, ipress, icategory, idate):
 
 
 def startcrawling(self):
-    # cur_time = timezone.now().strftime('%Y-%m-%d')
-    cur_time = "2018-01-04"
-    print(cur_time)
+    cur_time = timezone.now().strftime('%Y-%m-%d')
+    # cur_time = "2018-01-04"
+    # print(cur_time)
     crawler = cr.crawler(cur_time)
 
     date_list_len = len(crawler.date_list)
 
     for start in range(date_list_len):
         print("before\n", crawler.date_list)
-        nd_doc_list, nd_summary_list, nd_comment_dict = crawler.naver_news_crawl()
+        nd_doc_list, nd_summary_list = crawler.naver_news_crawl()
+
+        # nd_doc_list, nd_summary_list, nd_comment_dict = crawler.naver_news_crawl()
         print("after\n", crawler.date_list)
 
         nd_doc_len = len(nd_doc_list)
@@ -130,6 +132,7 @@ def startcrawling(self):
                 nd_doc_list[i].sentiment.want,
             )
 
+        '''
             comment_dict_len = len(nd_comment_dict[nd_doc_list[i].document_id])
             comment_dict_list = nd_comment_dict[nd_doc_list[i].document_id]
 
@@ -144,7 +147,7 @@ def startcrawling(self):
                     comment_dict_list[j].recomm,
                     comment_dict_list[j].unrecomm,
                 )
-
+        '''
         nd_summary_len = len(nd_summary_list)
         for i in range(nd_summary_len):
             doc_id = Document.objects.get(document_id=nd_summary_list[i].document_id)
