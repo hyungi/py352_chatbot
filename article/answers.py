@@ -11,12 +11,11 @@ from article.lists import *
 /article/answer.py
 
 '''
-press={}
-year={}
-month={}
-day={}
-category={}
-
+press = {}
+year = {}
+month = {}
+day = {}
+category = {}
 
 @csrf_exempt
 def message(request):
@@ -28,23 +27,21 @@ def message(request):
     '''
     :param 고객이 버튼을 눌렀을 경우 작동하는 함수로아래와 같은 정보가 전달된다.
     user_key: reqest.body.user_key, //user_key
-    type: reqest.body.type,            //메시지 타입
+    type: reqest.body.type,         //메시지 타입
     content: reqest.body.content    //메시지 내용
     :return JsonResponse를 통해 message 와 keyboard(optional)가 반환된다.
     '''
-    message = ((request.body).decode('utf-8'))
+    message = request.body.decode('utf-8')
     return_json_str = json.loads(message)
     content = return_json_str['content']
     user_key = return_json_str['user_key']
-    
-    
+
     isPress = check_is_in_presslist(content)
     isYear = check_is_in_yearlist(content)
-    isMonth = check_is_in_monthlist(content,user_key)
+    isMonth = check_is_in_monthlist(content, user_key)
     isDay = check_is_in_daylist(content)
     isCategory = check_is_in_categorylist(content)
-    #요청하기가 들어오면 다른 .py 파일에서 불러온 기사 요약 정보를 보여줄 수 있도록 하자. 
-    
+
     if content == u"신문사 고르기":
         return JsonResponse({
             'message': {
@@ -77,7 +74,7 @@ def message(request):
             })
     elif isPress:
         press[user_key] = content
-        print("here is isPres"+ press[user_key])
+        print("here is isPres" + press[user_key])
         
         if is_Full(user_key):
             print("press and Full")
@@ -269,11 +266,12 @@ def message(request):
         if is_Full(user_key):
             print("Category and Full")
             date = year[user_key]+"년 "+month[user_key]+"월 "+day[user_key]+"일"
-            result = press[user_key] +", "+date+", "+category[user_key]
-            rq = Requirement(user_key=user_key,press=press[user_key],date=date,category=category[user_key])
+            result = press[user_key] + ", " + date + ", " + category[user_key]
+            rq = Requirement(user_key=user_key, press=press[user_key], date=date, category=category[user_key])
             rq.save()
             response = getNews(press[user_key], year[user_key], month[user_key], day[user_key], category[user_key])
             print(response)
+            print(len(response))
 
             del press[user_key]
             del category[user_key]
@@ -328,19 +326,25 @@ def message(request):
                 'buttons': menulist
                 }
             })
-#신문사 이름중 하나인지 확인
+
+
+# 신문사 이름중 하나인지 확인
 def check_is_in_presslist(content):
     if content in presslist:
         return True
     else:
         return False
-#날짜 목록중 하나인지 체크 -- 임시방편이라 수정해야함
+
+
+# 날짜 목록중 하나인지 체크 -- 임시방편이라 수정해야함
 def check_is_in_yearlist(content):
     if content in yearlist:
         return True
     else:
         return False
-#월 목록중 하나인지 체크
+
+
+# 월 목록중 하나인지 체크
 def check_is_in_monthlist(content,user_key):
     global month
     if month.get(user_key) is not None:
@@ -349,20 +353,25 @@ def check_is_in_monthlist(content,user_key):
         return True
     else:
         return False
-#일 목록중 하나인지 체크
+
+
+# 일 목록중 하나인지 체크
 def check_is_in_daylist(content):
     if content in daylist:
         return True
     else:
         return False
 
-#카테고리 중 하나인지 체크
+
+# 카테고리 중 하나인지 체크
 def check_is_in_categorylist(content):
     if content in categorylist:
         return True
     else:
         return False
-#전부다 선택했는지 확인
+
+
+# 전부다 선택했는지 확인
 def is_Full(user_key):
     global press
     global year

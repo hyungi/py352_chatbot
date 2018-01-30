@@ -1,11 +1,19 @@
 # -*- coding: utf-8 -*-
 
+import os
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "mysite.settings")
+import django
+django.setup()
 
 from django.http import HttpResponseNotFound
 from django.utils import timezone
 import crawler.naver_news_crawler as cr
 from article.models import *
 from crawler.models import *
+
+
+
+
 '''
 crawler/saveNews.py
  
@@ -17,8 +25,6 @@ fb.save()
 
 
 '''
-
-
 def saveDocument(idid, ipress, icategory, ipd, icd, ititle, itext, ilink):
     '''
     각각의 데이터에 대응하는 input 데이터의 목록
@@ -93,7 +99,14 @@ def saveReq(iuser_key, ipress, icategory, idate):
     requirement.save()
 
 
-def startcrawling(self):
+def save_crawler():
+    crawler_data = CrawlerData(
+        crawler_data=timezone.now()
+    )
+    crawler_data.save()
+
+
+def start_crawling():
     cur_time = timezone.now().strftime('%Y-%m-%d')
     # cur_time = "2018-01-04"
     # print(cur_time)
@@ -161,5 +174,7 @@ def startcrawling(self):
                 nd_summary_list[i].summary_text,
             )
 
-    return HttpResponseNotFound
+    save_crawler()
 
+
+start_crawling()

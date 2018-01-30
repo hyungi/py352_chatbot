@@ -17,3 +17,11 @@ class Requirement(models.Model):
     def __str__(self):
         return self.press + ", " + self.date + ", " + self.category
 
+
+class CrawlerData(models.Model):
+    crawled_date = models.DateTimeField(default=timezone.now().strftime("%Y-%m-%d %H:%M"))
+
+    def __str__(self):
+        return self.crawled_date
+
+

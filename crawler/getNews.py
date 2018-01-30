@@ -9,7 +9,8 @@ import json
 
 '''
 
-def getNews(inputPress,inputYear,inputMonth,inputDay,inputCategory):
+
+def getNews(input_press, input_year, input_month, input_day, input_category):
 
     '''
     :params
@@ -21,14 +22,14 @@ def getNews(inputPress,inputYear,inputMonth,inputDay,inputCategory):
     casting 하여 한 기사별로 출력한다.
     '''
     
-    document = Document.objects.filter(press=inputPress)
-    document = document.filter(category=inputCategory)
-    document = document.filter(published_date__year=inputYear)
-    document = document.filter(published_date__month=inputMonth)
-    document = document.filter(published_date__day=inputDay)
+    document = Document.objects.filter(press=input_press)
+    document = document.filter(category=input_category)
+    document = document.filter(published_date__year=input_year)
+    document = document.filter(published_date__month=input_month)
+    document = document.filter(published_date__day=input_day)
     doc_id_list = document.all()
 
-    return_document = document.values('press', 'title', 'category')
+    return_document = document.values('press', 'title', 'category', 'link')
     document_list = list(return_document)
     doc_list_len = len(document_list)
 
@@ -42,12 +43,13 @@ def getNews(inputPress,inputYear,inputMonth,inputDay,inputCategory):
         doc_summary = DocumentSummary.objects.filter(document_id=doc_id_list[i])
 
         # print 는 디버깅용 response 는 카톡 채팅방에 보여주기 위함
-        # print(document_list[i]['press']+", "+document_list[i]['title']+", "+document_list[i]['category'])
+        print(document_list[i]['press']+", "+document_list[i]['title']+", "+document_list[i]['category'])
         response += document_list[i]['press']+", "+document_list[i]['title']+", "+document_list[i]['category']+'\n'
 
-        doc_summary = list(doc_summary.values('summary_text'))
+        # doc_summary = list(doc_summary.values('summary_text'))
 
         # print(doc_summary[0]['summary_text'])
-        response += doc_summary[0]['summary_text']+'\n'
+        # response += doc_summary[0]['summary_text']+'\n'
+        # 1000자 이상 초과할 경우 카톡 대화창에서 보이지 않으므로 다르게 처리할 방법을 찾아야함.
 
     return response

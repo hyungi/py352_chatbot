@@ -125,7 +125,7 @@ class crawler:
         return str(int(hasher.hexdigest(), 16))
 
 
-    def get_document_from_page(self, url) :
+    def get_document_from_page(self, url):
         '''
         url을 받아서 해당하는 뉴스 기사 정보(id/press/category/published_date/title/text/link/sentiment_list)를 모두 담은 nd.Document 객체를 반환한다.
         :param url: url 링크 (string)
@@ -139,9 +139,10 @@ class crawler:
         published_date = page_bs.find("div", {"class": "sponsor"}).find("span", {"class": "t11"}).text
         title = page_bs.find("div", {"class": "article_info"}).find("h3", {"id": "articleTitle"}).text.strip()
 
-        #print(title)
+        print(title)
+        print(url)
 
-        try :
+        try:
             good = page_bs.find("li", {"class": ["u_likeit_list", "good"]}).find("span", {"class": "u_likeit_list_count"}).text
             warm = page_bs.find("li", {"class": ["u_likeit_list", "warm"]}).find("span", {"class": "u_likeit_list_count"}).text
             sad = page_bs.find("li", {"class": ["u_likeit_list", "sad"]}).find("span", {"class": "u_likeit_list_count"}).text
@@ -152,7 +153,7 @@ class crawler:
             pattern = "// flash 오류를 우회하기 위한 함수 추가\nfunction _flash_removeCallback() {}"
             text = content.replace(pattern, "").strip()
             document_id = self.get_hash_from_text(text)
-        except Exception as e :
+        except Exception as e:
             return None #내용이 빠진 뉴스기사일 경우 뛰어넘는다.
 
         if len(text) <= 30 : return None
@@ -190,12 +191,13 @@ class crawler:
         #target_links = target_links[0:5] #테스트용
         for target_link in target_links :
             doc = self.get_document_from_page(target_link)
-            if doc==None : continue
+            if doc is None:
+                continue
 
             doc_summary = nd.Document_summary(doc)
             nd_document_list.append(doc)
             nd_document_summary_list.append(doc_summary)
-            #if len(nd_document_list)==10 : break #테스트용
+            #if len(nd_document_list) == 10: break #테스트용
 
         return nd_document_list, nd_document_summary_list
 
