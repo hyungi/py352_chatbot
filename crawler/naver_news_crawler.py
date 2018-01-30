@@ -188,7 +188,7 @@ class crawler:
         nd_document_list = []
         nd_document_summary_list = []
 
-        #target_links = target_links[0:5] #테스트용
+        # target_links = target_links[0:5] #테스트용
         for target_link in target_links :
             doc = self.get_document_from_page(target_link)
             if doc is None:
@@ -197,7 +197,7 @@ class crawler:
             doc_summary = nd.Document_summary(doc)
             nd_document_list.append(doc)
             nd_document_summary_list.append(doc_summary)
-            #if len(nd_document_list) == 10: break #테스트용
+            # if len(nd_document_list) == 10: break #테스트용
 
         return nd_document_list, nd_document_summary_list
 

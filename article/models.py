@@ -1,3 +1,6 @@
+# -*- coding: utf-8 -*-
+
+
 from django.db import models
 from django.utils import timezone
 
@@ -20,8 +23,4 @@ class Requirement(models.Model):
 
 class CrawlerData(models.Model):
     crawled_date = models.DateTimeField(default=timezone.now().strftime("%Y-%m-%d %H:%M"))
-
-    def __str__(self):
-        return self.crawled_date
-
 

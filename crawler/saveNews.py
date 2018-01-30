@@ -101,7 +101,7 @@ def saveReq(iuser_key, ipress, icategory, idate):
 
 def save_crawler():
     crawler_data = CrawlerData(
-        crawler_data=timezone.now()
+
     )
     crawler_data.save()
 
@@ -109,11 +109,10 @@ def save_crawler():
 def start_crawling():
     cur_time = timezone.now().strftime('%Y-%m-%d')
     # cur_time = "2018-01-04"
-    # print(cur_time)
+    print(cur_time)
     crawler = cr.crawler(cur_time)
 
     date_list_len = len(crawler.date_list)
-
     for start in range(date_list_len):
         print("before\n", crawler.date_list)
         nd_doc_list, nd_summary_list = crawler.naver_news_crawl()
@@ -175,6 +174,3 @@ def start_crawling():
             )
 
     save_crawler()
-
-
-#start_crawling()
