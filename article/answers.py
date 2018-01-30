@@ -1,3 +1,6 @@
+# -*- coding: utf-8 -*-
+
+
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import json
@@ -82,8 +85,8 @@ def message(request):
             result = press[user_key] + ", " + date + ", " + category[user_key]
             rq = Requirement(user_key=user_key, press=press[user_key], date=date, category=category[user_key])
             rq.save()
-            getNews(press[user_key], year[user_key], month[user_key], day[user_key], category[user_key])
-
+            response = getNews(press[user_key], year[user_key], month[user_key], day[user_key], category[user_key])
+            print(response)
             del press[user_key]
             del year[user_key]
             del month[user_key]
@@ -92,7 +95,7 @@ def message(request):
             
             return JsonResponse({
                 'message': {
-                    'text': result+'선택이 모두 완료되었습니다.'+news_list
+                    'text': result+'선택이 모두 완료되었습니다.'+'\n'+response
                     },
                 'keyboard': {
                     'type': 'buttons',
@@ -126,7 +129,7 @@ def message(request):
                 })
     elif isYear:
         year[user_key] = content
-        print("here is isYear "+ year[user_key] + "년")
+        print("here is isYear " + year[user_key] + "년")
         
         if is_Full(user_key):
             print("Year and Full")
@@ -134,7 +137,8 @@ def message(request):
             result = press[user_key] + ", " + date + ", " + category[user_key]
             rq = Requirement(user_key=user_key, press=press[user_key], date=date, category=category[user_key])
             rq.save()
-            getNews(press[user_key],year[user_key],month[user_key],day[user_key],category[user_key])
+            response = getNews(press[user_key], year[user_key], month[user_key], day[user_key], category[user_key])
+            print(response)
 
             del press[user_key]
             del category[user_key]
@@ -144,7 +148,7 @@ def message(request):
 
             return JsonResponse({
                 'message': {
-                    'text': result+'선택이 모두 완료되었습니다.'
+                    'text': result+'선택이 모두 완료되었습니다.'+'\n'+response
                     },
                 'keyboard': {
                     'type': 'buttons',
@@ -173,7 +177,8 @@ def message(request):
             rq = Requirement(user_key=user_key,press=press[user_key],date=date,category=category[user_key])
             rq.save()
 
-            getNews(press[user_key],year[user_key],month[user_key],day[user_key],category[user_key])
+            response = getNews(press[user_key], year[user_key], month[user_key], day[user_key], category[user_key])
+            print(response)
 
             del press[user_key]
             del category[user_key]
@@ -183,7 +188,7 @@ def message(request):
 
             return JsonResponse({
                 'message': {
-                    'text': result+'선택이 모두 완료되었습니다.'
+                    'text': result+'선택이 모두 완료되었습니다.'+'\n'+response
                     },
                 'keyboard': {
                     'type': 'buttons',
@@ -210,7 +215,8 @@ def message(request):
             result = press[user_key] + ", " + date + ", " + category[user_key]
             rq = Requirement(user_key=user_key,press=press[user_key],date=date,category=category[user_key])
             rq.save()
-            getNews(press[user_key],year[user_key],month[user_key],day[user_key],category[user_key])
+            response = getNews(press[user_key], year[user_key], month[user_key], day[user_key], category[user_key])
+            print(response)
 
             del press[user_key]
             del category[user_key]
@@ -220,7 +226,7 @@ def message(request):
 
             return JsonResponse({
                 'message': {
-                    'text': result+'선택이 모두 완료되었습니다.'
+                    'text': result+'선택이 모두 완료되었습니다.'+'\n'+response
                     },
                 'keyboard': {
                     'type': 'buttons',
@@ -266,7 +272,8 @@ def message(request):
             result = press[user_key] +", "+date+", "+category[user_key]
             rq = Requirement(user_key=user_key,press=press[user_key],date=date,category=category[user_key])
             rq.save()
-            getNews(press[user_key], year[user_key], month[user_key], day[user_key], category[user_key])
+            response = getNews(press[user_key], year[user_key], month[user_key], day[user_key], category[user_key])
+            print(response)
 
             del press[user_key]
             del category[user_key]
@@ -276,7 +283,7 @@ def message(request):
 
             return JsonResponse({
                 'message': {
-                    'text': result+'선택이 모두 완료되었습니다.'
+                    'text': result+'선택이 모두 완료되었습니다.'+'\n'+response
                     },
                 'keyboard': {
                     'type': 'buttons',

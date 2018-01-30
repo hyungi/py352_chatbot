@@ -1,5 +1,9 @@
-from .models import *
+# -*- coding: utf-8 -*-
 
+from article.lists import *
+from .models import *
+from django.http import JsonResponse
+import json
 '''
 /crawler/getNews.py
 
@@ -27,8 +31,23 @@ def getNews(inputPress,inputYear,inputMonth,inputDay,inputCategory):
     return_document = document.values('press', 'title', 'category')
     document_list = list(return_document)
     doc_list_len = len(document_list)
+
+    response = ""
+
+    if doc_list_len == 0:
+        print("선택한 뉴스가 없습니다.")
+        response += "선택한 뉴스가 없습니다."
+
     for i in range(doc_list_len):
-        docsummary = DocumentSummary.objects.filter(document_id=doc_id_list[i])
-        print(document_list[i]['press']+", "+document_list[i]['title']+", "+document_list[i]['category'])
-        docsummary = list(docsummary.values('summary_text'))
-        print(docsummary[0]['summary_text'])
+        doc_summary = DocumentSummary.objects.filter(document_id=doc_id_list[i])
+
+        # print 는 디버깅용 response 는 카톡 채팅방에 보여주기 위함
+        # print(document_list[i]['press']+", "+document_list[i]['title']+", "+document_list[i]['category'])
+        response += document_list[i]['press']+", "+document_list[i]['title']+", "+document_list[i]['category']+'\n'
+
+        doc_summary = list(doc_summary.values('summary_text'))
+
+        # print(doc_summary[0]['summary_text'])
+        response += doc_summary[0]['summary_text']+'\n'
+
+    return response

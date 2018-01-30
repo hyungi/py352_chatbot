@@ -9,11 +9,12 @@ from functools import singledispatch
 from bs4 import BeautifulSoup, element
 from . import news_document_class as nd
 import re
-import time, os
+import time
+import os
 
 
 @singledispatch
-def get_crawling_list(date_to_crawl, category_to_crawl = ["100","101","102","103","104","105"]):
+def get_crawling_list(date_to_crawl, category_to_crawl = ["105","104","103","102","101","100"]):
     '''
     지정한 날짜와 전체 분야(정치, 사회 등)을 cross join하여 반복문을 돌릴 crawling_list를 반환한다.
     :param date_to_crawl: 크롤링할 날짜 (string)
@@ -25,7 +26,7 @@ def get_crawling_list(date_to_crawl, category_to_crawl = ["100","101","102","103
 
 
 @get_crawling_list.register(datetime)
-def _(date_to_crawl, category_to_crawl = ["100","101","102","103","104","105"]):
+def _(date_to_crawl, category_to_crawl = ["105","104","103","102","101","100"]):
     '''
     지정한 날짜와 전체 분야(정치, 사회 등)을 cross join하여 반복문을 돌릴 crawling_list를 반환한다.
     :param date_to_crawl: 크롤링할 날짜 (datetime)
@@ -38,7 +39,7 @@ def _(date_to_crawl, category_to_crawl = ["100","101","102","103","104","105"]):
 
 
 @get_crawling_list.register(list)
-def _(date_to_crawl, category_to_crawl = ["100","101","102","103","104","105"]):
+def _(date_to_crawl, category_to_crawl = ["105","104","103","102","101","100"]):
     '''
     지정한 날짜와 전체 분야(정치, 사회 등)을 cross join하여 반복문을 돌릴 crawling_list를 반환한다.
     :param date_to_crawl: [start_date, end_date] 크롤링할 날짜의 범위를 나타내는 string을 원소로 갖는 리스트 (list)
@@ -155,21 +156,24 @@ class crawler:
         page_html = self.get_html_by_urllib(url)
         #page_html = get_html_by_selenium(url, self.path)
         page_bs = BeautifulSoup(page_html, 'html.parser')
-
         press = page_bs.find("div", {"class": "press_logo"}).find("img")["title"]
         category = category_dict[url[(url.index("sid1=") + len("sid1=")):(url.index("sid1=") + len("sid1=") + 3)]]
         published_date = page_bs.find("div", {"class": "sponsor"}).find("span", {"class": "t11"}).text
         title = page_bs.find("div", {"class": "article_info"}).find("h3", {"id": "articleTitle"}).text.strip()
-        good = page_bs.find("li", {"class": ["u_likeit_list", "good"]}).find("span", {"class": "u_likeit_list_count"}).text
-        warm = page_bs.find("li", {"class": ["u_likeit_list", "warm"]}).find("span", {"class": "u_likeit_list_count"}).text
-        sad = page_bs.find("li", {"class": ["u_likeit_list", "sad"]}).find("span", {"class": "u_likeit_list_count"}).text
-        angry = page_bs.find("li", {"class": ["u_likeit_list", "angry"]}).find("span",{"class": "u_likeit_list_count"}).text
-        want = page_bs.find("li", {"class": ["u_likeit_list", "want"]}).find("span", {"class": "u_likeit_list_count"}).text
-        content = page_bs.find("div", {"id": "articleBodyContents"}).text
-        pattern = "// flash 오류를 우회하기 위한 함수 추가\nfunction _flash_removeCallback() {}"
-        text = content.replace(pattern, "").strip()
-        sentiment_list = [good, warm, sad, angry, want]
-        document_id = self.get_hash_from_text(text)
+
+        try :
+            good = page_bs.find("li", {"class": ["u_likeit_list", "good"]}).find("span", {"class": "u_likeit_list_count"}).text
+            warm = page_bs.find("li", {"class": ["u_likeit_list", "warm"]}).find("span", {"class": "u_likeit_list_count"}).text
+            sad = page_bs.find("li", {"class": ["u_likeit_list", "sad"]}).find("span", {"class": "u_likeit_list_count"}).text
+            angry = page_bs.find("li", {"class": ["u_likeit_list", "angry"]}).find("span",{"class": "u_likeit_list_count"}).text
+            want = page_bs.find("li", {"class": ["u_likeit_list", "want"]}).find("span", {"class": "u_likeit_list_count"}).text
+            sentiment_list = [good, warm, sad, angry, want]
+            content = page_bs.find("div", {"id": "articleBodyContents"}).text
+            pattern = "// flash 오류를 우회하기 위한 함수 추가\nfunction _flash_removeCallback() {}"
+            text = content.replace(pattern, "").strip()
+            document_id = self.get_hash_from_text(text)
+        except Exception as e :
+            return None #내용이 빠진 뉴스기사일 경우 뛰어넘는다.
 
         news = nd.Document(document_id=document_id, press=press, category=category, published_date=published_date,
                         title=title, text=text, link=url, sentiment_list=sentiment_list)
@@ -177,14 +181,14 @@ class crawler:
         return news
 
 
-    def get_comment_html_from_url(self, url, path=os.path.join(BASE_DIR, 'crawler/chromedriver')):
+    def get_comment_html_from_url(self, url, path=os.path.join(BASE_DIR, 'crawler/chromedriver')) :
         '''
         특정 뉴스 기사 url을 받아 그 기사의 댓글 정보를 담고 있는 html 문서를 반환한다.
         :param url: 댓글을 크롤링할 뉴스 기사의 링크 (string)
         :param path: selenium에서 사용할 driver가 저장된 위치, 사용 전 확인 후 변경 필요 (string)
         :return: 해당 댓글 정보가 담겨있는 html문서 (string)
         '''
-        sleep_time = 1
+        sleep_time = 2
         options = webdriver.ChromeOptions()
         options.add_argument('headless')
         options.add_argument('--no-sandbox')
@@ -199,6 +203,7 @@ class crawler:
             time.sleep(sleep_time)
         except Exception as e:
             print(e)
+            print("네트워크 속도가 느려 발생하는 오류일 수 있습니다. sleep_time을 늘려주세요.")
             return False
         else:
             while True:
@@ -269,9 +274,11 @@ class crawler:
         nd_document_summary_list = []
         nd_comment_dict = dict()
 
-        #target_links = target_links[0:5] #테스트용
+        target_links = target_links[0:5] #테스트용
         for target_link in target_links :
             doc = self.get_document_from_page(target_link)
+            if doc==None : continue
+
             doc_summary = nd.Document_summary(doc)
             comment_list = self.get_comments_from_page(target_link)
 
@@ -281,7 +288,7 @@ class crawler:
             nd_comment_dict[doc.document_id] = comment_list
             nd_document_list.append(doc)
             nd_document_summary_list.append(doc_summary)
-            #if len(nd_document_list)==10 : break #테스트용
+            if len(nd_document_list)==10 : break #테스트용
 
         return nd_document_list, nd_document_summary_list, nd_comment_dict
 

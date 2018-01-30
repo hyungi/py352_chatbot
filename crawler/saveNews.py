@@ -1,3 +1,6 @@
+# -*- coding: utf-8 -*-
+
+
 from django.http import HttpResponseNotFound
 from django.utils import timezone
 import crawler.naver_news_crawler as cr
@@ -91,7 +94,9 @@ def saveReq(iuser_key, ipress, icategory, idate):
 
 
 def startcrawling(self):
-    cur_time = timezone.now().strftime('%Y-%m-%d')
+    # cur_time = timezone.now().strftime('%Y-%m-%d')
+    cur_time = "2018-01-04"
+    print(cur_time)
     crawler = cr.crawler(cur_time)
 
     date_list_len = len(crawler.date_list)
