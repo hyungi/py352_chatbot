@@ -154,7 +154,7 @@ class crawler:
             text = content.replace(pattern, "").strip()
             document_id = self.get_hash_from_text(text)
         except Exception as e:
-            return None #내용이 빠진 뉴스기사일 경우 뛰어넘는다.
+            return None  # 내용이 빠진 뉴스기사일 경우 뛰어넘는다.
 
         if len(text) <= 30 : return None
         news = nd.Document(document_id=document_id, press=press, category=category, published_date=published_date,

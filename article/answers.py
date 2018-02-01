@@ -16,7 +16,7 @@ year = {}
 month = {}
 day = {}
 category = {}
-
+user_request = {}
 @csrf_exempt
 def message(request):
     global press
@@ -24,6 +24,7 @@ def message(request):
     global month
     global day
     global category
+    global user_request
     '''
     :param 고객이 버튼을 눌렀을 경우 작동하는 함수로아래와 같은 정보가 전달된다.
     user_key: reqest.body.user_key, //user_key
@@ -41,6 +42,7 @@ def message(request):
     isMonth = check_is_in_monthlist(content, user_key)
     isDay = check_is_in_daylist(content)
     isCategory = check_is_in_categorylist(content)
+    is_news_title = check_is_news_title(content, user_key)
 
     if content == u"신문사 고르기":
         return JsonResponse({
@@ -83,7 +85,15 @@ def message(request):
             rq = Requirement(user_key=user_key, press=press[user_key], date=date, category=category[user_key])
             rq.save()
             response = getNews(press[user_key], year[user_key], month[user_key], day[user_key], category[user_key])
-            print(response)
+            show_contents = ""
+            show_links = ""
+            for i in response.keys():
+                print(response[i])
+                show_contents += response[i]
+
+                print(i)
+                show_links += i
+
             del press[user_key]
             del year[user_key]
             del month[user_key]
@@ -92,7 +102,7 @@ def message(request):
             
             return JsonResponse({
                 'message': {
-                    'text': result+'선택이 모두 완료되었습니다.'+'\n'+response
+                    'text': result+'선택이 모두 완료되었습니다.'+'\n'+show_contents
                     },
                 'keyboard': {
                     'type': 'buttons',
@@ -261,7 +271,7 @@ def message(request):
     
     elif isCategory:
         category[user_key] = content
-        print("here is isCategory"+ category[user_key])
+        print("here is isCategory" + category[user_key])
         
         if is_Full(user_key):
             print("Category and Full")
@@ -270,8 +280,13 @@ def message(request):
             rq = Requirement(user_key=user_key, press=press[user_key], date=date, category=category[user_key])
             rq.save()
             response = getNews(press[user_key], year[user_key], month[user_key], day[user_key], category[user_key])
-            print(response)
-            print(len(response))
+            result_list = []
+            for i in response.keys():
+                # print(response[i])
+                result_list.append(response[i])
+
+            print(result_list)
+            user_request[user_key] = result_list
 
             del press[user_key]
             del category[user_key]
@@ -281,11 +296,11 @@ def message(request):
 
             return JsonResponse({
                 'message': {
-                    'text': result+'선택이 모두 완료되었습니다.'+'\n'+response
+                    'text': result+'선택이 모두 완료되었습니다. 관심있는 기사가 있으신가요?\n\n'
                     },
                 'keyboard': {
                     'type': 'buttons',
-                    'buttons': presslist
+                    'buttons': result_list
                     }
                 }) 
         else:
@@ -316,7 +331,26 @@ def message(request):
                     'type': 'buttons',
                     'buttons': menulist
                     }
-                }) 
+                })
+    elif is_news_title:
+        print(content)
+        title, text, link = get_summary(content)
+
+        del user_request[user_key]
+        
+        print(title)
+        print(text)
+        print(link)
+        return JsonResponse({
+            'message': {
+                "text": "요청하신 뉴스 입니다.\n"+title+"\n"+text,
+                'message_button': {
+                    "label": "기사 바로가기",
+                    "url": link
+                }
+            }
+        })
+
     else:
         print("정의되지 않은 구문")
         return JsonResponse({
@@ -366,6 +400,16 @@ def check_is_in_daylist(content):
 # 카테고리 중 하나인지 체크
 def check_is_in_categorylist(content):
     if content in categorylist:
+        return True
+    else:
+        return False
+
+
+# 뉴스를 요청하는 것인지확인
+def check_is_news_title(content, user_key):
+    if user_request.get(user_key) is None:
+        return False
+    elif content in user_request.get(user_key):
         return True
     else:
         return False

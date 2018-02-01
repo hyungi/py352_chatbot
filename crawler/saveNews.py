@@ -5,7 +5,6 @@ os.environ.setdefault("DJANGO_SETTINGS_MODULE", "mysite.settings")
 import django
 django.setup()
 
-from django.http import HttpResponseNotFound
 from django.utils import timezone
 import crawler.naver_news_crawler as cr
 from article.models import *
@@ -115,6 +114,9 @@ def start_crawling():
     date_list_len = len(crawler.date_list)
     for start in range(date_list_len):
         print("before\n", crawler.date_list)
+        if crawler.naver_news_crawl() is None:
+            continue
+
         nd_doc_list, nd_summary_list = crawler.naver_news_crawl()
 
         # nd_doc_list, nd_summary_list, nd_comment_dict = crawler.naver_news_crawl()
