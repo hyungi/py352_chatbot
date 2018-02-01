@@ -4,7 +4,6 @@
     <list default="true" id="6478bc8a-a392-47c1-a65b-8e36165527e7" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change beforePath="$PROJECT_DIR$/article/answers.py" afterPath="$PROJECT_DIR$/article/answers.py" />
-      <change beforePath="$PROJECT_DIR$/crawler/saveNews.py" afterPath="$PROJECT_DIR$/crawler/saveNews.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -33,11 +32,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="answers.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="answers.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/article/answers.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="0" column="23" lean-forward="false" selection-start-line="0" selection-start-column="23" selection-end-line="0" selection-end-column="23" />
+            <state relative-caret-position="328">
+              <caret line="60" column="18" lean-forward="true" selection-start-line="60" selection-start-column="18" selection-end-line="60" selection-end-column="18" />
               <folding>
                 <element signature="e#26#62#0" expanded="true" />
               </folding>
@@ -69,15 +68,12 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="saveNews.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="saveNews.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/crawler/saveNews.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="303">
+            <state relative-caret-position="-408">
               <caret line="119" column="0" lean-forward="false" selection-start-line="119" selection-start-column="0" selection-end-line="119" selection-end-column="0" />
-              <folding>
-                <marker date="1517492214941" expanded="true" signature="2537:2622" ph="..." />
-                <marker date="1517492214941" expanded="true" signature="2537:4604" ph="..." />
-              </folding>
+              <folding />
             </state>
           </provider>
         </entry>
@@ -421,10 +417,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1515">
           <caret line="105" column="37" lean-forward="false" selection-start-line="105" selection-start-column="37" selection-end-line="105" selection-end-column="37" />
-          <folding>
-            <marker date="1517492214941" expanded="true" signature="2537:2622" ph="..." />
-            <marker date="1517492214941" expanded="true" signature="2537:4604" ph="..." />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -714,12 +707,9 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/crawler/saveNews.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="303">
+        <state relative-caret-position="-408">
           <caret line="119" column="0" lean-forward="false" selection-start-line="119" selection-start-column="0" selection-end-line="119" selection-end-column="0" />
-          <folding>
-            <marker date="1517492214941" expanded="true" signature="2537:2622" ph="..." />
-            <marker date="1517492214941" expanded="true" signature="2537:4604" ph="..." />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -735,8 +725,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/article/answers.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="23" lean-forward="false" selection-start-line="0" selection-start-column="23" selection-end-line="0" selection-end-column="23" />
+        <state relative-caret-position="328">
+          <caret line="60" column="18" lean-forward="true" selection-start-line="60" selection-start-column="18" selection-end-line="60" selection-end-column="18" />
           <folding>
             <element signature="e#26#62#0" expanded="true" />
           </folding>
