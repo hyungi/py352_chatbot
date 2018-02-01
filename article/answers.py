@@ -37,11 +37,11 @@ def message(request):
     content = return_json_str['content']
     user_key = return_json_str['user_key']
 
-    isPress = check_is_in_presslist(content)
-    isYear = check_is_in_yearlist(content)
-    isMonth = check_is_in_monthlist(content, user_key)
-    isDay = check_is_in_daylist(content)
-    isCategory = check_is_in_categorylist(content)
+    is_press = check_is_in_presslist(content)
+    is_year = check_is_in_yearlist(content)
+    is_month = check_is_in_monthlist(content, user_key)
+    is_day = check_is_in_daylist(content)
+    is_category = check_is_in_categorylist(content)
     is_news_title = check_is_news_title(content, user_key)
 
     if content == u"신문사 고르기":
@@ -74,39 +74,37 @@ def message(request):
                 'buttons': categorylist
                 }
             })
-    elif isPress:
+    elif is_press:
         press[user_key] = content
-        print("here is isPres" + press[user_key])
+        print("here is isPress " + press[user_key])
         
         if is_Full(user_key):
-            print("press and Full")
+            print("Press and Full")
             date = year[user_key]+"년 "+month[user_key]+"월 "+day[user_key]+"일"
             result = press[user_key] + ", " + date + ", " + category[user_key]
             rq = Requirement(user_key=user_key, press=press[user_key], date=date, category=category[user_key])
             rq.save()
             response = getNews(press[user_key], year[user_key], month[user_key], day[user_key], category[user_key])
-            show_contents = ""
-            show_links = ""
+            result_list = []
             for i in response.keys():
-                print(response[i])
-                show_contents += response[i]
+                result_list.append(response[i])
 
-                print(i)
-                show_links += i
+            print(result_list)
+            user_request[user_key] = result_list
 
             del press[user_key]
+            del category[user_key]
             del year[user_key]
             del month[user_key]
             del day[user_key]
-            del category[user_key]
-            
+
             return JsonResponse({
                 'message': {
-                    'text': result+'선택이 모두 완료되었습니다.'+'\n'+show_contents
+                    'text': result+'선택이 모두 완료되었습니다. 관심있는 기사가 있으신가요?'
                     },
                 'keyboard': {
                     'type': 'buttons',
-                    'buttons': menulist
+                    'buttons': result_list
                     }
                 })
         else:
@@ -134,7 +132,7 @@ def message(request):
                     'buttons': yearlist
                     }
                 })
-    elif isYear:
+    elif is_year:
         year[user_key] = content
         print("here is isYear " + year[user_key] + "년")
         
@@ -145,7 +143,12 @@ def message(request):
             rq = Requirement(user_key=user_key, press=press[user_key], date=date, category=category[user_key])
             rq.save()
             response = getNews(press[user_key], year[user_key], month[user_key], day[user_key], category[user_key])
-            print(response)
+            result_list = []
+            for i in response.keys():
+                result_list.append(response[i])
+
+            print(result_list)
+            user_request[user_key] = result_list
 
             del press[user_key]
             del category[user_key]
@@ -155,11 +158,11 @@ def message(request):
 
             return JsonResponse({
                 'message': {
-                    'text': result+'선택이 모두 완료되었습니다.'+'\n'+response
+                    'text': result+'선택이 모두 완료되었습니다. 관심있는 기사가 있으신가요?'
                     },
                 'keyboard': {
                     'type': 'buttons',
-                    'buttons': presslist
+                    'buttons': result_list
                     }
                 })       
         else:
@@ -173,19 +176,23 @@ def message(request):
                     }
             })   
 
-    elif isMonth:
+    elif is_month:
         month[user_key] = content
         print("here is isMonth "+ month[user_key] +"월")
         
         if is_Full(user_key):
             print("Month and Full")
             date = year[user_key]+"년 "+month[user_key]+"월 "+day[user_key]+"일"
-            result = press[user_key] +", "+date+", "+category[user_key]
-            rq = Requirement(user_key=user_key,press=press[user_key],date=date,category=category[user_key])
+            result = press[user_key] + ", " + date + ", " + category[user_key]
+            rq = Requirement(user_key=user_key, press=press[user_key], date=date, category=category[user_key])
             rq.save()
-
             response = getNews(press[user_key], year[user_key], month[user_key], day[user_key], category[user_key])
-            print(response)
+            result_list = []
+            for i in response.keys():
+                result_list.append(response[i])
+
+            print(result_list)
+            user_request[user_key] = result_list
 
             del press[user_key]
             del category[user_key]
@@ -195,13 +202,13 @@ def message(request):
 
             return JsonResponse({
                 'message': {
-                    'text': result+'선택이 모두 완료되었습니다.'+'\n'+response
+                    'text': result+'선택이 모두 완료되었습니다. 관심있는 기사가 있으신가요?'
                     },
                 'keyboard': {
                     'type': 'buttons',
-                    'buttons': presslist
+                    'buttons': result_list
                     }
-                })       
+                })
         else:
             return JsonResponse({
                 'message': {
@@ -212,7 +219,7 @@ def message(request):
                     'buttons': daylist
                     }
             })   
-    elif isDay:
+    elif is_day:
         day[user_key] = content
         print("here is isDay " + day[user_key] + "일")
         
@@ -220,10 +227,15 @@ def message(request):
             print("Day and Full")
             date = year[user_key]+"년 "+month[user_key]+"월 "+day[user_key]+"일"
             result = press[user_key] + ", " + date + ", " + category[user_key]
-            rq = Requirement(user_key=user_key,press=press[user_key],date=date,category=category[user_key])
+            rq = Requirement(user_key=user_key, press=press[user_key], date=date, category=category[user_key])
             rq.save()
             response = getNews(press[user_key], year[user_key], month[user_key], day[user_key], category[user_key])
-            print(response)
+            result_list = []
+            for i in response.keys():
+                result_list.append(response[i])
+
+            print(result_list)
+            user_request[user_key] = result_list
 
             del press[user_key]
             del category[user_key]
@@ -233,13 +245,13 @@ def message(request):
 
             return JsonResponse({
                 'message': {
-                    'text': result+'선택이 모두 완료되었습니다.'+'\n'+response
+                    'text': result+'선택이 모두 완료되었습니다. 관심있는 기사가 있으신가요?'
                     },
                 'keyboard': {
                     'type': 'buttons',
-                    'buttons': presslist
+                    'buttons': result_list
                     }
-                })       
+                })
         else:
             result = ""
             if press.get(user_key) is not None:
@@ -269,7 +281,7 @@ def message(request):
                     }
             })   
     
-    elif isCategory:
+    elif is_category:
         category[user_key] = content
         print("here is isCategory" + category[user_key])
         
@@ -282,7 +294,6 @@ def message(request):
             response = getNews(press[user_key], year[user_key], month[user_key], day[user_key], category[user_key])
             result_list = []
             for i in response.keys():
-                # print(response[i])
                 result_list.append(response[i])
 
             print(result_list)
@@ -296,7 +307,7 @@ def message(request):
 
             return JsonResponse({
                 'message': {
-                    'text': result+'선택이 모두 완료되었습니다. 관심있는 기사가 있으신가요?\n\n'
+                    'text': result+'선택이 모두 완료되었습니다. 관심있는 기사가 있으신가요?'
                     },
                 'keyboard': {
                     'type': 'buttons',
@@ -337,7 +348,7 @@ def message(request):
         title, text, link = get_summary(content)
 
         del user_request[user_key]
-        
+
         print(title)
         print(text)
         print(link)
@@ -348,13 +359,17 @@ def message(request):
                     "label": "기사 바로가기",
                     "url": link
                 }
+            },
+            'keyboard': {
+                'type': 'buttons',
+                'buttons': presslist
             }
         })
 
     else:
         print("정의되지 않은 구문")
         return JsonResponse({
-            'message': {'text':'죄송합니다 정의되지 않은 응답입니다.'},
+            'message': {'text': '죄송합니다 정의되지 않은 응답입니다.'},
             'keyboard': {
                 'type': 'buttons',
                 'buttons': menulist

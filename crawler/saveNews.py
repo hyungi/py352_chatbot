@@ -114,6 +114,7 @@ def start_crawling():
     date_list_len = len(crawler.date_list)
     for start in range(date_list_len):
         print("before\n", crawler.date_list)
+
         if crawler.naver_news_crawl() is None:
             continue
 
