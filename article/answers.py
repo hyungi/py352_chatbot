@@ -253,7 +253,8 @@ def message(request):
 
         news_requirement = NewsRequirement(
             user_key=user_key,
-            asked_news_title=title,
+            request_news_title=title,
+            request_news_id=str(user_request.get(user_key).get(content)),
         )
         news_requirement.save()
 
@@ -390,16 +391,16 @@ def handle_request(user_key):
         if category.get(user_key) is not None:
             print_result.append("[" + category.get(user_key) + "]")
 
-        elif day.get(user_key) is not None:
+        if day.get(user_key) is not None:
             print_result.append(day.get(user_key) + "일 ")
 
-        elif month.get(user_key) is not None:
+        if month.get(user_key) is not None:
             print_result.append(month.get(user_key) + "월 ")
 
-        elif year.get(user_key) is not None:
+        if year.get(user_key) is not None:
             print_result.append(year.get(user_key) + "년 ")
 
-        elif press.get(user_key) is not None:
+        if press.get(user_key) is not None:
             print_result.append("[" + press.get(user_key) + "] ")
 
         return print_result
