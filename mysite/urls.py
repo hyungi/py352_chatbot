@@ -15,13 +15,12 @@ Including another URLconf
 """
 
 from django.conf.urls import url
-from crawler import saveNews
+from crawler import save_news
 from django.contrib import admin
 from article import views, answers
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 urlpatterns = [
 
-    url(r'^crawler/', saveNews.start_crawling),
     url(r'^keyboard/', views.keyboard),
     url(r'^message', answers.message),
     url(r'^admin/', admin.site.urls),

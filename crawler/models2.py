@@ -3,19 +3,17 @@
 from django.db import models
 from django.utils import timezone
 # Create your models here.
-'''
-crawler/models.py
-'''
 
 
-class DocumentId(models.Model):
-    document_id = models.CharField(max_length=50, primary_key=True)
-
-    def __str__(self):
-        return self.document_id
-
-
-class Document(DocumentId):
+class Document(models.Model):
+    # author = models.ForeignKey(
+    #        'auth.User',
+    #        on_delete=models.DO_NOTHING,
+    #        )
+    document_id = models.CharField(
+        max_length=50,
+        primary_key=True,
+    )
     press = models.CharField(max_length=100, null=True)
     category = models.CharField(max_length=50, null=True)
     published_date = models.DateTimeField(default=timezone.now)
@@ -24,49 +22,13 @@ class Document(DocumentId):
     text = models.TextField()
     link = models.URLField(default="https://")
 
-    class Meta:
-        abstract = True
-
-
-class PoliticsDocument(Document):
-
     def __str__(self):
-        return "["+self.category+"] "+self.press+", "+self.title
-
-
-class EconomicsDocument(Document):
-
-    def __str__(self):
-        return "["+self.category+"] "+self.press+", "+self.title
-
-
-class SocietyDocument(Document):
-
-    def __str__(self):
-        return "["+self.category+"] "+self.press+", "+self.title
-
-
-class CultureLivingDocument(Document):
-
-    def __str__(self):
-        return "["+self.category+"] "+self.press+", "+self.title
-
-
-class WorldDocument(Document):
-
-    def __str__(self):
-        return "["+self.category+"] "+self.press+", "+self.title
-
-
-class ITScienceDocument(Document):
-
-    def __str__(self):
-        return "["+self.category+"] "+self.press+", "+self.title
+        return self.press + ", " + self.title
 
 
 class DocumentSummary(models.Model):
     document_id = models.OneToOneField(
-        DocumentId,
+        Document,
         on_delete=models.CASCADE,
         primary_key=True)
     sentences_n = models.IntegerField()
@@ -75,13 +37,10 @@ class DocumentSummary(models.Model):
     word_tfidf = models.TextField()
     summary_text = models.TextField()
 
-    def __str__(self):
-        return self.document_id.document_id
-
 
 class SentimentList(models.Model):
     document_id = models.OneToOneField(
-        DocumentId,
+        Document,
         on_delete=models.CASCADE,
         primary_key=True)
     good = models.IntegerField()
@@ -93,7 +52,7 @@ class SentimentList(models.Model):
 
 class Comment(models.Model):
     document_id = models.OneToOneField(
-        DocumentId,
+        Document,
         on_delete=models.CASCADE,
         primary_key=True)
     user_id = models.CharField(max_length=100, default="")

@@ -134,13 +134,17 @@ class crawler:
         category_dict = {"100": "정치", "101": "경제", "102": "사회", "103": "생활/문화", "104": "세계", "105": "IT/과학"}
         page_html = self.get_html_by_urllib(url)
         page_bs = BeautifulSoup(page_html, 'html.parser')
-        press = page_bs.find("div", {"class": "press_logo"}).find("img")["title"]
-        category = category_dict[url[(url.index("sid1=") + len("sid1=")):(url.index("sid1=") + len("sid1=") + 3)]]
-        published_date = page_bs.find("div", {"class": "sponsor"}).find("span", {"class": "t11"}).text
-        title = page_bs.find("div", {"class": "article_info"}).find("h3", {"id": "articleTitle"}).text.strip()
 
-        print(title)
-        print(url)
+        try:
+            press = page_bs.find("div", {"class": "press_logo"}).find("img")["title"]
+            category = category_dict[url[(url.index("sid1=") + len("sid1=")):(url.index("sid1=") + len("sid1=") + 3)]]
+            published_date = page_bs.find("div", {"class": "sponsor"}).find("span", {"class": "t11"}).text
+            title = page_bs.find("div", {"class": "article_info"}).find("h3", {"id": "articleTitle"}).text.strip()
+        except Exception as e:
+            return None
+
+        # print(title)
+        # print(url)
 
         try:
             good = page_bs.find("li", {"class": ["u_likeit_list", "good"]}).find("span", {"class": "u_likeit_list_count"}).text
@@ -162,8 +166,7 @@ class crawler:
 
         return news
 
-
-    def crawl_from_datelist_element(self, date_list_element) :
+    def crawl_from_datelist_element(self, date_list_element):
         '''
         하나의 date_list 원소(크롤링하고자 하는 날짜와 카테고리로 이루어진 tuple)에 해당하는 모든 페이지의 링크를 수집하고
         각 링크에서 수집한 뉴스기사, 뉴스 기사를 전처리한 결과물, 그리고 각 뉴스 기사에 대한 댓글 정보를 각각 리스트의 형태로 반환한다.
@@ -175,7 +178,7 @@ class crawler:
         page_url = "http://news.naver.com/main/main.nhn?mode=LSD&mid=shm&sid1=" + date_list_element[1] + "#&date=" + date_list_element[0] + "+00:00:00&page="
 
         target_links = []
-        for page in range(1,31) :
+        for page in range(1, 31):
 
             len_before_update = len(target_links)
             url = page_url + str(page)
@@ -183,13 +186,13 @@ class crawler:
             target_links = target_links + temp_links
             target_links = list(set(target_links))
             len_after_update = len(target_links)
-            if len_before_update==len_after_update : break
+            if len_before_update == len_after_update: break
 
         nd_document_list = []
         nd_document_summary_list = []
 
-        # target_links = target_links[0:5] #테스트용
-        for target_link in target_links :
+        # target_links = target_links[0:5] # 테스트용
+        for target_link in target_links:
             doc = self.get_document_from_page(target_link)
             if doc is None:
                 continue
@@ -197,12 +200,11 @@ class crawler:
             doc_summary = nd.Document_summary(doc)
             nd_document_list.append(doc)
             nd_document_summary_list.append(doc_summary)
-            # if len(nd_document_list) == 10: break #테스트용
+            # if len(nd_document_list) == 10: break # 테스트용
 
         return nd_document_list, nd_document_summary_list
 
-
-    def naver_news_crawl(self) :
+    def naver_news_crawl(self):
         '''
         주어진 날짜 기간에 해당하는 모든 네이버 뉴스를 크롤링하여 mini batch로 반환한다.
         parameter인 date_list에서 1개의 원소를 pop()하여 처리하고 결과값을 반환하며 오류 발생시 error_list에 삽입하여 반환한다.
@@ -214,10 +216,10 @@ class crawler:
         :return4: error_list (크롤링에 실패하면 date_list 원소로 이루어진 리스트) (list)
         '''
         date_list_element = (self.date_list).pop()
-        try :
-            nd_list, nd_summary_list= self.crawl_from_datelist_element(date_list_element)
+        try:
+            nd_list, nd_summary_list = self.crawl_from_datelist_element(date_list_element)
         except Exception as e :
             (self.error_list).insert(0, date_list_element)
             print(e)
-        else :
+        else:
             return nd_list, nd_summary_list
