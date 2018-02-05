@@ -28,6 +28,7 @@ def message(request):
     global day
     global category
     global user_request
+
     '''
     :param 고객이 버튼을 눌렀을 경우 작동하는 함수로아래와 같은 정보가 전달된다.
     user_key: reqest.body.user_key, //user_key
@@ -39,6 +40,8 @@ def message(request):
     return_json_str = json.loads(message)
     content = return_json_str['content']
     user_key = return_json_str['user_key']
+
+    print(content)
 
     is_press = check_is_in_press_list(content)
     is_year = check_is_in_year_list(content)
@@ -215,6 +218,7 @@ def message(request):
         return1, return2 = handle_request(user_key)
 
         if isinstance(return1, dict):
+            print("is_full and is_category")
             if return1.get("none") is not None:
                 reset_globals(user_key)
                 return JsonResponse({
@@ -228,10 +232,9 @@ def message(request):
             for i in return1.keys():
                 result_list.append(i)
 
-            print("is_full and is_category")
             print(result_list)
             user_request[user_key] = return1
-
+            print(user_request[user_key])
             return JsonResponse({
                 'message': {'text': return2 + '선택이 모두 완료되었습니다. 관심있는 기사가 있으신가요?'},
                 'keyboard': {'type': 'buttons',
@@ -325,12 +328,15 @@ def check_is_in_category_list(content):
 
 # 뉴스를 요청하는 것인지확인
 def check_is_news_title(content, user_key):
+    global user_request
+
     if user_request.get(user_key) is None:
         return False
-    elif content in user_request.get(user_key).keys():
-        return True
     else:
-        return False
+        if content in user_request.get(user_key).keys():
+            return True
+        else:
+            return False
 
 
 # 전부다 선택했는지 확인
@@ -401,35 +407,7 @@ def handle_request(user_key):
     else:
         show_list = ""
         result = {}
-        # document = DocumentId.objects.all()
         print_result = []
-
-        if category.get(user_key) is not None:
-            result["category"] = category.get(user_key)
-            print_result.append("분야: " + result.get("category"))
-        else:
-            show_list = category_list
-
-        if day.get(user_key) is not None:
-            result["day"] = day.get(user_key)
-            # document.filter(published_date__month=result.get("day"))
-            print_result.append(result.get("day") + "일 ")
-        else:
-            show_list = day_list
-
-        if month.get(user_key) is not None:
-            result["month"] = month.get(user_key)
-            # document.filter(published_date__month=result.get("month"))
-            print_result.append(result.get("month") + "월 ")
-        else:
-            show_list = month_list
-
-        if year.get(user_key) is not None:
-            result["year"] = year.get(user_key)
-            # document.filter(published_date__year=result.get("year"))
-            print_result.append(result.get("year") + "년 ")
-        else:
-            show_list = year_list
 
         if press.get(user_key) is not None:
             result["press"] = press.get(user_key)
@@ -437,6 +415,38 @@ def handle_request(user_key):
             print_result.append("신문사: "+result.get("press"))
         else:
             show_list = press_list
+            return print_result, show_list
+
+        if year.get(user_key) is not None:
+            result["year"] = year.get(user_key)
+            # document.filter(published_date__year=result.get("year"))
+            print_result.append(result.get("year") + "년 ")
+        else:
+            show_list = year_list
+            return print_result, show_list
+
+        if month.get(user_key) is not None:
+            result["month"] = month.get(user_key)
+            # document.filter(published_date__month=result.get("month"))
+            print_result.append(result.get("month") + "월 ")
+        else:
+            show_list = month_list
+            return print_result, show_list
+
+        if day.get(user_key) is not None:
+            result["day"] = day.get(user_key)
+            # document.filter(published_date__month=result.get("day"))
+            print_result.append(result.get("day") + "일 ")
+        else:
+            show_list = day_list
+            return print_result, show_list
+
+        if category.get(user_key) is not None:
+            result["category"] = category.get(user_key)
+            print_result.append("분야: " + result.get("category"))
+        else:
+            show_list = category_list
+            return print_result, show_list
 
         return print_result, show_list
         # return JsonResponse({
