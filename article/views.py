@@ -17,7 +17,7 @@ def keyboard(request):
 
     return JsonResponse({
         'type': 'buttons',
-        'buttons': lists.presslist
+        'buttons': lists.press_list
     })
 
 
