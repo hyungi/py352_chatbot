@@ -75,6 +75,7 @@ def message(request):
         return1, return2 = handle_request(user_key)
         if isinstance(return1, dict):
             if return1.get("none") is not None:
+                reset_globals(user_key)
                 return JsonResponse({
                     'message': {'text': return2 + '선택이 모두 완료되었지만, 해당하는 기사가 없습니다.'},
                     'keyboard': {'type': 'buttons',
@@ -109,6 +110,7 @@ def message(request):
         return1, return2 = handle_request(user_key)
         if isinstance(return1, dict):
             if return1.get("none") is not None:
+                reset_globals(user_key)
                 return JsonResponse({
                     'message': {'text': return2 + '선택이 모두 완료되었지만, 해당하는 기사가 없습니다.'},
                     'keyboard': {'type': 'buttons',
@@ -143,6 +145,7 @@ def message(request):
         return1, return2 = handle_request(user_key)
         if isinstance(return1, dict):
             if return1.get("none") is not None:
+                reset_globals(user_key)
                 return JsonResponse({
                     'message': {'text': return2 + '선택이 모두 완료되었지만, 해당하는 기사가 없습니다.'},
                     'keyboard': {'type': 'buttons',
@@ -177,6 +180,7 @@ def message(request):
         return1, return2 = handle_request(user_key)
         if isinstance(return1, dict):
             if return1.get("none") is not None:
+                reset_globals(user_key)
                 return JsonResponse({
                     'message': {'text': return2 + '선택이 모두 완료되었지만, 해당하는 기사가 없습니다.'},
                     'keyboard': {'type': 'buttons',
@@ -212,6 +216,7 @@ def message(request):
 
         if isinstance(return1, dict):
             if return1.get("none") is not None:
+                reset_globals(user_key)
                 return JsonResponse({
                     'message': {'text': return2 + '선택이 모두 완료되었지만, 해당하는 기사가 없습니다.'},
                     'keyboard': {'type': 'buttons',
@@ -245,12 +250,7 @@ def message(request):
         print(content)
         title, text, link = get_summary(str(user_request.get(user_key).get(content)), category[user_key])
 
-        del user_request[user_key]
-        del press[user_key]
-        del category[user_key]
-        del year[user_key]
-        del month[user_key]
-        del day[user_key]
+        reset_globals(user_key)
 
         print(title)
         print(text)
@@ -445,3 +445,20 @@ def handle_request(user_key):
         #                  'buttons': show_list
         #                  }
         # })
+
+
+def reset_globals(user_key):
+    global press
+    global year
+    global month
+    global day
+    global category
+    global user_request
+
+    del press[user_key]
+    del year[user_key]
+    del month[user_key]
+    del day[user_key]
+    del category[user_key]
+    del user_request[user_key]
+
