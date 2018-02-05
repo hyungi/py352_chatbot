@@ -7,7 +7,7 @@ import json
 from crawler.get_news import get_news, get_summary
 from article.models import Requirement
 from article.lists import press_list, category_list, year_list, month_list, day_list, menu_list
-from crawler.models import DocumentId
+
 '''
 /article/answer.py
 
@@ -41,8 +41,6 @@ def message(request):
     content = return_json_str['content']
     user_key = return_json_str['user_key']
 
-    print(content)
-
     is_press = check_is_in_press_list(content)
     is_year = check_is_in_year_list(content)
     is_month = check_is_in_month_list(content, user_key)
@@ -75,12 +73,13 @@ def message(request):
     elif is_press:
         press[user_key] = content
         print("selected press is " + press[user_key])
-        return1, return2 = handle_request(user_key)
+        return1 = handle_request(user_key)
+
         if isinstance(return1, dict):
             if return1.get("none") is not None:
                 reset_globals(user_key)
                 return JsonResponse({
-                    'message': {'text': return2 + '선택이 모두 완료되었지만, 해당하는 기사가 없습니다.'},
+                    'message': {'text': '선택이 모두 완료되었지만, 해당하는 기사가 없습니다.'},
                     'keyboard': {'type': 'buttons',
                                  'buttons': press_list
                                  }
@@ -94,7 +93,7 @@ def message(request):
             user_request[user_key] = result_list
 
             return JsonResponse({
-                'message': {'text': return2 + '선택이 모두 완료되었습니다. 관심있는 기사가 있으신가요?'},
+                'message': {'text': '선택이 모두 완료되었습니다. 관심있는 기사가 있으신가요?'},
                 'keyboard': {'type': 'buttons',
                              'buttons': result_list
                              }
@@ -103,19 +102,19 @@ def message(request):
             return JsonResponse({
                 'message': {'text': str(return1) + "여기까지 선택이 완료 되었습니다! 다른것을 선택해 주세요"},
                 'keyboard': {'type': 'buttons',
-                             'buttons': return2
+                             'buttons': year_list
                              }
             })
 
     elif is_year:
         year[user_key] = content
         print("selected year is " + year[user_key] + "년")
-        return1, return2 = handle_request(user_key)
+        return1  = handle_request(user_key)
         if isinstance(return1, dict):
             if return1.get("none") is not None:
                 reset_globals(user_key)
                 return JsonResponse({
-                    'message': {'text': return2 + '선택이 모두 완료되었지만, 해당하는 기사가 없습니다.'},
+                    'message': {'text': '선택이 모두 완료되었지만, 해당하는 기사가 없습니다.'},
                     'keyboard': {'type': 'buttons',
                                  'buttons': press_list
                                  }
@@ -129,7 +128,7 @@ def message(request):
             user_request[user_key] = result_list
 
             return JsonResponse({
-                'message': {'text': return2 + '선택이 모두 완료되었습니다. 관심있는 기사가 있으신가요?'},
+                'message': {'text': '선택이 모두 완료되었습니다. 관심있는 기사가 있으신가요?'},
                 'keyboard': {'type': 'buttons',
                              'buttons': result_list
                              }
@@ -138,19 +137,19 @@ def message(request):
             return JsonResponse({
                 'message': {'text': str(return1) + "여기까지 선택이 완료 되었습니다! 다른것을 선택해 주세요"},
                 'keyboard': {'type': 'buttons',
-                             'buttons': return2
+                             'buttons': month_list
                              }
             })
 
     elif is_month:
         month[user_key] = content
         print("selected month is " + month[user_key] + "월")
-        return1, return2 = handle_request(user_key)
+        return1 = handle_request(user_key)
         if isinstance(return1, dict):
             if return1.get("none") is not None:
                 reset_globals(user_key)
                 return JsonResponse({
-                    'message': {'text': return2 + '선택이 모두 완료되었지만, 해당하는 기사가 없습니다.'},
+                    'message': {'text': '선택이 모두 완료되었지만, 해당하는 기사가 없습니다.'},
                     'keyboard': {'type': 'buttons',
                                  'buttons': press_list
                                  }
@@ -164,7 +163,7 @@ def message(request):
             user_request[user_key] = result_list
 
             return JsonResponse({
-                'message': {'text': return2 + '선택이 모두 완료되었습니다. 관심있는 기사가 있으신가요?'},
+                'message': {'text': '선택이 모두 완료되었습니다. 관심있는 기사가 있으신가요?'},
                 'keyboard': {'type': 'buttons',
                              'buttons': result_list
                              }
@@ -173,19 +172,19 @@ def message(request):
             return JsonResponse({
                 'message': {'text': str(return1) + "여기까지 선택이 완료 되었습니다! 다른것을 선택해 주세요"},
                 'keyboard': {'type': 'buttons',
-                             'buttons': return2
+                             'buttons': day_list
                              }
             })
 
     elif is_day:
         day[user_key] = content
         print("selected day is " + day[user_key] + "일")
-        return1, return2 = handle_request(user_key)
+        return1 = handle_request(user_key)
         if isinstance(return1, dict):
             if return1.get("none") is not None:
                 reset_globals(user_key)
                 return JsonResponse({
-                    'message': {'text': return2 + '선택이 모두 완료되었지만, 해당하는 기사가 없습니다.'},
+                    'message': {'text': '선택이 모두 완료되었지만, 해당하는 기사가 없습니다.'},
                     'keyboard': {'type': 'buttons',
                                  'buttons': press_list
                                  }
@@ -199,7 +198,7 @@ def message(request):
             user_request[user_key] = result_list
 
             return JsonResponse({
-                'message': {'text': return2 + '선택이 모두 완료되었습니다. 관심있는 기사가 있으신가요?'},
+                'message': {'text': '선택이 모두 완료되었습니다. 관심있는 기사가 있으신가요?'},
                 'keyboard': {'type': 'buttons',
                              'buttons': result_list
                              }
@@ -208,21 +207,21 @@ def message(request):
             return JsonResponse({
                 'message': {'text': str(return1) + "여기까지 선택이 완료 되었습니다! 다른것을 선택해 주세요"},
                 'keyboard': {'type': 'buttons',
-                             'buttons': return2
+                             'buttons': category_list
                              }
             })
 
     elif is_category:
         category[user_key] = content
         print("selected category is" + category[user_key])
-        return1, return2 = handle_request(user_key)
+        return1 = handle_request(user_key)
 
         if isinstance(return1, dict):
             print("is_full and is_category")
             if return1.get("none") is not None:
                 reset_globals(user_key)
                 return JsonResponse({
-                    'message': {'text': return2 + '선택이 모두 완료되었지만, 해당하는 기사가 없습니다.'},
+                    'message': {'text': '선택이 모두 완료되었지만, 해당하는 기사가 없습니다.'},
                     'keyboard': {'type': 'buttons',
                                  'buttons': press_list
                                  }
@@ -236,7 +235,7 @@ def message(request):
             user_request[user_key] = return1
             print(user_request[user_key])
             return JsonResponse({
-                'message': {'text': return2 + '선택이 모두 완료되었습니다. 관심있는 기사가 있으신가요?'},
+                'message': {'text': '선택이 모두 완료되었습니다. 관심있는 기사가 있으신가요?'},
                 'keyboard': {'type': 'buttons',
                              'buttons': result_list
                              }
@@ -245,12 +244,11 @@ def message(request):
             return JsonResponse({
                 'message': {'text': str(return1) + "여기까지 선택이 완료 되었습니다! 다른것을 선택해 주세요"},
                 'keyboard': {'type': 'buttons',
-                             'buttons': return2
+                             'buttons': press_list
                              }
             })
 
     elif is_news_title:
-        print(content)
         title, text, link = get_summary(str(user_request.get(user_key).get(content)), category[user_key])
 
         reset_globals(user_key)
@@ -278,7 +276,7 @@ def message(request):
             'message': {'text': '죄송합니다 정의되지 않은 응답입니다.'},
             'keyboard': {
                 'type': 'buttons',
-                'buttons': menu_list
+                'buttons': press_list
             }
         })
 
@@ -373,88 +371,35 @@ def handle_request(user_key):
     if is_full(user_key):
         print("is_full")
         date = year[user_key] + "년 " + month[user_key] + "월 " + day[user_key] + "일"
-        result = press[user_key] + ", " + date + ", " + category[user_key]
         save_request = Requirement(user_key=user_key, press=press[user_key], date=date, category=category[user_key])
         save_request.save()
         response = get_news(press[user_key], year[user_key], month[user_key], day[user_key], category[user_key])
         print(response)
-        print(result)
 
-        return response, result
-
-        # if response.get("none") is not None:
-        #     return JsonResponse({
-        #         'message': {'text': result + '선택이 모두 완료되었지만, 해당하는 기사가 없습니다.'},
-        #         'keyboard': {'type': 'buttons',
-        #                      'buttons': press_list
-        #                      }
-        #     })
-        #
-        # result_list = []
-        # for i in response.keys():
-        #     result_list.append(response[i])
-        #
-        # print(result_list)
-        # user_request[user_key] = result_list
-        #
-        # return JsonResponse({
-        #     'message': {'text': result + '선택이 모두 완료되었습니다. 관심있는 기사가 있으신가요?'},
-        #     'keyboard': {'type': 'buttons',
-        #                  'buttons': result_list
-        #                  }
-        # })
+        return response
 
     else:
-        show_list = ""
-        result = {}
         print_result = []
 
         if press.get(user_key) is not None:
-            result["press"] = press.get(user_key)
-            # document.filter(press=result.get("press"))
-            print_result.append("신문사: "+result.get("press"))
-        else:
-            show_list = press_list
-            return print_result, show_list
+            print_result.append("[" + press.get(user_key) + "] ")
+            return print_result
 
-        if year.get(user_key) is not None:
-            result["year"] = year.get(user_key)
-            # document.filter(published_date__year=result.get("year"))
-            print_result.append(result.get("year") + "년 ")
-        else:
-            show_list = year_list
-            return print_result, show_list
+        elif year.get(user_key) is not None:
+            print_result.append(year.get(user_key) + "년 ")
+            return print_result
 
-        if month.get(user_key) is not None:
-            result["month"] = month.get(user_key)
-            # document.filter(published_date__month=result.get("month"))
-            print_result.append(result.get("month") + "월 ")
-        else:
-            show_list = month_list
-            return print_result, show_list
+        elif month.get(user_key) is not None:
+            print_result.append(month.get(user_key) + "월 ")
+            return print_result
 
-        if day.get(user_key) is not None:
-            result["day"] = day.get(user_key)
-            # document.filter(published_date__month=result.get("day"))
-            print_result.append(result.get("day") + "일 ")
-        else:
-            show_list = day_list
-            return print_result, show_list
+        elif day.get(user_key) is not None:
+            print_result.append(day.get(user_key) + "일 ")
+            return print_result
 
-        if category.get(user_key) is not None:
-            result["category"] = category.get(user_key)
-            print_result.append("분야: " + result.get("category"))
-        else:
-            show_list = category_list
-            return print_result, show_list
-
-        return print_result, show_list
-        # return JsonResponse({
-        #     'message': {'text': str(print_result) + "여기까지 선택이 완료 되었습니다! 다른것을 선택해 주세요"},
-        #     'keyboard': {'type': 'buttons',
-        #                  'buttons': show_list
-        #                  }
-        # })
+        elif category.get(user_key) is not None:
+            print_result.append("[" + category.get(user_key) + "]")
+            return print_result
 
 
 def reset_globals(user_key):
@@ -471,3 +416,5 @@ def reset_globals(user_key):
     del day[user_key]
     del category[user_key]
     del user_request[user_key]
+
+# global result 라는 변수 하나만을 선언해서 result = {'encrypted_user_key':{'press':'조선일보','year':'2018','category':'정치'}} 등으로 처리해보자
