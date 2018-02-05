@@ -5,7 +5,7 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import json
 from crawler.get_news import get_news, get_summary
-from article.models import Requirement
+from article.models import Requirement, NewsRequirement
 from article.lists import press_list, category_list, year_list, month_list, day_list, menu_list
 
 '''
@@ -251,6 +251,12 @@ def message(request):
     elif is_news_title:
         title, text, link = get_summary(str(user_request.get(user_key).get(content)), category[user_key])
 
+        news_requirement = NewsRequirement(
+            user_key=user_key,
+            asked_news_title=title,
+        )
+        news_requirement.save()
+
         reset_globals(user_key)
 
         print(title)
@@ -381,25 +387,22 @@ def handle_request(user_key):
     else:
         print_result = []
 
-        if press.get(user_key) is not None:
-            print_result.append("[" + press.get(user_key) + "] ")
-            return print_result
-
-        elif year.get(user_key) is not None:
-            print_result.append(year.get(user_key) + "년 ")
-            return print_result
-
-        elif month.get(user_key) is not None:
-            print_result.append(month.get(user_key) + "월 ")
-            return print_result
+        if category.get(user_key) is not None:
+            print_result.append("[" + category.get(user_key) + "]")
 
         elif day.get(user_key) is not None:
             print_result.append(day.get(user_key) + "일 ")
-            return print_result
 
-        elif category.get(user_key) is not None:
-            print_result.append("[" + category.get(user_key) + "]")
-            return print_result
+        elif month.get(user_key) is not None:
+            print_result.append(month.get(user_key) + "월 ")
+
+        elif year.get(user_key) is not None:
+            print_result.append(year.get(user_key) + "년 ")
+
+        elif press.get(user_key) is not None:
+            print_result.append("[" + press.get(user_key) + "] ")
+
+        return print_result
 
 
 def reset_globals(user_key):
