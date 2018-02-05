@@ -35,4 +35,4 @@ class NewsRequirement(models.Model):
     request_time = models.DateTimeField(default=timezone.now().strftime("%Y-%m-%d %H:%M"))
 
     def __str__(self):
-        return self.asked_news_title + ", " + self.asked_time.strftime("%Y-%m-%d %H:%M")
+        return self.request_news_title + ", " + self.request_time.strftime("%Y-%m-%d %H:%M")

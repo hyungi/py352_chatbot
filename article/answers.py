@@ -71,6 +71,9 @@ def message(request):
                          }
         })
     elif is_press:
+        if press.get(user_key) is not None:
+            del press[user_key]
+
         press[user_key] = content
         print("selected press is " + press[user_key])
         return1 = handle_request(user_key)
@@ -100,16 +103,19 @@ def message(request):
             })
         else:
             return JsonResponse({
-                'message': {'text': str(return1) + "여기까지 선택이 완료 되었습니다! 다른것을 선택해 주세요"},
+                'message': {'text': str(return1) + "여기까지 선택이 완료 되었습니다! 연도를 선택해 주세요"},
                 'keyboard': {'type': 'buttons',
                              'buttons': year_list
                              }
             })
 
     elif is_year:
+        if year.get(user_key) is not None:
+            del year[user_key]
+
         year[user_key] = content
         print("selected year is " + year[user_key] + "년")
-        return1  = handle_request(user_key)
+        return1 = handle_request(user_key)
         if isinstance(return1, dict):
             if return1.get("none") is not None:
                 reset_globals(user_key)
@@ -135,13 +141,16 @@ def message(request):
             })
         else:
             return JsonResponse({
-                'message': {'text': str(return1) + "여기까지 선택이 완료 되었습니다! 다른것을 선택해 주세요"},
+                'message': {'text': str(return1) + "여기까지 선택이 완료 되었습니다! 월을 선택해 주세요"},
                 'keyboard': {'type': 'buttons',
                              'buttons': month_list
                              }
             })
 
     elif is_month:
+        if month.get(user_key) is not None:
+            del month[user_key]
+
         month[user_key] = content
         print("selected month is " + month[user_key] + "월")
         return1 = handle_request(user_key)
@@ -170,13 +179,16 @@ def message(request):
             })
         else:
             return JsonResponse({
-                'message': {'text': str(return1) + "여기까지 선택이 완료 되었습니다! 다른것을 선택해 주세요"},
+                'message': {'text': str(return1) + "여기까지 선택이 완료 되었습니다! 일을 선택해 주세요"},
                 'keyboard': {'type': 'buttons',
                              'buttons': day_list
                              }
             })
 
     elif is_day:
+        if day.get(user_key) is not None:
+            del day[user_key]
+
         day[user_key] = content
         print("selected day is " + day[user_key] + "일")
         return1 = handle_request(user_key)
@@ -205,13 +217,16 @@ def message(request):
             })
         else:
             return JsonResponse({
-                'message': {'text': str(return1) + "여기까지 선택이 완료 되었습니다! 다른것을 선택해 주세요"},
+                'message': {'text': str(return1) + "여기까지 선택이 완료 되었습니다! 분야를 선택해 주세요"},
                 'keyboard': {'type': 'buttons',
                              'buttons': category_list
                              }
             })
 
     elif is_category:
+        if category.get(user_key) is not None:
+            del category[user_key]
+
         category[user_key] = content
         print("selected category is" + category[user_key])
         return1 = handle_request(user_key)
@@ -279,6 +294,8 @@ def message(request):
 
     else:
         print("정의되지 않은 구문")
+        reset_globals(user_key)
+
         return JsonResponse({
             'message': {'text': '죄송합니다 정의되지 않은 응답입니다.'},
             'keyboard': {
@@ -386,22 +403,27 @@ def handle_request(user_key):
         return response
 
     else:
-        print_result = []
+        print_result = ""
 
         if category.get(user_key) is not None:
-            print_result.append("[" + category.get(user_key) + "]")
+            print_result = "[" + category.get(user_key) + "]" + print_result
+            print(print_result)
 
         if day.get(user_key) is not None:
-            print_result.append(day.get(user_key) + "일 ")
+            print_result = day.get(user_key) + "일 " + print_result
+            print(print_result)
 
         if month.get(user_key) is not None:
-            print_result.append(month.get(user_key) + "월 ")
+            print_result = month.get(user_key) + "월 " + print_result
+            print(print_result)
 
         if year.get(user_key) is not None:
-            print_result.append(year.get(user_key) + "년 ")
+            print_result = year.get(user_key) + "년 " + print_result
+            print(print_result)
 
         if press.get(user_key) is not None:
-            print_result.append("[" + press.get(user_key) + "] ")
+            print_result = "[" + press.get(user_key) + "] " + print_result
+            print(print_result)
 
         return print_result
 
