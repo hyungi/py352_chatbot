@@ -461,4 +461,3 @@ def reset_globals(user_key):
     del day[user_key]
     del category[user_key]
     del user_request[user_key]
-
