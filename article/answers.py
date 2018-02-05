@@ -415,6 +415,10 @@ def reset_globals(user_key):
     del month[user_key]
     del day[user_key]
     del category[user_key]
-    del user_request[user_key]
+    try:
+        del user_request[user_key]
+    except Exception as e:
+        print("뉴스가 없어서 저장을 못했는데 어떻게 지우냐 멍청아!")
+
 
 # global result 라는 변수 하나만을 선언해서 result = {'encrypted_user_key':{'press':'조선일보','year':'2018','category':'정치'}} 등으로 처리해보자

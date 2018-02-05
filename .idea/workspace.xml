@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="6478bc8a-a392-47c1-a65b-8e36165527e7" name="Default" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change beforePath="$PROJECT_DIR$/article/answers.py" afterPath="$PROJECT_DIR$/article/answers.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -32,11 +33,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="answers.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="answers.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/article/answers.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-2628">
-              <caret line="42" column="0" lean-forward="false" selection-start-line="42" selection-start-column="0" selection-end-line="42" selection-end-column="0" />
+            <state relative-caret-position="242">
+              <caret line="416" column="26" lean-forward="false" selection-start-line="416" selection-start-column="26" selection-end-line="416" selection-end-column="26" />
               <folding>
                 <element signature="e#26#62#0" expanded="true" />
               </folding>
@@ -44,11 +45,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="for_debug" pinned="false" current-in-tab="false">
+      <file leaf-file-name="for_debug" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/for_debug">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="405">
-              <caret line="27" column="0" lean-forward="false" selection-start-line="15" selection-start-column="0" selection-end-line="27" selection-end-column="0" />
+            <state relative-caret-position="168">
+              <caret line="21" column="22" lean-forward="true" selection-start-line="21" selection-start-column="22" selection-end-line="21" selection-end-column="22" />
               <folding />
             </state>
           </provider>
@@ -188,8 +189,8 @@
         <option value="$PROJECT_DIR$/article/lists.py" />
         <option value="$PROJECT_DIR$/article/views.py" />
         <option value="$PROJECT_DIR$/1" />
-        <option value="$PROJECT_DIR$/for_debug" />
         <option value="$PROJECT_DIR$/article/answers.py" />
+        <option value="$PROJECT_DIR$/for_debug" />
       </list>
     </option>
   </component>
@@ -770,21 +771,21 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/for_debug">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="405">
-          <caret line="27" column="0" lean-forward="false" selection-start-line="15" selection-start-column="0" selection-end-line="27" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/article/answers.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-2628">
-          <caret line="42" column="0" lean-forward="false" selection-start-line="42" selection-start-column="0" selection-end-line="42" selection-end-column="0" />
+        <state relative-caret-position="242">
+          <caret line="416" column="26" lean-forward="false" selection-start-line="416" selection-start-column="26" selection-end-line="416" selection-end-column="26" />
           <folding>
             <element signature="e#26#62#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/for_debug">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="168">
+          <caret line="21" column="22" lean-forward="true" selection-start-line="21" selection-start-column="22" selection-end-line="21" selection-end-column="22" />
+          <folding />
         </state>
       </provider>
     </entry>
