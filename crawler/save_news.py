@@ -178,6 +178,7 @@ def start_crawling(crawling_time):
         print("before\n", crawler.date_list)
         try:
             nd_doc_list, nd_summary_list = crawler.naver_news_crawl()
+
         except Exception as e:
             print("Error")
 

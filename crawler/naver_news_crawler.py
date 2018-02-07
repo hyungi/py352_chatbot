@@ -19,7 +19,7 @@ def get_crawling_list(date_to_crawl, category_to_crawl = ["100","101","102","103
     :param category_to_crawl: 크롤링할 분야를 원소로 갖는 리스트 (list)
     :return: crawling_list #[[ct1, dt1], [ct2, dt1], ... , [ct2, dt2] : the list of [category, datetime] to crawl
     '''
-    result = [x for x in itertools.product([date_to_crawl], category_to_crawl)]
+    result = [x for x    in itertools.product([date_to_crawl], category_to_crawl)]
     return sorted(result, key=lambda k:k[0])
 
 

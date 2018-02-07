@@ -3,7 +3,7 @@
 from django.http import JsonResponse, HttpResponseNotFound
 from django.views.decorators.csrf import csrf_exempt
 import json
-from . import lists
+from .lists import year_list
 
 
 # 고객의 요청 정보를 담을 객체 선언을 여기다 하자!
@@ -17,18 +17,20 @@ def keyboard(request):
 
     return JsonResponse({
         'type': 'buttons',
-        'buttons': lists.press_list
+        'buttons': year_list
     })
 
 
 @csrf_exempt
 def add_friend(request):
     if request.method == "POST":
-        message = ((request.body).decode('utf-8'))
+        message = request.body.decode('utf-8')
         return_json_str = json.loads(message)
         user_key = return_json_str['user_key']
         # 튜플 생성
-        return JsonResponse({"result": "done"})
+        return JsonResponse({'result': 'done',
+                             'message': {'text': '첫 안내 문구'}
+                             })
     else:
         return HttpResponseNotFound
 

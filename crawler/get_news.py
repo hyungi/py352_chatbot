@@ -14,7 +14,7 @@ def get_news(press, year, month, day, category):
     이에 맞는 뉴스 정보를 되돌려주는 함수(최신 10개 기사)
     :returns
     쿼리문에 의해 골라진 쿼리셋을
-    response = {'key','value'}  value = title / key = document_id
+    response = {'key':'value'}  value = title / key = document_id
     위와 같은 형태로 저장하여 전송한다.
     """
 
