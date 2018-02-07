@@ -18,7 +18,14 @@ def message(request):
     content = return_json_str['content']
     user_key = return_json_str['user_key']
 
-    if handler.check_is_in_year_list(user_key, content):
+    is_year = handler.check_is_in_year_list(user_key, content)
+    is_month = handler.check_is_in_month_list(user_key, content)
+    is_day = handler.check_is_in_day_list(user_key, content)
+    is_category = handler.check_is_in_category_list(user_key, content)
+    is_press = handler.check_is_in_press_list(user_key, content)
+    is_news_title = handler.check_is_news_title(user_key, content)
+
+    if is_year:
         if handler.is_full(user_key):
             return_document = handler.user_request.get(user_key)
             print(handler.user_request.get(user_key))
@@ -50,7 +57,7 @@ def message(request):
                              }
             })
 
-    elif handler.check_is_in_month_list(user_key, content):
+    elif is_month:
         if handler.is_full(user_key):
             return_document = handler.user_request.get(user_key)
             print(handler.user_request.get(user_key))
@@ -83,7 +90,7 @@ def message(request):
                              }
             })
 
-    elif handler.check_is_in_day_list(user_key, content):
+    elif is_day:
         if handler.is_full(user_key):
             return_document = handler.user_request.get(user_key)
             if return_document is None:
@@ -114,7 +121,7 @@ def message(request):
                              }
             })
 
-    elif handler.check_is_in_category_list(user_key, content):
+    elif is_category:
         print(handler.user_request.get(user_key))
 
         if handler.is_full(user_key):
@@ -147,7 +154,7 @@ def message(request):
                              }
             })
 
-    elif handler.check_is_in_press_list(user_key, content):
+    elif is_press:
         if handler.is_full(user_key):
             return_document = handler.user_request.get(user_key)
             print(handler.user_request.get(user_key))
@@ -182,7 +189,7 @@ def message(request):
                              }
             })
 
-    elif handler.check_is_news_title(user_key, content):
+    elif is_news_title:
         title = handler.summary[user_key][0]
         text = handler.summary[user_key][1]
         url = handler.summary[user_key][2]

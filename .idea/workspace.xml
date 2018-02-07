@@ -2,13 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="6478bc8a-a392-47c1-a65b-8e36165527e7" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change beforePath="$PROJECT_DIR$/article/answers.py" afterPath="$PROJECT_DIR$/article/answers1.py" />
-      <change beforePath="$PROJECT_DIR$/article/lists.py" afterPath="$PROJECT_DIR$/article/lists.py" />
-      <change beforePath="$PROJECT_DIR$/article/views.py" afterPath="$PROJECT_DIR$/article/views.py" />
-      <change beforePath="$PROJECT_DIR$/crawler/get_news.py" afterPath="$PROJECT_DIR$/crawler/get_news.py" />
-      <change beforePath="$PROJECT_DIR$/crawler/naver_news_crawler.py" afterPath="$PROJECT_DIR$/crawler/naver_news_crawler.py" />
-      <change beforePath="$PROJECT_DIR$/crawler/save_news.py" afterPath="$PROJECT_DIR$/crawler/save_news.py" />
+      <change beforePath="$PROJECT_DIR$/article/answers.py" afterPath="$PROJECT_DIR$/article/answers.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -40,11 +34,21 @@
     <splitter split-orientation="horizontal" split-proportion="0.546495">
       <split-first>
         <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+          <file leaf-file-name="answers1.py" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/article/answers1.py">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="330">
+                  <caret line="43" column="0" lean-forward="true" selection-start-line="43" selection-start-column="0" selection-end-line="48" selection-end-column="58" />
+                  <folding />
+                </state>
+              </provider>
+            </entry>
+          </file>
           <file leaf-file-name="answers.py" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/article/answers.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="1513">
-                  <caret line="254" column="7" lean-forward="false" selection-start-line="254" selection-start-column="7" selection-end-line="254" selection-end-column="7" />
+                <state relative-caret-position="2865">
+                  <caret line="191" column="22" lean-forward="false" selection-start-line="191" selection-start-column="22" selection-end-line="191" selection-end-column="22" />
                   <folding>
                     <element signature="e#25#61#0" expanded="true" />
                   </folding>
@@ -81,7 +85,7 @@
           <file leaf-file-name="user_request_handler.py" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/article/user_request_handler.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="149">
+                <state relative-caret-position="478">
                   <caret line="84" column="23" lean-forward="false" selection-start-line="84" selection-start-column="23" selection-end-line="84" selection-end-column="23" />
                   <folding>
                     <element signature="e#0#84#0" expanded="true" />
@@ -168,8 +172,8 @@
         <option value="$PROJECT_DIR$/crawler/get_news.py" />
         <option value="$PROJECT_DIR$/article/lists.py" />
         <option value="$PROJECT_DIR$/article/answers2.py" />
-        <option value="$PROJECT_DIR$/article/answers.py" />
         <option value="$PROJECT_DIR$/article/user_request_handler.py" />
+        <option value="$PROJECT_DIR$/article/answers.py" />
       </list>
     </option>
   </component>
@@ -208,6 +212,11 @@
             <path>
               <item name="Root" type="cbb8eebc:String" user="Root" />
               <item name="py352_chatbot" type="cbb8eebc:String" user="py352_chatbot" />
+            </path>
+            <path>
+              <item name="Root" type="cbb8eebc:String" user="Root" />
+              <item name="py352_chatbot" type="cbb8eebc:String" user="py352_chatbot" />
+              <item name="article" type="cbb8eebc:String" user="article" />
             </path>
             <path>
               <item name="Root" type="cbb8eebc:String" user="Root" />
@@ -719,14 +728,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/article/answers1.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="130">
-          <caret line="190" column="0" lean-forward="true" selection-start-line="190" selection-start-column="0" selection-end-line="190" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/crawler/get_news.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="130">
@@ -778,7 +779,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/article/user_request_handler.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="149">
+        <state relative-caret-position="478">
           <caret line="84" column="23" lean-forward="false" selection-start-line="84" selection-start-column="23" selection-end-line="84" selection-end-column="23" />
           <folding>
             <element signature="e#0#84#0" expanded="true" />
@@ -786,10 +787,18 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/article/answers1.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="330">
+          <caret line="43" column="0" lean-forward="true" selection-start-line="43" selection-start-column="0" selection-end-line="48" selection-end-column="58" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/article/answers.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1513">
-          <caret line="254" column="7" lean-forward="false" selection-start-line="254" selection-start-column="7" selection-end-line="254" selection-end-column="7" />
+        <state relative-caret-position="2865">
+          <caret line="191" column="22" lean-forward="false" selection-start-line="191" selection-start-column="22" selection-end-line="191" selection-end-column="22" />
           <folding>
             <element signature="e#25#61#0" expanded="true" />
           </folding>
