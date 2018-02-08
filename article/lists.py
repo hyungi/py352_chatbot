@@ -33,7 +33,7 @@ else:
     press_list = list(set(press_list))
     press_list.sort()
 try:
-    for i in range(0,7):
+    for i in range(0, 7):
         category_list.extend(list(PoliticsDocument.objects.filter(published_date__exact=timezone.datetime(int(date_list[i][0:4]), int(date_list[i][6:7]), int(date_list[i][9:10]))).values_list('category',flat=True).distinct()))
         category_list.extend(list(SocietyDocument.objects.filter(published_date__exact=timezone.datetime(int(date_list[i][0:4]), int(date_list[i][6:7]), int(date_list[i][9:10]))).values_list('category',flat=True).distinct()))
         category_list.extend(list(EconomicsDocument.objects.filter(published_date__exact=timezone.datetime(int(date_list[i][0:4]), int(date_list[i][6:7]), int(date_list[i][9:10]))).values_list('category',flat=True).distinct()))
@@ -41,6 +41,7 @@ try:
         category_list.extend(list(ITScienceDocument.objects.filter(published_date__exact=timezone.datetime(int(date_list[i][0:4]), int(date_list[i][6:7]), int(date_list[i][9:10]))).values_list('category',flat=True).distinct()))
         category_list.extend(list(WorldDocument.objects.filter(published_date__exact=timezone.datetime(int(date_list[i][0:4]), int(date_list[i][6:7]), int(date_list[i][9:10]))).values_list('category',flat=True).distinct()))
 
+    list(set(category_list))
 except Exception as e:
     category_list = ['정치', '경제', '사회', '생활/문화', '세계', 'IT/과학']
 
@@ -70,3 +71,4 @@ else:
             published_date__exact=timezone.datetime(int(date_list[i][0:4]), int(date_list[i][6:7]),
                                                     int(date_list[i][9:10]))).values_list('category',
                                                                                           flat=True).distinct()))
+    list(set(category_list))
