@@ -41,7 +41,7 @@ try:
         category_list.extend(list(ITScienceDocument.objects.filter(published_date__exact=timezone.datetime(int(date_list[i][0:4]), int(date_list[i][6:7]), int(date_list[i][9:10]))).values_list('category',flat=True).distinct()))
         category_list.extend(list(WorldDocument.objects.filter(published_date__exact=timezone.datetime(int(date_list[i][0:4]), int(date_list[i][6:7]), int(date_list[i][9:10]))).values_list('category',flat=True).distinct()))
 
-    list(set(category_list))
+    category_list = list(set(category_list))
 except Exception as e:
     category_list = ['정치', '경제', '사회', '생활/문화', '세계', 'IT/과학']
 
@@ -71,4 +71,4 @@ else:
             published_date__exact=timezone.datetime(int(date_list[i][0:4]), int(date_list[i][6:7]),
                                                     int(date_list[i][9:10]))).values_list('category',
                                                                                           flat=True).distinct()))
-    list(set(category_list))
+    category_list = list(set(category_list))
