@@ -6,7 +6,9 @@ from django.views.decorators.csrf import csrf_exempt
 import json
 from crawler.get_news import get_news, get_summary
 from article.models import Requirement, NewsRequirement
-from article.lists import press_list, category_list, date_list
+from article.lists import press_list, date_list,category_list
+from django.utils import timezone
+from crawler.models import *
 
 '''
 /article/answers.py
@@ -17,13 +19,13 @@ category = {}
 press = {}
 user_request = {}
 
+
 @csrf_exempt
 def message(request):
     global date
     global category
     global press
     global user_request
-
 
     '''
     :param 고객이 버튼을 눌렀을 경우 작동하는 함수로아래와 같은 정보가 전달된다.
@@ -70,6 +72,7 @@ def message(request):
                              }
             })
         else:
+            print(category_list)
             return JsonResponse({
                 'message': {'text': str(return1) + "여기까지 선택이 완료 되었습니다! 분야를 선택해 주세요"},
                 'keyboard': {'type': 'buttons',
@@ -107,10 +110,12 @@ def message(request):
                              }
             })
         else:
+            return_press_list = make_press_list(content, user_key)
+            print(return_press_list)
             return JsonResponse({
                 'message': {'text': str(return1) + "여기까지 선택이 완료 되었습니다! 다른것을 선택해 주세요"},
                 'keyboard': {'type': 'buttons',
-                             'buttons': press_list
+                             'buttons': return_press_list
                              }
             })
 
@@ -191,14 +196,6 @@ def message(request):
         })
 
 
-# 신문사 이름중 하나인지 확인
-def check_is_in_press_list(content):
-    if content in press_list:
-        return True
-    else:
-        return False
-
-
 # 날짜 목록중 하나인지 체크 -- 임시방편이라 수정해야함
 def check_is_in_date_list(content):
     if content in date_list:
@@ -210,6 +207,14 @@ def check_is_in_date_list(content):
 # 카테고리 중 하나인지 체크
 def check_is_in_category_list(content):
     if content in category_list:
+        return True
+    else:
+        return False
+
+
+# 신문사 이름중 하나인지 확인
+def check_is_in_press_list(content):
+    if content in press_list:
         return True
     else:
         return False
@@ -297,3 +302,52 @@ def reset_globals(user_key):
 
 
 # global result 라는 변수 하나만을 선언해서 result = {'encrypted_user_key':{'press':'조선일보','year':'2018','category':'정치'}} 등으로 처리해보자
+
+def make_press_list(content, user_key):
+    global date
+    return_press_list = []
+
+    if content == "정치":
+        return_press_list = list(PoliticsDocument.objects.filter(
+            published_date__year=int(date.get(user_key)[0:4]),
+            published_date__month=int(date.get(user_key)[6:7]),
+            published_date__day=int(date.get(user_key)[9:10]),
+        ).values_list('press', flat=True).distinct())
+
+    elif content == "경제":
+        return_press_list = list(EconomicsDocument.objects.filter(
+            published_date__year=int(date.get(user_key)[0:4]),
+            published_date__month=int(date.get(user_key)[6:7]),
+            published_date__day=int(date.get(user_key)[9:10]),
+        ).values_list('press', flat=True).distinct())
+
+    elif content == "사회":
+        return_press_list = list(SocietyDocument.objects.filter(
+            published_date__year=int(date.get(user_key)[0:4]),
+            published_date__month=int(date.get(user_key)[6:7]),
+            published_date__day=int(date.get(user_key)[9:10]),
+        ).values_list('press', flat=True).distinct())
+
+    elif content == "생활/문화":
+        return_press_list = list(CultureLivingDocument.objects.filter(
+            published_date__year=int(date.get(user_key)[0:4]),
+            published_date__month=int(date.get(user_key)[6:7]),
+            published_date__day=int(date.get(user_key)[9:10]),
+        ).values_list('press', flat=True).distinct())
+
+    elif content == "세계":
+        return_press_list = list(WorldDocument.objects.filter(
+            published_date__year=int(date.get(user_key)[0:4]),
+            published_date__month=int(date.get(user_key)[6:7]),
+            published_date__day=int(date.get(user_key)[9:10]),
+        ).values_list('press', flat=True).distinct())
+
+    elif content == "IT/과학":
+        return_press_list = list(ITScienceDocument.objects.filter(
+            published_date__year=int(date.get(user_key)[0:4]),
+            published_date__month=int(date.get(user_key)[6:7]),
+            published_date__day=int(date.get(user_key)[9:10]),
+        ).values_list('press', flat=True).distinct())
+
+    return_press_list.sort()
+    return return_press_list
