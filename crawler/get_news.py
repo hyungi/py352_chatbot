@@ -7,7 +7,11 @@ from .models import *
 '''
 
 
-def get_news(press, year, month, day, category):
+def get_news(press, date, category):
+    year = int(date[0:4])
+    month = int(date[6:7])
+    day = int(date[9:10])
+
     """
     :params
     고객이 입력한 press, year, month, day, category 정보를 바탕으로
