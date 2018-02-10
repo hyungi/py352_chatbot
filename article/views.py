@@ -28,6 +28,7 @@ def add_friend(request):
         return_json_str = json.loads(message)
         user_key = return_json_str['user_key']
         # 튜플 생성
+        print("친구 추가시 보이는 화면")
         button_list = ['동의합니다', '동의하지 않습니다']
         return JsonResponse({'result': 'done',
                              'message': {'text': '첫 안내 문구'},
@@ -42,7 +43,16 @@ def add_friend(request):
 def del_friend(request, user_key):
     if request.method == "DELETE":
         # 만들어둔 튜플 삭제
+        print("친구 삭제시 보이는 화면")
         return JsonResponse({"result": "done"})
     else:
         return HttpResponseNotFound
 
+
+@csrf_exempt
+def exit_chatroom(request, user_key):
+    if request.method == "DELETE":
+        print("채팅방을 나가면 보이는 화면")
+        return JsonResponse({"result": "chat_room_out"})
+    else:
+        return HttpResponseNotFound

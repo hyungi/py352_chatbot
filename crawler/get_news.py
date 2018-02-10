@@ -9,8 +9,8 @@ from .models import *
 
 def get_news(press, date, category):
     year = int(date[0:4])
-    month = int(date[6:7])
-    day = int(date[9:10])
+    month = int(date[5:7])
+    day = int(date[8:10])
 
     """
     :params

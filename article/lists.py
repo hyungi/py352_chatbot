@@ -32,3 +32,13 @@ else:
     press_list.extend(list(ITScienceDocument.objects.values_list("press", flat=True).distinct()))
     press_list = list(set(press_list))
     press_list.sort()
+
+gender_list = ['남성', '여성']
+
+birth_year_list = []
+
+for i in range(1950, 2010):
+    birth_year_list.append(i)
+
+job_list = ['학생', '주부', '직장인']
+region_list = ['서울', '경기', '인천', '강원', '대전', '충북', '충남', '광주', '전북', '전남', '부산', '울산', '대구', '경북', '경남', '제주', '그 외']

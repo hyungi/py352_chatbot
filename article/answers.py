@@ -5,8 +5,8 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import json
 from crawler.get_news import get_news, get_summary
-from article.models import Requirement, NewsRequirement
-from article.lists import press_list, date_list,category_list
+from article.models import Requirement, NewsRequirement, UserStatus
+from article.lists import press_list, date_list, category_list, gender_list, birth_year_list, job_list, region_list
 from django.utils import timezone
 from crawler.models import *
 
@@ -19,6 +19,7 @@ category = {}
 press = {}
 user_request = {}
 
+user_info = {}
 
 @csrf_exempt
 def message(request):
@@ -26,6 +27,7 @@ def message(request):
     global category
     global press
     global user_request
+    global user_info
 
     '''
     :param 고객이 버튼을 눌렀을 경우 작동하는 함수로아래와 같은 정보가 전달된다.
@@ -43,6 +45,11 @@ def message(request):
     is_date = check_is_in_date_list(content)
     is_category = check_is_in_category_list(content)
     is_news_title = check_is_news_title(content, user_key)
+    agree_flag1, agree_flag2 = check_is_agree_or_disagree(content)
+    is_in_gender = check_is_in_gender_list(content)
+    is_in_birth_year = check_is_in_birth_year_list(content)
+    is_in_job_list = check_is_in_job_list(content)
+    is_in_region_list = check_is_in_region_list(content)
 
     if is_date:
         date[user_key] = content
@@ -112,6 +119,16 @@ def message(request):
         else:
             return_press_list = make_press_list(content, user_key)
             print(return_press_list)
+
+            if len(return_press_list) is 0:
+                reset_globals(user_key)
+                return JsonResponse({
+                    'message': {'text': '날짜와 카테고리에 맞는 신문사가 없습니다. 다시 골라 주세요'},
+                    'keyboard': {'type': 'buttons',
+                                 'buttons': date_list
+                                 }
+                })
+
             return JsonResponse({
                 'message': {'text': str(return1) + "여기까지 선택이 완료 되었습니다! 다른것을 선택해 주세요"},
                 'keyboard': {'type': 'buttons',
@@ -135,8 +152,6 @@ def message(request):
                 })
 
             result_list = list(return1.keys())
-            print("result_list")
-            print(result_list)
 
             user_request[user_key] = return1
 
@@ -183,6 +198,85 @@ def message(request):
             }
         })
 
+    elif agree_flag1:
+        print("최초 개인 정보 수집에 대한 답변입니다.")
+        if agree_flag2:
+            print("동의합니다.")
+            return JsonResponse({
+                'message': {'text': '동의해 주셔서 감사합니다. 원활한 서비스 제공을 위해 성별/나이/직업/지역에 대한 기본적인 정보수집을 진행하겠습니다.\n성별을 선택해주세요.'},
+                'keyboard': {
+                    'type': 'buttons',
+                    'buttons': gender_list
+                }
+            })
+
+        else:
+            print("동의하지 않습니다.")
+            return JsonResponse({
+                'message': {'text': '확인해 주셔서 감사합니다.\n[[기본 안내문구]]'},
+                'keyboard': {
+                    'type': 'buttons',
+                    'buttons': date_list
+                }
+            })
+
+    elif is_in_gender:
+        print('성별에 대한 답변을 한 상태' + str(content))
+        user_info[user_key] = {'gender': content}
+        return JsonResponse({
+            'message': {'text': content+'라고 답변을 해주셌네요! 감사합니다. 출생년도를 입력해 주시겠어요?'},
+            'keyboard': {
+                'type': 'buttons',
+                'buttons': birth_year_list
+            }
+        })
+
+    elif is_in_birth_year:
+        print('생년에 대한 답변을 한 상태' + str(content))
+        user_info[user_key] = {'birth_year': content}
+        return JsonResponse({
+            'message': {'text': content+'라고 답변을 해주셨네요! 감사합니다. 직업을 입력해 주시겠어요?'},
+            'keyboard': {
+                'type': 'buttons',
+                'buttons': job_list
+            }
+        })
+
+    elif is_in_job_list:
+        print('직업에 대한 답변을 한 상태' + str(content))
+        user_info[user_key] = {'job': content}
+        return JsonResponse({
+            'message': {'text': content+'라고 답변을 해 주셨네요! 감사합니다. 마지막으로 지역을 입력해 주시겠어요?'},
+            'keyboard': {
+                'type': 'buttons',
+                'buttons': region_list
+            }
+        })
+
+    elif is_in_region_list:
+        print('지역 답변까지 완료를 한 상태' + str(content))
+        user_info[user_key] = {'region': content}
+        user_status = UserStatus(
+            user_key=user_key,
+            gender=user_info[user_key]['gender'],
+            birth_year=user_info[user_key]['birth_year'],
+            location=user_info[user_key]['region'],
+        )
+        user_status.save()
+
+        show_result = "성별: "+str(user_info[user_key]['gender']) + \
+                      "\n생년: "+str(user_info[user_key]['birth_year']) + \
+                      "\n지역: " + str(user_info[user_key]['region'])
+        del user_info[user_key]
+
+        return JsonResponse({
+            'message': {'text': show_result+'라고 답변을 해주셨네요! 정보 수집이 모두 완료되었습니다. 감사합니다.\n[[기본안내문구]]'},
+            'keyboard': {
+                'type': 'buttons',
+                'buttons': date_list
+            }
+        })
+
     else:
         print("정의되지 않은 구문")
         reset_globals(user_key)
@@ -194,6 +288,48 @@ def message(request):
                 'buttons': date_list
             }
         })
+
+
+# 지역을 선택한 상황인가
+def check_is_in_region_list(content):
+    if content in region_list:
+        return True
+    else:
+        return False
+
+
+# 직업을 선택한 상황인가
+def check_is_in_job_list(content):
+    if content in job_list:
+        return True
+    else:
+        return False
+
+
+# 나이대 선택을 한 상황인가
+def check_is_in_birth_year_list(content):
+    if content in birth_year_list:
+        return True
+    else:
+        return False
+
+
+# 성별 선택을 한 상황인가
+def check_is_in_gender_list(content):
+    if content in gender_list:
+        return True
+    else:
+        return False
+
+
+# 정보수집 여부에 대한 답변인가
+def check_is_agree_or_disagree(content):
+    if content == '동의합니다':
+        return True, True
+    elif content == '동의하지 않습니다':
+        return True, False
+    else:
+        return False, False
 
 
 # 날짜 목록중 하나인지 체크 -- 임시방편이라 수정해야함
@@ -293,7 +429,10 @@ def reset_globals(user_key):
 
     del date[user_key]
     del category[user_key]
-    del press[user_key]
+    try:
+        del press[user_key]
+    except Exception as e:
+        print("신문사 아직 안골라서 못지움")
 
     try:
         del user_request[user_key]
@@ -306,48 +445,58 @@ def reset_globals(user_key):
 def make_press_list(content, user_key):
     global date
     return_press_list = []
+    additional_press_list = []
 
     if content == "정치":
         return_press_list = list(PoliticsDocument.objects.filter(
             published_date__year=int(date.get(user_key)[0:4]),
-            published_date__month=int(date.get(user_key)[6:7]),
-            published_date__day=int(date.get(user_key)[9:10]),
+            published_date__month=int(date.get(user_key)[5:7]),
+            published_date__day=int(date.get(user_key)[8:10]),
         ).values_list('press', flat=True).distinct())
 
     elif content == "경제":
         return_press_list = list(EconomicsDocument.objects.filter(
             published_date__year=int(date.get(user_key)[0:4]),
-            published_date__month=int(date.get(user_key)[6:7]),
-            published_date__day=int(date.get(user_key)[9:10]),
+            published_date__month=int(date.get(user_key)[5:7]),
+            published_date__day=int(date.get(user_key)[8:10]),
         ).values_list('press', flat=True).distinct())
 
     elif content == "사회":
         return_press_list = list(SocietyDocument.objects.filter(
             published_date__year=int(date.get(user_key)[0:4]),
-            published_date__month=int(date.get(user_key)[6:7]),
-            published_date__day=int(date.get(user_key)[9:10]),
+            published_date__month=int(date.get(user_key)[5:7]),
+            published_date__day=int(date.get(user_key)[8:10]),
         ).values_list('press', flat=True).distinct())
 
     elif content == "생활/문화":
         return_press_list = list(CultureLivingDocument.objects.filter(
             published_date__year=int(date.get(user_key)[0:4]),
-            published_date__month=int(date.get(user_key)[6:7]),
-            published_date__day=int(date.get(user_key)[9:10]),
+            published_date__month=int(date.get(user_key)[5:7]),
+            published_date__day=int(date.get(user_key)[8:10]),
         ).values_list('press', flat=True).distinct())
 
     elif content == "세계":
         return_press_list = list(WorldDocument.objects.filter(
             published_date__year=int(date.get(user_key)[0:4]),
-            published_date__month=int(date.get(user_key)[6:7]),
-            published_date__day=int(date.get(user_key)[9:10]),
+            published_date__month=int(date.get(user_key)[5:7]),
+            published_date__day=int(date.get(user_key)[8:10]),
         ).values_list('press', flat=True).distinct())
 
     elif content == "IT/과학":
         return_press_list = list(ITScienceDocument.objects.filter(
             published_date__year=int(date.get(user_key)[0:4]),
-            published_date__month=int(date.get(user_key)[6:7]),
-            published_date__day=int(date.get(user_key)[9:10]),
+            published_date__month=int(date.get(user_key)[5:7]),
+            published_date__day=int(date.get(user_key)[8:10]),
         ).values_list('press', flat=True).distinct())
 
     return_press_list.sort()
+    print(return_press_list)
+    if NewsRequirement.objects.filter(user_key=user_key).exists():
+        additional_press_list = list(set(Requirement.objects.filter(user_key=user_key).order_by('request_date').values_list('press', flat=True)[:10]))
+
+    for i in range(len(additional_press_list)):
+        print(additional_press_list[i])
+        if additional_press_list[i] in return_press_list:
+            return_press_list = [additional_press_list[i]] + return_press_list
+
     return return_press_list
