@@ -52,9 +52,9 @@ def message(request):
     is_in_birth_year = check_is_in_birth_year_list(content)
     is_in_job_list = check_is_in_job_list(content)
     is_in_region_list = check_is_in_region_list(content)
-    is_tutorial = content == '사용방법 익히기'
-    is_news_select = content == '뉴스 선택하기'
-    is_recent_news = content == '최근에 본 뉴스 확인하기'
+    is_tutorial = check_is_in_tutorial(content)
+    is_news_select = check_is_in_news_select(content)
+    is_recent_news = check_is_in_recent_news(content)
 
     if is_tutorial:
         print('tutorial page')
@@ -322,6 +322,27 @@ def message(request):
                 'buttons': date_list
             }
         })
+
+
+def check_is_in_recent_news(content):
+    if content == '최근에 본 뉴스 확인하기':
+        return True
+    else:
+        return False
+
+
+def check_is_in_tutorial(content):
+    if content == '사용방법 익히기':
+        return True
+    else:
+        return False
+
+
+def check_is_in_news_select(content):
+    if content == '뉴스 선택하기':
+        return True
+    else:
+        return False
 
 
 # 지역을 선택한 상황인가

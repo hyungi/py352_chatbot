@@ -3,7 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="6478bc8a-a392-47c1-a65b-8e36165527e7" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/article/answers.py" afterPath="$PROJECT_DIR$/article/answers.py" />
-      <change beforePath="$PROJECT_DIR$/article/user_info_class.py" afterPath="$PROJECT_DIR$/article/user_info_class.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -38,8 +37,8 @@
           <file leaf-file-name="answers.py" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/article/answers.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="449">
-                  <caret line="238" column="42" lean-forward="true" selection-start-line="238" selection-start-column="42" selection-end-line="238" selection-end-column="42" />
+                <state relative-caret-position="468">
+                  <caret line="355" column="14" lean-forward="true" selection-start-line="355" selection-start-column="14" selection-end-line="355" selection-end-column="14" />
                   <folding>
                     <element signature="e#26#62#0" expanded="true" />
                   </folding>
@@ -51,7 +50,7 @@
             <entry file="file://$PROJECT_DIR$/article/user_info_class.py">
               <provider selected="true" editor-type-id="text-editor">
                 <state relative-caret-position="-2695">
-                  <caret line="15" column="39" lean-forward="true" selection-start-line="15" selection-start-column="39" selection-end-line="15" selection-end-column="39" />
+                  <caret line="15" column="39" lean-forward="false" selection-start-line="15" selection-start-column="39" selection-end-line="15" selection-end-column="39" />
                   <folding>
                     <element signature="e#0#13#0" expanded="true" />
                   </folding>
@@ -73,7 +72,7 @@
             <entry file="file://$PROJECT_DIR$/article/views.py">
               <provider selected="true" editor-type-id="text-editor">
                 <state relative-caret-position="660">
-                  <caret line="44" column="30" lean-forward="true" selection-start-line="44" selection-start-column="30" selection-end-line="44" selection-end-column="30" />
+                  <caret line="44" column="30" lean-forward="false" selection-start-line="44" selection-start-column="30" selection-end-line="44" selection-end-column="30" />
                   <folding>
                     <element signature="e#25#83#0" expanded="true" />
                   </folding>
@@ -788,7 +787,7 @@
     <entry file="file://$PROJECT_DIR$/article/user_info_class.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-2695">
-          <caret line="15" column="39" lean-forward="true" selection-start-line="15" selection-start-column="39" selection-end-line="15" selection-end-column="39" />
+          <caret line="15" column="39" lean-forward="false" selection-start-line="15" selection-start-column="39" selection-end-line="15" selection-end-column="39" />
           <folding>
             <element signature="e#0#13#0" expanded="true" />
           </folding>
@@ -798,7 +797,7 @@
     <entry file="file://$PROJECT_DIR$/article/views.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="660">
-          <caret line="44" column="30" lean-forward="true" selection-start-line="44" selection-start-column="30" selection-end-line="44" selection-end-column="30" />
+          <caret line="44" column="30" lean-forward="false" selection-start-line="44" selection-start-column="30" selection-end-line="44" selection-end-column="30" />
           <folding>
             <element signature="e#25#83#0" expanded="true" />
           </folding>
@@ -807,8 +806,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/article/answers.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="449">
-          <caret line="238" column="42" lean-forward="true" selection-start-line="238" selection-start-column="42" selection-end-line="238" selection-end-column="42" />
+        <state relative-caret-position="468">
+          <caret line="355" column="14" lean-forward="true" selection-start-line="355" selection-start-column="14" selection-end-line="355" selection-end-column="14" />
           <folding>
             <element signature="e#26#62#0" expanded="true" />
           </folding>
