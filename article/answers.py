@@ -253,6 +253,7 @@ def message(request):
     elif is_in_gender:
         print('성별에 대한 답변을 한 상태' + str(content))
         user_info[user_key] = {'gender': content}
+        print(user_info)
         return JsonResponse({
             'message': {'text': content + '라고 답변을 해주셌네요! 감사합니다. 출생년도를 입력해 주시겠어요?'},
             'keyboard': {
@@ -264,6 +265,7 @@ def message(request):
     elif is_in_birth_year:
         print('생년에 대한 답변을 한 상태' + str(content))
         user_info[user_key] = {'birth_year': content}
+        print(user_info)
         return JsonResponse({
             'message': {'text': content + '라고 답변을 해주셨네요! 감사합니다. 직업을 입력해 주시겠어요?'},
             'keyboard': {
@@ -275,6 +277,7 @@ def message(request):
     elif is_in_job_list:
         print('직업에 대한 답변을 한 상태' + str(content))
         user_info[user_key] = {'job': content}
+        print(user_info)
         return JsonResponse({
             'message': {'text': content + '라고 답변을 해 주셨네요! 감사합니다. 마지막으로 지역을 입력해 주시겠어요?'},
             'keyboard': {
@@ -286,13 +289,14 @@ def message(request):
     elif is_in_region_list:
         print('지역 답변까지 완료를 한 상태' + str(content))
         user_info[user_key] = {'region': content}
-        user_status = UserStatus(
-            user_key=user_key,
-            gender=user_info[user_key]['gender'],
-            birth_year=user_info[user_key]['birth_year'],
-            location=user_info[user_key]['region'],
-        )
-        user_status.save()
+        print(user_info)
+        # user_status = UserStatus(
+        #     user_key=user_key,
+        #     gender=user_info[user_key]['gender'],
+        #     birth_year=user_info[user_key]['birth_year'],
+        #     location=user_info[user_key]['region'],
+        # )
+        # user_status.save()
 
         show_result = "성별: " + str(user_info[user_key]['gender']) + \
                       "\n생년: " + str(user_info[user_key]['birth_year']) + \
