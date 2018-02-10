@@ -9,7 +9,7 @@ class news_record:
     '''
     사용자가 특정 뉴스를 조회한 기록을 저장하는 class (열람한 뉴스의 document_id / press / category / title / request_time을 저장한다.)
     '''
-    def __init__(self, **news_info) :
+    def __init__(self, **news_info):
         self.document_id = news_info["document_id"]
         self.press = news_info["press"]
         self.category = news_info["category"]

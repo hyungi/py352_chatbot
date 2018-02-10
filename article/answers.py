@@ -231,7 +231,7 @@ def message(request):
     elif agree_flag1:
         print("최초 개인 정보 수집에 대한 답변입니다.")
         if agree_flag2:
-            print("동의합니다.")
+            print("동의합니다")
             return JsonResponse({
                 'message': {'text': '동의해 주셔서 감사합니다. 원활한 서비스 제공을 위해 성별/나이/직업/지역에 대한 기본적인 정보수집을 진행하겠습니다.\n성별을 선택해주세요.'},
                 'keyboard': {
@@ -241,7 +241,7 @@ def message(request):
             })
 
         else:
-            print("동의하지 않습니다.")
+            print("동의하지 않습니다")
             return JsonResponse({
                 'message': {'text': '확인해 주셔서 감사합니다.\n[[기본 안내문구]]'},
                 'keyboard': {
@@ -542,5 +542,7 @@ def make_press_list(content, user_key):
         result.append(str(i) + ' (' + str(counter_press_list[i]) + ')')
 
     # 다른 신문사 보기 기능 추가 >> 원래 보던 신문사가 아닌 신문사는 따로 관리해서 보여주기.
+    # 자주본 신문사의 갯수가 5개 이하 일때는 다 보여주기
+    # 자주본 신문사의 갯수가 5개 이상일 때는 [다른신문사 보기] 로 추가
 
     return result
