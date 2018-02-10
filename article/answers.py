@@ -6,7 +6,7 @@ from django.views.decorators.csrf import csrf_exempt
 import json
 from crawler.get_news import get_news, get_summary
 from article.models import Requirement, NewsRequirement, UserStatus
-from article.lists import press_list, date_list, category_list, gender_list, birth_year_list, job_list, region_list
+from article.lists import press_list, date_list, category_list, gender_list, birth_year_list, region_list
 from django.utils import timezone
 from crawler.models import *
 from collections import Counter
@@ -20,7 +20,10 @@ category = {}
 press = {}
 user_request = {}
 
-user_info = {}
+user_info_gender = {}
+user_info_birth_year = {}
+user_info_region = {}
+
 
 
 @csrf_exempt
@@ -29,7 +32,9 @@ def message(request):
     global category
     global press
     global user_request
-    global user_info
+    global user_info_gender
+    global user_info_birth_year
+    global user_info_region
 
     '''
     :param 고객이 버튼을 눌렀을 경우 작동하는 함수로아래와 같은 정보가 전달된다.
@@ -50,7 +55,6 @@ def message(request):
     agree_flag1, agree_flag2 = check_is_agree_or_disagree(content)
     is_in_gender = check_is_in_gender_list(content)
     is_in_birth_year = check_is_in_birth_year_list(content)
-    is_in_job_list = check_is_in_job_list(content)
     is_in_region_list = check_is_in_region_list(content)
     is_tutorial = check_is_in_tutorial(content)
     is_news_select = check_is_in_news_select(content)
@@ -232,6 +236,7 @@ def message(request):
         print("최초 개인 정보 수집에 대한 답변입니다.")
         if agree_flag2:
             print("동의합니다")
+            print(gender_list)
             return JsonResponse({
                 'message': {'text': '동의해 주셔서 감사합니다. 원활한 서비스 제공을 위해 성별/나이/직업/지역에 대한 기본적인 정보수집을 진행하겠습니다.\n성별을 선택해주세요.'},
                 'keyboard': {
@@ -252,8 +257,9 @@ def message(request):
 
     elif is_in_gender:
         print('성별에 대한 답변을 한 상태' + str(content))
-        user_info[user_key] = {'gender': content}
-        print(user_info)
+        user_info_gender[user_key] = content
+        print(user_info_gender)
+        print(birth_year_list)
         return JsonResponse({
             'message': {'text': content + '라고 답변을 해주셌네요! 감사합니다. 출생년도를 입력해 주시겠어요?'},
             'keyboard': {
@@ -264,20 +270,9 @@ def message(request):
 
     elif is_in_birth_year:
         print('생년에 대한 답변을 한 상태' + str(content))
-        user_info[user_key] = {'birth_year': content}
-        print(user_info)
-        return JsonResponse({
-            'message': {'text': content + '라고 답변을 해주셨네요! 감사합니다. 직업을 입력해 주시겠어요?'},
-            'keyboard': {
-                'type': 'buttons',
-                'buttons': job_list
-            }
-        })
-
-    elif is_in_job_list:
-        print('직업에 대한 답변을 한 상태' + str(content))
-        user_info[user_key] = {'job': content}
-        print(user_info)
+        user_info_birth_year[user_key] = content
+        print(user_info_birth_year)
+        print(region_list)
         return JsonResponse({
             'message': {'text': content + '라고 답변을 해 주셨네요! 감사합니다. 마지막으로 지역을 입력해 주시겠어요?'},
             'keyboard': {
@@ -288,8 +283,8 @@ def message(request):
 
     elif is_in_region_list:
         print('지역 답변까지 완료를 한 상태' + str(content))
-        user_info[user_key] = {'region': content}
-        print(user_info)
+        user_info_region[user_key] = content
+        print(user_info_region)
         # user_status = UserStatus(
         #     user_key=user_key,
         #     gender=user_info[user_key]['gender'],
@@ -298,10 +293,12 @@ def message(request):
         # )
         # user_status.save()
 
-        show_result = "성별: " + str(user_info[user_key]['gender']) + \
-                      "\n생년: " + str(user_info[user_key]['birth_year']) + \
-                      "\n지역: " + str(user_info[user_key]['region'])
-        del user_info[user_key]
+        show_result = "성별: " + str(user_info_gender[user_key]) + \
+                      "\n생년: " + str(user_info_birth_year[user_key]) + \
+                      "\n지역: " + str(user_info_region[user_key])
+        del user_info_gender[user_key]
+        del user_info_region[user_key]
+        del user_info_birth_year[user_key]
 
         return JsonResponse({
             'message': {'text': show_result + '라고 답변을 해주셨네요! 정보 수집이 모두 완료되었습니다. 감사합니다.\n[[기본안내문구]]'},
@@ -351,15 +348,6 @@ def check_is_in_region_list(content):
         return True
     else:
         return False
-
-
-# 직업을 선택한 상황인가
-def check_is_in_job_list(content):
-    if content in job_list:
-        return True
-    else:
-        return False
-
 
 # 나이대 선택을 한 상황인가
 def check_is_in_birth_year_list(content):
