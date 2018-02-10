@@ -548,7 +548,8 @@ def make_press_list(content, user_key):
     print(counter_press_list)
     result = []
     for i in counter_press_list:
-        result.append(str(i) + ' (' + str(counter_press_list[i]) + ')')
+        result.append(str(i))
+        # result.append(str(i) + ' (' + str(counter_press_list[i]) + ')')
 
     # 다른 신문사 보기 기능 추가 >> 원래 보던 신문사가 아닌 신문사는 따로 관리해서 보여주기.
     # 자주본 신문사의 갯수가 5개 이하 일때는 다 보여주기
