@@ -9,6 +9,7 @@ from article.models import Requirement, NewsRequirement, UserStatus
 from article.lists import press_list, date_list, category_list, gender_list, birth_year_list, job_list, region_list
 from django.utils import timezone
 from crawler.models import *
+from collections import Counter
 
 '''
 /article/answers.py
@@ -20,6 +21,7 @@ press = {}
 user_request = {}
 
 user_info = {}
+
 
 @csrf_exempt
 def message(request):
@@ -50,8 +52,36 @@ def message(request):
     is_in_birth_year = check_is_in_birth_year_list(content)
     is_in_job_list = check_is_in_job_list(content)
     is_in_region_list = check_is_in_region_list(content)
+    is_tutorial = content == '사용방법 익히기'
+    is_news_select = content == '뉴스 선택하기'
+    is_recent_news = content == '최근에 본 뉴스 확인하기'
 
-    if is_date:
+    if is_tutorial:
+        print('tutorial page')
+        button_list = ['동의합니다', '동의하지 않습니다']
+
+        return JsonResponse({'message': {'text': '첫 안내 문구'},
+                             'keyboard': {'type': 'buttons',
+                                          'buttons': button_list}
+                             })
+
+    elif is_news_select:
+        print('news_select_page')
+
+        return JsonResponse({'message': {'text': '우선 날짜부터 골라주세요!'},
+                             'keyboard': {'type': 'buttons',
+                                          'buttons': date_list}
+                             })
+
+    elif is_recent_news:
+        print('is_recent_news')
+
+        return JsonResponse({'message': {'text': '우선 날짜부터 골라주세요!'},
+                             'keyboard': {'type': 'buttons',
+                                          'buttons': date_list}
+                             })
+
+    elif is_date:
         date[user_key] = content
         print("selected day is " + date[user_key] + "일")
         return1 = handle_request(user_key)
@@ -224,7 +254,7 @@ def message(request):
         print('성별에 대한 답변을 한 상태' + str(content))
         user_info[user_key] = {'gender': content}
         return JsonResponse({
-            'message': {'text': content+'라고 답변을 해주셌네요! 감사합니다. 출생년도를 입력해 주시겠어요?'},
+            'message': {'text': content + '라고 답변을 해주셌네요! 감사합니다. 출생년도를 입력해 주시겠어요?'},
             'keyboard': {
                 'type': 'buttons',
                 'buttons': birth_year_list
@@ -235,7 +265,7 @@ def message(request):
         print('생년에 대한 답변을 한 상태' + str(content))
         user_info[user_key] = {'birth_year': content}
         return JsonResponse({
-            'message': {'text': content+'라고 답변을 해주셨네요! 감사합니다. 직업을 입력해 주시겠어요?'},
+            'message': {'text': content + '라고 답변을 해주셨네요! 감사합니다. 직업을 입력해 주시겠어요?'},
             'keyboard': {
                 'type': 'buttons',
                 'buttons': job_list
@@ -246,7 +276,7 @@ def message(request):
         print('직업에 대한 답변을 한 상태' + str(content))
         user_info[user_key] = {'job': content}
         return JsonResponse({
-            'message': {'text': content+'라고 답변을 해 주셨네요! 감사합니다. 마지막으로 지역을 입력해 주시겠어요?'},
+            'message': {'text': content + '라고 답변을 해 주셨네요! 감사합니다. 마지막으로 지역을 입력해 주시겠어요?'},
             'keyboard': {
                 'type': 'buttons',
                 'buttons': region_list
@@ -264,13 +294,13 @@ def message(request):
         )
         user_status.save()
 
-        show_result = "성별: "+str(user_info[user_key]['gender']) + \
-                      "\n생년: "+str(user_info[user_key]['birth_year']) + \
+        show_result = "성별: " + str(user_info[user_key]['gender']) + \
+                      "\n생년: " + str(user_info[user_key]['birth_year']) + \
                       "\n지역: " + str(user_info[user_key]['region'])
         del user_info[user_key]
 
         return JsonResponse({
-            'message': {'text': show_result+'라고 답변을 해주셨네요! 정보 수집이 모두 완료되었습니다. 감사합니다.\n[[기본안내문구]]'},
+            'message': {'text': show_result + '라고 답변을 해주셨네요! 정보 수집이 모두 완료되었습니다. 감사합니다.\n[[기본안내문구]]'},
             'keyboard': {
                 'type': 'buttons',
                 'buttons': date_list
@@ -452,51 +482,61 @@ def make_press_list(content, user_key):
             published_date__year=int(date.get(user_key)[0:4]),
             published_date__month=int(date.get(user_key)[5:7]),
             published_date__day=int(date.get(user_key)[8:10]),
-        ).values_list('press', flat=True).distinct())
+        ).values_list('press', flat=True))
 
     elif content == "경제":
         return_press_list = list(EconomicsDocument.objects.filter(
             published_date__year=int(date.get(user_key)[0:4]),
             published_date__month=int(date.get(user_key)[5:7]),
             published_date__day=int(date.get(user_key)[8:10]),
-        ).values_list('press', flat=True).distinct())
+        ).values_list('press', flat=True))
 
     elif content == "사회":
         return_press_list = list(SocietyDocument.objects.filter(
             published_date__year=int(date.get(user_key)[0:4]),
             published_date__month=int(date.get(user_key)[5:7]),
             published_date__day=int(date.get(user_key)[8:10]),
-        ).values_list('press', flat=True).distinct())
+        ).values_list('press', flat=True))
 
     elif content == "생활/문화":
         return_press_list = list(CultureLivingDocument.objects.filter(
             published_date__year=int(date.get(user_key)[0:4]),
             published_date__month=int(date.get(user_key)[5:7]),
             published_date__day=int(date.get(user_key)[8:10]),
-        ).values_list('press', flat=True).distinct())
+        ).values_list('press', flat=True))
 
     elif content == "세계":
         return_press_list = list(WorldDocument.objects.filter(
             published_date__year=int(date.get(user_key)[0:4]),
             published_date__month=int(date.get(user_key)[5:7]),
             published_date__day=int(date.get(user_key)[8:10]),
-        ).values_list('press', flat=True).distinct())
+        ).values_list('press', flat=True))
 
     elif content == "IT/과학":
         return_press_list = list(ITScienceDocument.objects.filter(
             published_date__year=int(date.get(user_key)[0:4]),
             published_date__month=int(date.get(user_key)[5:7]),
             published_date__day=int(date.get(user_key)[8:10]),
-        ).values_list('press', flat=True).distinct())
+        ).values_list('press', flat=True))
 
-    return_press_list.sort()
     print(return_press_list)
-    if NewsRequirement.objects.filter(user_key=user_key).exists():
-        additional_press_list = list(set(Requirement.objects.filter(user_key=user_key).order_by('request_date').values_list('press', flat=True)[:10]))
 
+    if NewsRequirement.objects.filter(user_key=user_key).exists():
+        additional_press_list = Requirement.objects.filter(user_key=user_key).order_by('request_date').values_list(
+            'press', flat=True)[:10]
+
+    print(additional_press_list)
     for i in range(len(additional_press_list)):
         print(additional_press_list[i])
         if additional_press_list[i] in return_press_list:
             return_press_list = [additional_press_list[i]] + return_press_list
 
-    return return_press_list
+    counter_press_list = Counter(return_press_list)
+    print(counter_press_list)
+    result = []
+    for i in counter_press_list:
+        result.append(str(i) + ' (' + str(counter_press_list[i]) + ')')
+
+    # 다른 신문사 보기 기능 추가 >> 원래 보던 신문사가 아닌 신문사는 따로 관리해서 보여주기.
+
+    return result

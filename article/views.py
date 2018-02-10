@@ -14,10 +14,10 @@ def keyboard(request):
     :return 카톡 플친 API를 적용할 때 필수적으로 요청하는 구성 요건으로
     json 값을 넘겨주기 위해 JsonResponse을 사용한다.
     '''
-
+    first_button_list = ['사용방법 익히기', '뉴스 선택하기', '최근에 본 뉴스 확인하기']
     return JsonResponse({
         'type': 'buttons',
-        'buttons': date_list
+        'buttons': first_button_list
     })
 
 
@@ -30,8 +30,7 @@ def add_friend(request):
         # 튜플 생성
         print("친구 추가시 보이는 화면")
         button_list = ['동의합니다', '동의하지 않습니다']
-        return JsonResponse({'result': 'done',
-                             'message': {'text': '첫 안내 문구'},
+        return JsonResponse({'message': {'text': '첫 안내 문구'},
                              'keyboard': {'type': 'buttons',
                                           'buttons': button_list}
                              })
