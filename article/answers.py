@@ -591,6 +591,15 @@ def make_press_list(content, user_key):
     except Exception as e:
         print(str(e))
 
+    convert_to_set = set()
+
+    if len(additional_press_list) > 0:
+        for i in additional_press_list:
+            convert_to_set.add(i)
+
+    print("convert_to_set: "+str(convert_to_set))
+    set(additional_press_list)
+
     counter_press_list = Counter(return_press_list)
     print(counter_press_list)
     result = []
@@ -598,14 +607,14 @@ def make_press_list(content, user_key):
         result.append(str(i) + ' (' + str(counter_press_list[i]) + ')')
 
     result.sort()
-
+    additional_press_list = list(convert_to_set)
     for i in range(len(additional_press_list)):
-        if additional_press_list[i] in return_press_list:
+        if additional_press_list[i] in counter_press_list:
             print('앞에 추가될 신문사' + additional_press_list[i])
-            result = [additional_press_list[i]] + result
+            result = [str(additional_press_list[i])+" (" + str(counter_press_list.get(additional_press_list[i])) + ")"] + result
 
     # 다른 신문사 보기 기능 추가 >> 원래 보던 신문사가 아닌 신문사는 따로 관리해서 보여주기.
     # 자주본 신문사의 갯수가 5개 이하 일때는 다 보여주기
     # 자주본 신문사의 갯수가 5개 이상일 때는 [다른신문사 보기] 로 추가
-
+    print(result)
     return result
