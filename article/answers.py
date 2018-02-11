@@ -50,7 +50,7 @@ def message(request):
     is_date = check_is_in_date_list(content)
     is_category = check_is_in_category_list(content)
     is_news_title = check_is_news_title(content, user_key)
-    agree_flag1, agree_flag2 = check_is_agree_or_disagree(content)
+    agree_flag1, agree_flag2 = check_is_agree_or_disagree(content, user_key)
     is_in_gender = check_is_in_gender_list(content)
     is_in_birth_year = check_is_in_birth_year_list(content)
     is_in_region_list = check_is_in_region_list(content)
@@ -273,13 +273,13 @@ def message(request):
             })
 
         else:
-            print("동의하지 않습니다")
+            print("동의하지 않습니다, 혹은 이미 정보가 있는 상태")
             user_status_save = UserStatus(
                 user_key=user_key
             )
             user_status_save.save()
             return JsonResponse({
-                'message': {'text': '확인해 주셔서 감사합니다.\n[[기본 안내문구]]'},
+                'message': {'text': '정보수집에 동의 하지 않으셨거나 이미 입력하신 정보가 있습니다.\n[[기본 안내문구]]'},
                 'keyboard': {
                     'type': 'buttons',
                     'buttons': date_list
@@ -402,9 +402,12 @@ def check_is_in_gender_list(content):
 
 
 # 정보수집 여부에 대한 답변인가
-def check_is_agree_or_disagree(content):
+def check_is_agree_or_disagree(content, user_key):
     if content == '동의합니다':
-        return True, True
+        if UserStatus.objects.filter(user_key) is not None:
+            return True, False
+        else:
+            return True, True
     elif content == '동의하지 않습니다':
         return True, False
     else:
@@ -599,7 +602,7 @@ def make_press_list(content, user_key):
     for i in range(len(additional_press_list)):
         if additional_press_list[i] in return_press_list:
             print('앞에 추가될 신문사' + additional_press_list[i])
-            return_press_list = [additional_press_list[i]] + return_press_list
+            result = [additional_press_list[i]] + result
 
     # 다른 신문사 보기 기능 추가 >> 원래 보던 신문사가 아닌 신문사는 따로 관리해서 보여주기.
     # 자주본 신문사의 갯수가 5개 이하 일때는 다 보여주기
