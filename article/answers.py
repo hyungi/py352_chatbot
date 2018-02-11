@@ -6,7 +6,7 @@ from django.views.decorators.csrf import csrf_exempt
 import json
 from crawler.get_news import get_news, get_summary
 from article.models import Requirement, NewsRequirement, UserStatus
-from article.lists import press_list, date_list, category_list, gender_list, birth_year_list, region_list
+from article.lists import press_list, date_list, category_list, gender_list, birth_year_list, region_list, first_button_list
 from crawler.models import *
 from collections import Counter
 
@@ -108,7 +108,7 @@ def message(request):
                 return JsonResponse({
                     'message': {'text': '선택이 모두 완료되었지만, 해당하는 기사가 없습니다.'},
                     'keyboard': {'type': 'buttons',
-                                 'buttons': date_list
+                                 'buttons': first_button_list
                                  }
                 })
 
@@ -196,7 +196,7 @@ def message(request):
                 return JsonResponse({
                     'message': {'text': '선택이 모두 완료되었지만, 해당하는 기사가 없습니다.'},
                     'keyboard': {'type': 'buttons',
-                                 'buttons': date_list
+                                 'buttons': first_button_list
                                  }
                 })
 
@@ -220,8 +220,6 @@ def message(request):
 
     elif is_news_title:
         title, text, url = get_summary(str(user_request.get(user_key).get(content)))
-
-
 
         if category.get(user_key) is None:
             category[user_key] = NewsRequirement.objects.filter(request_title=title).values_list('request_category', flat=True).distinct()[0]
@@ -253,7 +251,7 @@ def message(request):
             },
             'keyboard': {
                 'type': 'buttons',
-                'buttons': date_list
+                'buttons': first_button_list
             }
         })
 
@@ -346,7 +344,7 @@ def message(request):
             'message': {'text': '죄송합니다 정의되지 않은 응답입니다.'},
             'keyboard': {
                 'type': 'buttons',
-                'buttons': date_list
+                'buttons': first_button_list
             }
         })
 

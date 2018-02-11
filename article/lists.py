@@ -6,6 +6,7 @@ from django.utils import timezone
 category_list = ['정치', '경제', '사회', '생활/문화', '세계', 'IT/과학']
 press_list = []
 date_list = []
+first_button_list = ['사용방법 익히기', '뉴스 선택하기', '최근에 본 뉴스 확인하기']
 
 for i in range(0, 7):
     date_list.append((timezone.now() - timezone.timedelta(days=i)).strftime("%Y-%m-%d"))

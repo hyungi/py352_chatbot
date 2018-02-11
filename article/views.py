@@ -3,7 +3,7 @@
 from django.http import JsonResponse, HttpResponseNotFound
 from django.views.decorators.csrf import csrf_exempt
 import json
-
+from article.lists import first_button_list
 
 # 고객의 요청 정보를 담을 객체 선언을 여기다 하자!
 def keyboard(request):
@@ -12,7 +12,6 @@ def keyboard(request):
     :return 카톡 플친 API를 적용할 때 필수적으로 요청하는 구성 요건으로
     json 값을 넘겨주기 위해 JsonResponse을 사용한다.
     '''
-    first_button_list = ['사용방법 익히기', '뉴스 선택하기', '최근에 본 뉴스 확인하기']
     print(first_button_list)
     return JsonResponse({
         'type': 'buttons',
