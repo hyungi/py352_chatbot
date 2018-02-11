@@ -26,37 +26,37 @@ def get_news(press, date, category):
         document = PoliticsDocument.objects.filter(press=press)
         document = document.filter(published_date__year=year)
         document = document.filter(published_date__month=month)
-        document = document.filter(published_date__day=day).order_by("-published_date")[:10]  # 최신순 10개를 보여주기 위함.
+        document = document.filter(published_date__day=day).order_by("-published_date")
 
     elif category == "경제":
         document = EconomicsDocument.objects.filter(press=press)
         document = document.filter(published_date__year=year)
         document = document.filter(published_date__month=month)
-        document = document.filter(published_date__day=day).order_by("-published_date")[:10]  # 최신순 10개를 보여주기 위함.
+        document = document.filter(published_date__day=day).order_by("-published_date")
 
     elif category == "사회":
         document = SocietyDocument.objects.filter(press=press)
         document = document.filter(published_date__year=year)
         document = document.filter(published_date__month=month)
-        document = document.filter(published_date__day=day).order_by("-published_date")[:10]  # 최신순 10개를 보여주기 위함.
+        document = document.filter(published_date__day=day).order_by("-published_date")
 
     elif category == "생활/문화":
         document = CultureLivingDocument.objects.filter(press=press)
         document = document.filter(published_date__year=year)
         document = document.filter(published_date__month=month)
-        document = document.filter(published_date__day=day).order_by("-published_date")[:10]  # 최신순 10개를 보여주기 위함.
+        document = document.filter(published_date__day=day).order_by("-published_date")
 
     elif category == "세계":
         document = WorldDocument.objects.filter(press=press)
         document = document.filter(published_date__year=year)
         document = document.filter(published_date__month=month)
-        document = document.filter(published_date__day=day).order_by("-published_date")[:10]  # 최신순 10개를 보여주기 위함.
+        document = document.filter(published_date__day=day).order_by("-published_date")
 
     elif category == "IT/과학":
         document = ITScienceDocument.objects.filter(press=press)
         document = document.filter(published_date__year=year)
         document = document.filter(published_date__month=month)
-        document = document.filter(published_date__day=day).order_by("-published_date")[:10]  # 최신순 10개를 보여주기 위함.
+        document = document.filter(published_date__day=day).order_by("-published_date")
 
     print(document.values_list('published_date'))
     return_document = document.values('document_id', 'title')
@@ -71,7 +71,6 @@ def get_news(press, date, category):
 
     for i in reversed(range(doc_list_len)):
         response[document_list[i]['title']] = document_list[i]['document_id']
-    # 임시방편이라 수정해야함
 
     return response
 

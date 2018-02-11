@@ -225,7 +225,10 @@ def message(request):
         if press.get(user_key) is None:
             press[user_key] = NewsRequirement.objects.filter(request_title=content).values_list('request_press', flat=True).distinct()[0]
 
-        title, text, url = get_summary(str(user_request.get(user_key).get(content)),category[user_key])
+        title, text, url = get_summary(str(user_request.get(user_key).get(content)), category[user_key])
+
+        print(category.get(user_key))
+        print(press.get(user_key))
 
         news_requirement = NewsRequirement(
             request_news_id=str(user_request.get(user_key).get(content)),
@@ -314,13 +317,16 @@ def message(request):
         user_info_region[user_key] = content
         print(user_info_region)
 
-        user_status = UserStatus(
-            user_key=user_key,
-            gender=user_info_gender[user_key],
-            birth_year=user_info_birth_year[user_key],
-            location=user_info_region[user_key],
-        )
-        user_status.save()
+        if UserStatus.objects.filter(user_key=user_key) is not None:
+            user_status = UserStatus(
+                user_key=user_key,
+                gender=user_info_gender[user_key],
+                birth_year=user_info_birth_year[user_key],
+                location=user_info_region[user_key],
+            )
+            user_status.save()
+
+        # User_status 여러개 저장하지 않게 managing 하기
 
         show_result = "성별: " + str(user_info_gender[user_key]) + \
                       "\n생년: " + str(user_info_birth_year[user_key]) + \
@@ -504,11 +510,19 @@ def reset_globals(user_key):
     global user_request
 
     try:
-        del date[user_key]
-        del category[user_key]
         del press[user_key]
     except Exception as e:
         print("신문사 아직 안골라서 못지움")
+
+    try:
+        del date[user_key]
+    except Exception as e:
+        print("날짜 아직 안골라서 못지움")
+
+    try:
+        del category[user_key]
+    except Exception as e:
+        print("분야 아직 안골라서 못지움")
 
     try:
         del user_request[user_key]
