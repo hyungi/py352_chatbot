@@ -219,12 +219,13 @@ def message(request):
             })
 
     elif is_news_title:
-        title, text, url = get_summary(str(user_request.get(user_key).get(content)))
 
         if category.get(user_key) is None:
-            category[user_key] = NewsRequirement.objects.filter(request_title=title).values_list('request_category', flat=True).distinct()[0]
+            category[user_key] = NewsRequirement.objects.filter(request_title=content).values_list('request_category', flat=True).distinct()[0]
         if press.get(user_key) is None:
-            press[user_key] = NewsRequirement.objects.filter(request_title=title).values_list('request_press', flat=True).distinct()[0]
+            press[user_key] = NewsRequirement.objects.filter(request_title=content).values_list('request_press', flat=True).distinct()[0]
+
+        title, text, url = get_summary(str(user_request.get(user_key).get(content)),category[user_key])
 
         news_requirement = NewsRequirement(
             request_news_id=str(user_request.get(user_key).get(content)),

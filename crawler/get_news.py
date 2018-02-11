@@ -76,36 +76,26 @@ def get_news(press, date, category):
     return response
 
 
-def get_summary(input_document_id):
+def get_summary(input_document_id, category):
     document_id = DocumentId.objects.get(document_id=input_document_id)
 
-    try:
+    if category == "정치":
         document = PoliticsDocument.objects.get(document_id=document_id)
-        document = EconomicsDocument.objects.get(document_id=document_id)
-        document = SocietyDocument.objects.get(document_id=document_id)
-        document = CultureLivingDocument.objects.get(document_id=document_id)
-        document = WorldDocument.objects.get(document_id=document_id)
-        document = ITScienceDocument.objects.get(document_id=document_id)
-    except:
-        pass
 
-    # if category == "정치":
-    #     document = PoliticsDocument.objects.get(document_id=document_id)
-    #
-    # elif category == "경제":
-    #     document = EconomicsDocument.objects.get(document_id=document_id)
-    #
-    # elif category == "사회":
-    #     document = SocietyDocument.objects.get(document_id=document_id)
-    #
-    # elif category == "생활/문화":
-    #     document = CultureLivingDocument.objects.get(document_id=document_id)
-    #
-    # elif category == "세계":
-    #     document = WorldDocument.objects.get(document_id=document_id)
-    #
-    # elif category == "IT/과학":
-    #     document = ITScienceDocument.objects.get(document_id=document_id)
+    elif category == "경제":
+        document = EconomicsDocument.objects.get(document_id=document_id)
+
+    elif category == "사회":
+        document = SocietyDocument.objects.get(document_id=document_id)
+
+    elif category == "생활/문화":
+        document = CultureLivingDocument.objects.get(document_id=document_id)
+
+    elif category == "세계":
+        document = WorldDocument.objects.get(document_id=document_id)
+
+    elif category == "IT/과학":
+        document = ITScienceDocument.objects.get(document_id=document_id)
 
     summary_document = DocumentSummary.objects.get(document_id=document_id)
 
