@@ -185,7 +185,7 @@ def message(request):
 
     elif is_press:
         separator = ' '
-        rest = content.split(separator, 1)[0]
+        rest = content.rsplit(separator, 1)[0]
         press[user_key] = rest
         print("selected press is " + press[user_key])
         return1 = handle_request(user_key)
@@ -424,7 +424,8 @@ def check_is_in_category_list(content):
 # 신문사 이름중 하나인지 확인
 def check_is_in_press_list(content):
     separator = ' '
-    rest = content.split(separator, 1)[0]
+    rest = content.rsplit(separator, 1)[0]
+    print(rest)
     if rest in press_list:
         return True
     else:
