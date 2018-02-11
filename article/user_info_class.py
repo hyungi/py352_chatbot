@@ -2,7 +2,7 @@ import pickle
 import pandas as pd
 import numpy as np
 from sklearn.metrics.pairwise import cosine_similarity
-from article.models import UserStatus, NewsRecords
+from article.models import UserStatus, NewsRequirement
 
 
 class news_record:
@@ -212,17 +212,15 @@ class user_information_manager:
             return False
 
     def update_user_news_record_list(self, user_key, news_record_instance):
-        save_user_status = UserStatus(
-
+        save_news_record = NewsRequirement(
+            user_status=UserStatus.objects.get(user_key=user_key),
+            request_news_id=news_record_instance.document_id,
+            request_press=news_record_instance.press,
+            request_category=news_record_instance.category,
+            request_title=news_record_instance.title,
+            request_time=news_record_instance.request_time,
         )
-        save_user_status.save()
-#        self.user_key = user_info["user_key"]
-#        self.gender = user_info["gender"]
-#        self.birth_year = user_info["birth_year"]
-#        self.location = user_info["location"]
-#        self.news_record_list = []
-#        self.recommend_service = "Y"
-#        self.remove_seen_news = "N"
+        save_news_record.save()
 #        # 해당 user_key의 user_status 객체를 불러와서 news_record_instance를 업데이트한다.
 #        # user_status 객체의 클래스 메소드인 add_news_record(news_record_instance)를 이용한다.
         pass

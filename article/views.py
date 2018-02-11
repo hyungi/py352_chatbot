@@ -3,11 +3,9 @@
 from django.http import JsonResponse, HttpResponseNotFound
 from django.views.decorators.csrf import csrf_exempt
 import json
-from .lists import date_list
 
 
 # 고객의 요청 정보를 담을 객체 선언을 여기다 하자!
-# request_list > answer.py 라는 걸 만들어서 여기다가 객체를 던져주고 요약한 것을 보내도록 하자
 def keyboard(request):
     '''
     :param 카톡플친 API를 통해 넘어온 /keyboard request
@@ -29,12 +27,8 @@ def add_friend(request):
         return_json_str = json.loads(message)
         user_key = return_json_str['user_key']
         # 튜플 생성
-        print("친구 추가시 보이는 화면")
-        button_list = ['동의합니다', '동의하지 않습니다']
-        return JsonResponse({'message': {'text': '첫 안내 문구'},
-                             'keyboard': {'type': 'buttons',
-                                          'buttons': button_list}
-                             })
+        return JsonResponse({"result": "done"})
+
     else:
         return HttpResponseNotFound
 

@@ -58,6 +58,7 @@ def get_news(press, date, category):
         document = document.filter(published_date__month=month)
         document = document.filter(published_date__day=day).order_by("-published_date")[:10]  # 최신순 10개를 보여주기 위함.
 
+    print(document.values_list('published_date'))
     return_document = document.values('document_id', 'title')
     document_list = list(return_document)
     doc_list_len = len(document_list)
@@ -75,26 +76,36 @@ def get_news(press, date, category):
     return response
 
 
-def get_summary(input_document_id, category):
+def get_summary(input_document_id):
     document_id = DocumentId.objects.get(document_id=input_document_id)
 
-    if category == "정치":
+    try:
         document = PoliticsDocument.objects.get(document_id=document_id)
-
-    elif category == "경제":
         document = EconomicsDocument.objects.get(document_id=document_id)
-
-    elif category == "사회":
         document = SocietyDocument.objects.get(document_id=document_id)
-
-    elif category == "생활/문화":
         document = CultureLivingDocument.objects.get(document_id=document_id)
-
-    elif category == "세계":
         document = WorldDocument.objects.get(document_id=document_id)
-
-    elif category == "IT/과학":
         document = ITScienceDocument.objects.get(document_id=document_id)
+    except:
+        pass
+
+    # if category == "정치":
+    #     document = PoliticsDocument.objects.get(document_id=document_id)
+    #
+    # elif category == "경제":
+    #     document = EconomicsDocument.objects.get(document_id=document_id)
+    #
+    # elif category == "사회":
+    #     document = SocietyDocument.objects.get(document_id=document_id)
+    #
+    # elif category == "생활/문화":
+    #     document = CultureLivingDocument.objects.get(document_id=document_id)
+    #
+    # elif category == "세계":
+    #     document = WorldDocument.objects.get(document_id=document_id)
+    #
+    # elif category == "IT/과학":
+    #     document = ITScienceDocument.objects.get(document_id=document_id)
 
     summary_document = DocumentSummary.objects.get(document_id=document_id)
 
