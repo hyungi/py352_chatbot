@@ -59,7 +59,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'article',
     'crawler',
-    'django_crontab',
 ]
 
 MIDDLEWARE = [

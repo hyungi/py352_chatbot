@@ -98,4 +98,6 @@ def get_summary(input_document_id, category):
 
     summary_document = DocumentSummary.objects.get(document_id=document_id)
 
-    return document.title, summary_document.summary_text, document.link
+    joined_summary_text = "".join(list(summary_document.summary_text))
+
+    return document.title, joined_summary_text, document.link

@@ -28,17 +28,17 @@ class CrawlerData(models.Model):
 
 class UserStatus(models.Model):
     user_key = models.CharField(max_length=200, default="")
-    gender = models.CharField(max_length=4,default="")
+    gender = models.CharField(max_length=4, default="")
     birth_year = models.PositiveSmallIntegerField(blank=True, null=True, default=0)
     location = models.CharField(max_length=200, default="")
     recommend_service = models.BooleanField(default=True)
-    remove_seen_new = models.BooleanField(default=False)
+    remove_seen_news = models.BooleanField(default=False)
 
     def __str__(self):
         return self.gender + " " + str(self.birth_year) + " " + self.location
 
 
-class NewsRequirement(models.Model):
+class NewsRecord(models.Model):
     request_news_id = models.CharField(max_length=50, default="")
     request_press = models.CharField(max_length=20, default="")
     request_category = models.CharField(max_length=20, default="")

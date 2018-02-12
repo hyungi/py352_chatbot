@@ -2,8 +2,8 @@ import pickle
 import pandas as pd
 import numpy as np
 from sklearn.metrics.pairwise import cosine_similarity
-from article.models import UserStatus, NewsRequirement
-
+from article.save_user_info import *
+from article.models import UserStatus
 
 class news_record:
     '''
@@ -43,8 +43,7 @@ class user_status:
         self.location = user_info["location"]
         self.news_record_list = []
         self.recommend_service = "Y"
-        self.remove_seen_news = "N"
-
+        self.remove_seen_news = "Y"
 
     def update_user_status(self, **user_info):
         '''
@@ -56,7 +55,6 @@ class user_status:
         self.gender = user_info["gender"]
         self.birth_year = user_info["birth_year"]
         self.location = user_info["location"]
-
 
     def set_recommend_service(self, flag):
         '''
@@ -84,13 +82,14 @@ class user_status:
         else :
             raise "Wrong parameter input. Parameter should be 'Y' or 'N'."
 
-    def add_news_record(self, news_record_instnace):
+    def add_news_record(self, news_record_instance):
         '''
         열람한 뉴스 정보를 담고 있는 news_record 객체를 사용자의 news_record_list에 추가한다.
-        :param news_record_instnace: 뉴스 정보를 담고 있는 news_record 객체
+        :param news_record_instance: 뉴스 정보를 담고 있는 news_record 객체
         :return: None
         '''
-        self.news_record_list.append(news_record_instnace)
+        print("in add_news_record" + str(news_record_instance))
+        self.news_record_list.append(news_record_instance)
 
     def print_user_status(self):
         '''
@@ -135,8 +134,8 @@ class user_information_manager:
         :param path: 정보를 저장할 파일의 위치 및 파일명.txt 
         '''
         self.path = path
-        self.user_record = None #사용자의 press, category별 열람 횟수를 frequency table로 저장한다
-        self.user_vector = None #user_record를 사용자별로 총합 1의 0~1사이의 실수들로 정규화한다.
+        self.user_record = None # 사용자의 press, category별 열람 횟수를 frequency table로 저장한다
+        self.user_vector = None # user_record를 사용자별로 총합 1의 0~1사이의 실수들로 정규화한다.
         try:
             with open(self.path, mode="rb") as fp:
                 self.user_record = pickle.load(fp)
@@ -212,18 +211,16 @@ class user_information_manager:
             return False
 
     def update_user_news_record_list(self, user_key, news_record_instance):
-        save_news_record = NewsRequirement(
-            user_status=UserStatus.objects.get(user_key=user_key),
-            request_news_id=news_record_instance.document_id,
-            request_press=news_record_instance.press,
-            request_category=news_record_instance.category,
-            request_title=news_record_instance.title,
-            request_time=news_record_instance.request_time,
-        )
-        save_news_record.save()
-#        # 해당 user_key의 user_status 객체를 불러와서 news_record_instance를 업데이트한다.
-#        # user_status 객체의 클래스 메소드인 add_news_record(news_record_instance)를 이용한다.
-        pass
+        save_news_record(user_key, news_record_instance)
+        print("in update_user_news_record_list: " + str(news_record_instance))
+        user_info = {'user_key': user_key,
+                     'gender': UserStatus.objects.get(user_key=user_key).gender,
+                     'birth_year': UserStatus.objects.get(user_key=user_key).birth_year,
+                     'location': UserStatus.objects.get(user_key=user_key).location}
+        user_status_instance = user_status(**user_info)
+        user_status_instance.add_news_record(news_record_instance)
+        # 해당 user_key 의 user_status 객체를 불러와서 news_record_instance 를 업데이트한다.
+        # user_status 객체의 클래스 메소드인 add_news_record(news_record_instance)를 이용한다.
 
     def update_user_record(self, user_key, news_record_instance):
         '''
@@ -267,6 +264,7 @@ class user_information_manager:
         # 작업 완료 후 파일 업데이트
         self.update_user_record_file()
         # 작업 완료 후 user_news_record_list 업데이트
+        print("in update_user_record: " + str(news_record_instance))
         self.update_user_news_record_list(user_key, news_record_instance)
 
 

@@ -5,10 +5,15 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import json
 from crawler.get_news import get_news, get_summary
-from article.models import Requirement, NewsRequirement, UserStatus
-from article.lists import press_list, date_list, category_list, gender_list, birth_year_list, region_list, first_button_list
+from article.models import Requirement, NewsRecord, UserStatus
+from article.lists import press_list, date_list, category_list, gender_list, birth_year_list, region_list, \
+    first_button_list
 from crawler.models import *
 from collections import Counter
+from article.user_info_class import news_record, user_status, user_information_manager
+from article.save_user_info import save_news_record, save_user_status
+from django.utils import timezone
+import os
 
 '''
 /article/answers.py
@@ -23,6 +28,9 @@ user_info_gender = {}
 user_info_birth_year = {}
 user_info_region = {}
 
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+user_info_manager = user_information_manager(path=os.path.join(BASE_DIR, 'info_matrix.txt'))
+
 
 @csrf_exempt
 def message(request):
@@ -33,6 +41,7 @@ def message(request):
     global user_info_gender
     global user_info_birth_year
     global user_info_region
+    global user_info_manager
 
     '''
     :param 고객이 버튼을 눌렀을 경우 작동하는 함수로아래와 같은 정보가 전달된다.
@@ -78,20 +87,20 @@ def message(request):
     elif is_recent_news:
         print('is_recent_news')
 
-        try:
-            user_status = UserStatus.objects.get(user_key=user_key)
-            news_requirement = NewsRequirement.objects.filter(user_status=user_status).order_by("-request_time")[:10]
-            print('최근에 본 뉴스 보여주기')
-            return1 = dict(news_requirement.values_list('request_title', 'request_news_id'))
-            result_list = list(return1.keys())
-            print(result_list)
-            user_request[user_key] = return1
+        user_status_instance = UserStatus.objects.get(user_key=user_key)
+        news_requirement = NewsRecord.objects.filter(user_status=user_status_instance).order_by("-request_time")[:10]
+        print('최근에 본 뉴스 보여주기')
+        return1 = dict(news_requirement.values_list('request_title', 'request_news_id'))
+        result_list = list(return1.keys())
+        print(result_list)
+        user_request[user_key] = return1
 
+        if len(result_list) > 0:
             return JsonResponse({'message': {'text': '최근에 보신 뉴스입니다.'},
                                  'keyboard': {'type': 'buttons',
                                               'buttons': result_list}
                                  })
-        except Exception as e:
+        else:
             print('최근에 본 뉴스가 없을 경우')
             return JsonResponse({'message': {'text': '최근에 보신 뉴스가 없네요 우선 날짜부터 골라주세요!'},
                                  'keyboard': {'type': 'buttons',
@@ -221,23 +230,25 @@ def message(request):
     elif is_news_title:
 
         if category.get(user_key) is None:
-            category[user_key] = NewsRequirement.objects.filter(request_title=content).values_list('request_category', flat=True).distinct()[0]
+            category[user_key] = NewsRecord.objects.filter(
+                request_title=content).values_list('request_category', flat=True).distinct()[0]
         if press.get(user_key) is None:
-            press[user_key] = NewsRequirement.objects.filter(request_title=content).values_list('request_press', flat=True).distinct()[0]
+            press[user_key] = NewsRecord.objects.filter(
+                request_title=content).values_list('request_press', flat=True).distinct()[0]
+        doc_id = str(user_request.get(user_key).get(content))
 
-        title, text, url = get_summary(str(user_request.get(user_key).get(content)), category[user_key])
+        title, text, url = get_summary(doc_id, category[user_key])
 
         print(category.get(user_key))
         print(press.get(user_key))
 
-        news_requirement = NewsRequirement(
-            request_news_id=str(user_request.get(user_key).get(content)),
-            request_press=press.get(user_key),
-            request_category=category.get(user_key),
-            request_title=title,
-            user_status=UserStatus.objects.get(user_key=user_key),
-        )
-        news_requirement.save()
+        news_info = {"document_id": doc_id, "press": press.get(user_key),
+                     "category": category.get(user_key), "title": title,
+                     "request_time": timezone.now()}
+
+        news_record_instance = news_record(**news_info)
+        user_info_manager.update_user_record(user_key, news_record_instance)
+        # save_news_record(user_key, news_record_instance)
 
         reset_globals(user_key)
 
@@ -247,11 +258,7 @@ def message(request):
 
         return JsonResponse({
             'message': {
-                "text": "요청하신 뉴스 입니다.\n" + title + "\n" + text,
-                'message_button': {
-                    "label": "기사 바로가기",
-                    "url": url
-                }
+                "text": "요청하신 뉴스 입니다.\n" + title + "\n" + text + "\n" + url
             },
             'keyboard': {
                 'type': 'buttons',
@@ -317,16 +324,10 @@ def message(request):
         user_info_region[user_key] = content
         print(user_info_region)
 
-        if UserStatus.objects.filter(user_key=user_key) is not None:
-            user_status = UserStatus(
-                user_key=user_key,
-                gender=user_info_gender[user_key],
-                birth_year=user_info_birth_year[user_key],
-                location=user_info_region[user_key],
-            )
-            user_status.save()
-
-        # User_status 여러개 저장하지 않게 managing 하기
+        user_info = {'user_key': user_key, 'gender': user_info_gender[user_key],
+                     'birth_year': user_info_birth_year[user_key], 'location': user_info_region[user_key]}
+        user_status_instance = user_status(**user_info)
+        save_user_status(user_status_instance)
 
         show_result = "성별: " + str(user_info_gender[user_key]) + \
                       "\n생년: " + str(user_info_birth_year[user_key]) + \
@@ -404,10 +405,7 @@ def check_is_in_gender_list(content):
 # 정보수집 여부에 대한 답변인가
 def check_is_agree_or_disagree(content, user_key):
     if content == '동의합니다':
-        if UserStatus.objects.filter(user_key) is not None:
-            return True, False
-        else:
-            return True, True
+        return True, True
     elif content == '동의하지 않습니다':
         return True, False
     else:
@@ -585,7 +583,7 @@ def make_press_list(content, user_key):
     # print(return_press_list)
 
     try:
-        NewsRequirement.objects.filter(user_status=UserStatus.objects.get(user_key=user_key)).exists()
+        NewsRecord.objects.filter(user_status=UserStatus.objects.get(user_key=user_key)).exists()
         additional_press_list = Requirement.objects.filter(user_key=user_key).order_by('request_date').values_list(
             'press', flat=True).distinct()
     except Exception as e:
@@ -597,7 +595,7 @@ def make_press_list(content, user_key):
         for i in additional_press_list:
             convert_to_set.add(i)
 
-    print("convert_to_set: "+str(convert_to_set))
+    print("convert_to_set: " + str(convert_to_set))
     set(additional_press_list)
 
     counter_press_list = Counter(return_press_list)
@@ -611,7 +609,8 @@ def make_press_list(content, user_key):
     for i in range(len(additional_press_list)):
         if additional_press_list[i] in counter_press_list:
             print('앞에 추가될 신문사' + additional_press_list[i])
-            result = [str(additional_press_list[i])+" (" + str(counter_press_list.get(additional_press_list[i])) + ")"] + result
+            result = [str(additional_press_list[i]) + " (" + str(
+                counter_press_list.get(additional_press_list[i])) + ")"] + result
 
     # 다른 신문사 보기 기능 추가 >> 원래 보던 신문사가 아닌 신문사는 따로 관리해서 보여주기.
     # 자주본 신문사의 갯수가 5개 이하 일때는 다 보여주기
