@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from .models import *
+
 '''
 /crawler/get_news.py
 
@@ -76,6 +77,7 @@ def get_news(press, date, category):
 
 
 def get_summary(input_document_id, category):
+    print(input_document_id)
     document_id = DocumentId.objects.get(document_id=input_document_id)
 
     if category == "정치":

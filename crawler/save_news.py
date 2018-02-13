@@ -3,6 +3,7 @@
 import crawler.naver_news_crawler as cr
 from article.models import *
 from crawler.models import *
+import pickle
 
 '''
 crawler/save_news.py
@@ -181,6 +182,12 @@ def start_crawling(crawling_time):
 
         except Exception as e:
             print("Error")
+
+        path = 'for_hodong.txt'
+        data = [nd_doc_list, nd_summary_list]
+
+        with open(path, mode="wb") as fp:
+            pickle.dump(data, fp)
 
         print("after\n", crawler.date_list)
 

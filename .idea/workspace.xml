@@ -3,118 +3,14 @@
   <component name="ChangeListManager">
     <list default="true" id="6478bc8a-a392-47c1-a65b-8e36165527e7" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change beforePath="$PROJECT_DIR$/article/admin.py" afterPath="$PROJECT_DIR$/article/admin.py" />
       <change beforePath="$PROJECT_DIR$/article/answers.py" afterPath="$PROJECT_DIR$/article/answers.py" />
+      <change beforePath="$PROJECT_DIR$/article/lists.py" afterPath="$PROJECT_DIR$/article/lists.py" />
       <change beforePath="$PROJECT_DIR$/article/models.py" afterPath="$PROJECT_DIR$/article/models.py" />
       <change beforePath="$PROJECT_DIR$/article/user_info_class.py" afterPath="$PROJECT_DIR$/article/user_info_class.py" />
       <change beforePath="$PROJECT_DIR$/crawler/get_news.py" afterPath="$PROJECT_DIR$/crawler/get_news.py" />
-      <change beforePath="$PROJECT_DIR$/lib/python3.5/site-packages/django_admin_bootstrapped-2.5.7.dist-info/DESCRIPTION.rst" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/lib/python3.5/site-packages/django_admin_bootstrapped-2.5.7.dist-info/INSTALLER" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/lib/python3.5/site-packages/django_admin_bootstrapped-2.5.7.dist-info/METADATA" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/lib/python3.5/site-packages/django_admin_bootstrapped-2.5.7.dist-info/RECORD" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/lib/python3.5/site-packages/django_admin_bootstrapped-2.5.7.dist-info/WHEEL" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/lib/python3.5/site-packages/django_admin_bootstrapped-2.5.7.dist-info/metadata.json" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/lib/python3.5/site-packages/django_admin_bootstrapped-2.5.7.dist-info/pbr.json" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/lib/python3.5/site-packages/django_admin_bootstrapped-2.5.7.dist-info/top_level.txt" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/lib/python3.5/site-packages/django_admin_bootstrapped/__init__.py" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/lib/python3.5/site-packages/django_admin_bootstrapped/admin/__init__.py" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/lib/python3.5/site-packages/django_admin_bootstrapped/admin/models.py" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/lib/python3.5/site-packages/django_admin_bootstrapped/models.py" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/lib/python3.5/site-packages/django_admin_bootstrapped/renderers.py" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/lib/python3.5/site-packages/django_admin_bootstrapped/runtests.py" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/lib/python3.5/site-packages/django_admin_bootstrapped/static/admin/css/admin-inlines.css" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/lib/python3.5/site-packages/django_admin_bootstrapped/static/admin/css/changelists.css" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/lib/python3.5/site-packages/django_admin_bootstrapped/static/admin/css/overrides.css" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/lib/python3.5/site-packages/django_admin_bootstrapped/static/admin/js/generic-lookup.js" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/lib/python3.5/site-packages/django_admin_bootstrapped/static/admin/js/jquery-1.9.1.min.js" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/lib/python3.5/site-packages/django_admin_bootstrapped/static/admin/js/jquery-migrate-1.2.1.min.js" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/lib/python3.5/site-packages/django_admin_bootstrapped/static/admin/js/jquery.sortable.js" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/lib/python3.5/site-packages/django_admin_bootstrapped/static/bootstrap-rtl/css/bootstrap-flipped.css" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/lib/python3.5/site-packages/django_admin_bootstrapped/static/bootstrap-rtl/css/bootstrap-flipped.css.map" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/lib/python3.5/site-packages/django_admin_bootstrapped/static/bootstrap-rtl/css/bootstrap-flipped.min.css" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/lib/python3.5/site-packages/django_admin_bootstrapped/static/bootstrap-rtl/css/bootstrap-rtl.css" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/lib/python3.5/site-packages/django_admin_bootstrapped/static/bootstrap-rtl/css/bootstrap-rtl.css.map" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/lib/python3.5/site-packages/django_admin_bootstrapped/static/bootstrap-rtl/css/bootstrap-rtl.min.css" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/lib/python3.5/site-packages/django_admin_bootstrapped/static/bootstrap/css/bootstrap-theme.css" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/lib/python3.5/site-packages/django_admin_bootstrapped/static/bootstrap/css/bootstrap-theme.css.map" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/lib/python3.5/site-packages/django_admin_bootstrapped/static/bootstrap/css/bootstrap-theme.min.css" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/lib/python3.5/site-packages/django_admin_bootstrapped/static/bootstrap/css/bootstrap.css" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/lib/python3.5/site-packages/django_admin_bootstrapped/static/bootstrap/css/bootstrap.css.map" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/lib/python3.5/site-packages/django_admin_bootstrapped/static/bootstrap/css/bootstrap.min.css" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/lib/python3.5/site-packages/django_admin_bootstrapped/static/bootstrap/fonts/glyphicons-halflings-regular.eot" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/lib/python3.5/site-packages/django_admin_bootstrapped/static/bootstrap/fonts/glyphicons-halflings-regular.svg" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/lib/python3.5/site-packages/django_admin_bootstrapped/static/bootstrap/fonts/glyphicons-halflings-regular.ttf" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/lib/python3.5/site-packages/django_admin_bootstrapped/static/bootstrap/fonts/glyphicons-halflings-regular.woff" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/lib/python3.5/site-packages/django_admin_bootstrapped/static/bootstrap/fonts/glyphicons-halflings-regular.woff2" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/lib/python3.5/site-packages/django_admin_bootstrapped/static/bootstrap/js/bootstrap.js" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/lib/python3.5/site-packages/django_admin_bootstrapped/static/bootstrap/js/bootstrap.min.js" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/lib/python3.5/site-packages/django_admin_bootstrapped/templates/admin/404.html" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/lib/python3.5/site-packages/django_admin_bootstrapped/templates/admin/500.html" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/lib/python3.5/site-packages/django_admin_bootstrapped/templates/admin/actions.html" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/lib/python3.5/site-packages/django_admin_bootstrapped/templates/admin/app_index.html" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/lib/python3.5/site-packages/django_admin_bootstrapped/templates/admin/auth/user/add_form.html" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/lib/python3.5/site-packages/django_admin_bootstrapped/templates/admin/auth/user/change_password.html" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/lib/python3.5/site-packages/django_admin_bootstrapped/templates/admin/base.html" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/lib/python3.5/site-packages/django_admin_bootstrapped/templates/admin/base_site.html" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/lib/python3.5/site-packages/django_admin_bootstrapped/templates/admin/bootstrapped_extra/app_name.html" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/lib/python3.5/site-packages/django_admin_bootstrapped/templates/admin/change_form.html" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/lib/python3.5/site-packages/django_admin_bootstrapped/templates/admin/change_list.html" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/lib/python3.5/site-packages/django_admin_bootstrapped/templates/admin/change_list_results.html" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/lib/python3.5/site-packages/django_admin_bootstrapped/templates/admin/date_hierarchy.html" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/lib/python3.5/site-packages/django_admin_bootstrapped/templates/admin/delete_confirmation.html" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/lib/python3.5/site-packages/django_admin_bootstrapped/templates/admin/delete_selected_confirmation.html" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/lib/python3.5/site-packages/django_admin_bootstrapped/templates/admin/edit_inline/stacked.html" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/lib/python3.5/site-packages/django_admin_bootstrapped/templates/admin/edit_inline/tabular.html" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/lib/python3.5/site-packages/django_admin_bootstrapped/templates/admin/filer/actions.html" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/lib/python3.5/site-packages/django_admin_bootstrapped/templates/admin/filer/admin_app_name.html" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/lib/python3.5/site-packages/django_admin_bootstrapped/templates/admin/filer/breadcrumbs.html" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/lib/python3.5/site-packages/django_admin_bootstrapped/templates/admin/filer/change_form.html" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/lib/python3.5/site-packages/django_admin_bootstrapped/templates/admin/filer/folder/change_form.html" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/lib/python3.5/site-packages/django_admin_bootstrapped/templates/admin/filer/folder/directory_listing.html" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/lib/python3.5/site-packages/django_admin_bootstrapped/templates/admin/filer/folder/directory_table.html" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/lib/python3.5/site-packages/django_admin_bootstrapped/templates/admin/filer/image/change_form.html" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/lib/python3.5/site-packages/django_admin_bootstrapped/templates/admin/filer/tools/clipboard/clipboard.html" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/lib/python3.5/site-packages/django_admin_bootstrapped/templates/admin/filer/tools/search_form.html" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/lib/python3.5/site-packages/django_admin_bootstrapped/templates/admin/filter.html" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/lib/python3.5/site-packages/django_admin_bootstrapped/templates/admin/includes/fieldset.html" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/lib/python3.5/site-packages/django_admin_bootstrapped/templates/admin/index.html" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/lib/python3.5/site-packages/django_admin_bootstrapped/templates/admin/invalid_setup.html" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/lib/python3.5/site-packages/django_admin_bootstrapped/templates/admin/language_selector.html" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/lib/python3.5/site-packages/django_admin_bootstrapped/templates/admin/login.html" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/lib/python3.5/site-packages/django_admin_bootstrapped/templates/admin/object_history.html" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/lib/python3.5/site-packages/django_admin_bootstrapped/templates/admin/page_submit_line.html" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/lib/python3.5/site-packages/django_admin_bootstrapped/templates/admin/pagination.html" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/lib/python3.5/site-packages/django_admin_bootstrapped/templates/admin/prepopulated_fields_js.html" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/lib/python3.5/site-packages/django_admin_bootstrapped/templates/admin/related_widget_wrapper.html" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/lib/python3.5/site-packages/django_admin_bootstrapped/templates/admin/search_form.html" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/lib/python3.5/site-packages/django_admin_bootstrapped/templates/admin/submit_line.html" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/lib/python3.5/site-packages/django_admin_bootstrapped/templates/registration/logged_out.html" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/lib/python3.5/site-packages/django_admin_bootstrapped/templates/registration/password_change_done.html" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/lib/python3.5/site-packages/django_admin_bootstrapped/templates/registration/password_change_form.html" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/lib/python3.5/site-packages/django_admin_bootstrapped/templates/registration/password_reset_complete.html" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/lib/python3.5/site-packages/django_admin_bootstrapped/templates/registration/password_reset_confirm.html" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/lib/python3.5/site-packages/django_admin_bootstrapped/templates/registration/password_reset_done.html" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/lib/python3.5/site-packages/django_admin_bootstrapped/templates/registration/password_reset_form.html" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/lib/python3.5/site-packages/django_admin_bootstrapped/templatetags/__init__.py" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/lib/python3.5/site-packages/django_admin_bootstrapped/templatetags/bootstrapped_goodies_tags.py" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/lib/python3.5/site-packages/django_admin_bootstrapped/tests.py" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/lib/python3.5/site-packages/django_admin_bootstrapped/widgets.py" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/lib/python3.5/site-packages/django_crontab-0.7.1.dist-info/DESCRIPTION.rst" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/lib/python3.5/site-packages/django_crontab-0.7.1.dist-info/INSTALLER" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/lib/python3.5/site-packages/django_crontab-0.7.1.dist-info/METADATA" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/lib/python3.5/site-packages/django_crontab-0.7.1.dist-info/RECORD" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/lib/python3.5/site-packages/django_crontab-0.7.1.dist-info/WHEEL" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/lib/python3.5/site-packages/django_crontab-0.7.1.dist-info/metadata.json" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/lib/python3.5/site-packages/django_crontab-0.7.1.dist-info/top_level.txt" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/lib/python3.5/site-packages/django_crontab/__init__.py" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/lib/python3.5/site-packages/django_crontab/app_settings.py" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/lib/python3.5/site-packages/django_crontab/crontab.py" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/lib/python3.5/site-packages/django_crontab/management/__init__.py" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/lib/python3.5/site-packages/django_crontab/management/commands/__init__.py" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/lib/python3.5/site-packages/django_crontab/management/commands/crontab.py" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/lib/python3.5/site-packages/django_crontab/models.py" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/mysite/settings.py" afterPath="$PROJECT_DIR$/mysite/settings.py" />
-      <change beforePath="$PROJECT_DIR$/pip-selfcheck.json" afterPath="$PROJECT_DIR$/pip-selfcheck.json" />
+      <change beforePath="$PROJECT_DIR$/crawler/save_news.py" afterPath="$PROJECT_DIR$/crawler/save_news.py" />
+      <change beforePath="$PROJECT_DIR$/crawler/text_rank.py" afterPath="$PROJECT_DIR$/crawler/text_rank.py" />
+      <change beforePath="$PROJECT_DIR$/info_matrix.txt" afterPath="$PROJECT_DIR$/info_matrix.txt" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -149,8 +45,8 @@
           <file leaf-file-name="answers.py" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/article/answers.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="419">
-                  <caret line="269" column="39" lean-forward="false" selection-start-line="269" selection-start-column="39" selection-end-line="269" selection-end-column="39" />
+                <state relative-caret-position="-3221">
+                  <caret line="287" column="33" lean-forward="false" selection-start-line="287" selection-start-column="33" selection-end-line="287" selection-end-column="33" />
                   <folding>
                     <element signature="e#26#62#0" expanded="true" />
                   </folding>
@@ -158,31 +54,11 @@
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="get_news.py" pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/crawler/get_news.py">
+          <file leaf-file-name="lists.py" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/article/lists.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="178">
-                  <caret line="100" column="35" lean-forward="false" selection-start-line="100" selection-start-column="35" selection-end-line="100" selection-end-column="35" />
-                  <folding />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file leaf-file-name="apps.py" pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/article/apps.py">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="0">
-                  <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-                  <folding />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file leaf-file-name="settings.py" pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/mysite/settings.py">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="89">
-                  <caret line="20" column="12" lean-forward="false" selection-start-line="20" selection-start-column="12" selection-end-line="20" selection-end-column="12" />
+                <state relative-caret-position="353">
+                  <caret line="45" column="46" lean-forward="false" selection-start-line="45" selection-start-column="33" selection-end-line="45" selection-end-column="46" />
                   <folding />
                 </state>
               </provider>
@@ -201,8 +77,8 @@
           <file leaf-file-name="for_debug" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/for_debug">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="1005">
-                  <caret line="67" column="159" lean-forward="false" selection-start-line="67" selection-start-column="0" selection-end-line="67" selection-end-column="159" />
+                <state relative-caret-position="109">
+                  <caret line="53" column="117" lean-forward="false" selection-start-line="53" selection-start-column="0" selection-end-line="54" selection-end-column="0" />
                   <folding />
                 </state>
               </provider>
@@ -211,8 +87,8 @@
           <file leaf-file-name="models.py" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/article/models.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="315">
-                  <caret line="32" column="43" lean-forward="false" selection-start-line="32" selection-start-column="43" selection-end-line="32" selection-end-column="43" />
+                <state relative-caret-position="615">
+                  <caret line="52" column="34" lean-forward="false" selection-start-line="52" selection-start-column="34" selection-end-line="52" selection-end-column="34" />
                   <folding>
                     <element signature="e#24#52#0" expanded="true" />
                   </folding>
@@ -220,10 +96,20 @@
               </provider>
             </entry>
           </file>
+          <file leaf-file-name="get_news.py" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/crawler/get_news.py">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="348">
+                  <caret line="87" column="0" lean-forward="false" selection-start-line="87" selection-start-column="0" selection-end-line="87" selection-end-column="0" />
+                  <folding />
+                </state>
+              </provider>
+            </entry>
+          </file>
           <file leaf-file-name="admin.py" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/article/admin.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="75">
+                <state relative-caret-position="60">
                   <caret line="5" column="30" lean-forward="false" selection-start-line="5" selection-start-column="30" selection-end-line="5" selection-end-column="30" />
                   <folding>
                     <element signature="e#0#32#0" expanded="true" />
@@ -236,11 +122,11 @@
       </split-first>
       <split-second>
         <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-          <file leaf-file-name="user_info_class.py" pinned="false" current-in-tab="false">
+          <file leaf-file-name="user_info_class.py" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/article/user_info_class.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="175">
-                  <caret line="140" column="17" lean-forward="false" selection-start-line="140" selection-start-column="17" selection-end-line="140" selection-end-column="17" />
+                <state relative-caret-position="258">
+                  <caret line="31" column="18" lean-forward="false" selection-start-line="31" selection-start-column="18" selection-end-line="31" selection-end-column="18" />
                   <folding>
                     <element signature="e#0#13#0" expanded="true" />
                   </folding>
@@ -251,19 +137,21 @@
           <file leaf-file-name="save_user_info.py" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/article/save_user_info.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="300">
+                <state relative-caret-position="222">
                   <caret line="20" column="9" lean-forward="false" selection-start-line="20" selection-start-column="9" selection-end-line="20" selection-end-column="9" />
                   <folding />
                 </state>
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="save_news.py" pinned="false" current-in-tab="true">
+          <file leaf-file-name="save_news.py" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/crawler/save_news.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="-216">
-                  <caret line="172" column="32" lean-forward="false" selection-start-line="172" selection-start-column="32" selection-end-line="172" selection-end-column="32" />
-                  <folding />
+                <state relative-caret-position="346">
+                  <caret line="189" column="13" lean-forward="false" selection-start-line="189" selection-start-column="13" selection-end-line="189" selection-end-column="13" />
+                  <folding>
+                    <element signature="e#25#64#0" expanded="true" />
+                  </folding>
                 </state>
               </provider>
             </entry>
@@ -281,13 +169,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>tex</find>
-      <find>text</find>
-      <find>is_Full</find>
-      <find>!</find>
-      <find>user</find>
-      <find>del</find>
-      <find>result</find>
       <find>user_r</find>
       <find>require</find>
       <find>input</find>
@@ -301,16 +182,23 @@
       <find>job_</find>
       <find>user_re</find>
       <find>is_recent_news</find>
-      <find>user_request</find>
       <find>selected press</find>
       <find>get_summary</find>
-      <find>user_status</find>
       <find>news_info</find>
-      <find>news_record_instance</find>
       <find>최근</find>
       <find>update_user_news_record_list</find>
       <find>user_info</find>
       <find>add_news_record</find>
+      <find>update_user</find>
+      <find>저장하겠습니다</find>
+      <find>update_user_record</find>
+      <find>user_info_manager</find>
+      <find>user_status</find>
+      <find>news_record_instance</find>
+      <find>update_u</find>
+      <find>update</find>
+      <find>user_status_instance</find>
+      <find>user_request</find>
     </findStrings>
     <replaceStrings>
       <replace />
@@ -327,22 +215,22 @@
         <option value="$PROJECT_DIR$/crawler/admin.py" />
         <option value="$PROJECT_DIR$/crawler/saveNews.py" />
         <option value="$PROJECT_DIR$/crawler/getNews.py" />
-        <option value="$PROJECT_DIR$/crawler/text_rank.py" />
         <option value="$PROJECT_DIR$/1" />
         <option value="$PROJECT_DIR$/crawler/naver_news_crawler.py" />
         <option value="$PROJECT_DIR$/crawler/models.py" />
-        <option value="$PROJECT_DIR$/crawler/save_news.py" />
         <option value="$PROJECT_DIR$/article/answers2.py" />
         <option value="$PROJECT_DIR$/article/user_request_handler.py" />
         <option value="$PROJECT_DIR$/mysite/urls.py" />
-        <option value="$PROJECT_DIR$/article/lists.py" />
         <option value="$PROJECT_DIR$/article/views.py" />
-        <option value="$PROJECT_DIR$/article/models.py" />
         <option value="$PROJECT_DIR$/article/admin.py" />
         <option value="$PROJECT_DIR$/article/save_user_info.py" />
         <option value="$PROJECT_DIR$/for_debug" />
-        <option value="$PROJECT_DIR$/article/user_info_class.py" />
         <option value="$PROJECT_DIR$/mysite/settings.py" />
+        <option value="$PROJECT_DIR$/crawler/save_news.py" />
+        <option value="$PROJECT_DIR$/article/lists.py" />
+        <option value="$PROJECT_DIR$/article/user_info_class.py" />
+        <option value="$PROJECT_DIR$/crawler/text_rank.py" />
+        <option value="$PROJECT_DIR$/article/models.py" />
         <option value="$PROJECT_DIR$/crawler/get_news.py" />
         <option value="$PROJECT_DIR$/article/answers.py" />
       </list>
@@ -354,7 +242,7 @@
     <detection-done>true</detection-done>
     <sorting>DEFINITION_ORDER</sorting>
   </component>
-  <component name="ProjectFrameBounds">
+  <component name="ProjectFrameBounds" extendedState="6">
     <option name="y" value="23" />
     <option name="width" value="1440" />
     <option name="height" value="817" />
@@ -392,46 +280,11 @@
               <item name="py352_chatbot" type="462c0819:PsiDirectoryNode" />
               <item name="crawler" type="462c0819:PsiDirectoryNode" />
             </path>
-            <path>
-              <item name="py352_chatbot" type="b2602c69:ProjectViewProjectNode" />
-              <item name="py352_chatbot" type="462c0819:PsiDirectoryNode" />
-              <item name="mysite" type="462c0819:PsiDirectoryNode" />
-            </path>
           </expand>
           <select />
         </subPane>
       </pane>
-      <pane id="Scope">
-        <subPane subId="Project Files">
-          <expand>
-            <path>
-              <item name="Root" type="cbb8eebc:String" user="Root" />
-              <item name="py352_chatbot" type="cbb8eebc:String" user="py352_chatbot" />
-            </path>
-            <path>
-              <item name="Root" type="cbb8eebc:String" user="Root" />
-              <item name="py352_chatbot" type="cbb8eebc:String" user="py352_chatbot" />
-              <item name="article" type="cbb8eebc:String" user="article" />
-            </path>
-            <path>
-              <item name="Root" type="cbb8eebc:String" user="Root" />
-              <item name="py352_chatbot" type="cbb8eebc:String" user="py352_chatbot" />
-              <item name="crawler" type="cbb8eebc:String" user="crawler" />
-            </path>
-            <path>
-              <item name="Root" type="cbb8eebc:String" user="Root" />
-              <item name="py352_chatbot" type="cbb8eebc:String" user="py352_chatbot" />
-              <item name="include" type="cbb8eebc:String" user="include" />
-            </path>
-            <path>
-              <item name="Root" type="cbb8eebc:String" user="Root" />
-              <item name="py352_chatbot" type="cbb8eebc:String" user="py352_chatbot" />
-              <item name="mysite" type="cbb8eebc:String" user="mysite" />
-            </path>
-          </expand>
-          <select />
-        </subPane>
-      </pane>
+      <pane id="Scope" />
       <pane id="Scratches" />
     </panes>
   </component>
@@ -559,22 +412,21 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="23" width="1440" height="817" extended-state="0" />
-    <editor active="true" />
+    <frame x="0" y="23" width="1440" height="817" extended-state="6" />
     <layout>
-      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32963988" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32132965" sideWeight="0.51287556" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4141274" sideWeight="0.49713877" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32963988" sideWeight="0.490701" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4141274" sideWeight="0.50858366" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32825485" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
-      <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.50138503" sideWeight="0.49427754" order="8" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32132965" sideWeight="0.48712447" order="9" side_tool="false" content_ui="tabs" />
+      <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.50138503" sideWeight="0.49427754" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4141274" sideWeight="0.4914163" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32132965" sideWeight="0.48712447" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.20314735" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Docker" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3297568" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="SciView" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3297568" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24964234" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -584,15 +436,15 @@
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
     </layout>
     <layout-to-restore>
-      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32963988" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32963988" sideWeight="0.490701" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32132965" sideWeight="0.51287556" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4141274" sideWeight="0.50858366" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4141274" sideWeight="0.49713877" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32825485" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.50138503" sideWeight="0.49427754" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4141274" sideWeight="0.4914163" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32132965" sideWeight="0.48712447" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.20314735" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
@@ -602,8 +454,8 @@
       <window_info id="SciView" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3297568" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24964234" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
     </layout-to-restore>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -741,13 +593,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/crawler/text_rank.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="330">
-          <caret line="27" column="25" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="196" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/crawler/views.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -819,14 +664,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/article/lists.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="540">
-          <caret line="38" column="20" lean-forward="true" selection-start-line="38" selection-start-column="20" selection-end-line="38" selection-end-column="20" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/article/user_request_handler.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-2055">
@@ -845,13 +682,12 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="270">
           <caret line="19" column="0" lean-forward="false" selection-start-line="19" selection-start-column="0" selection-end-line="19" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/article/admin.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="75">
+        <state relative-caret-position="60">
           <caret line="5" column="30" lean-forward="false" selection-start-line="5" selection-start-column="30" selection-end-line="5" selection-end-column="30" />
           <folding>
             <element signature="e#0#32#0" expanded="true" />
@@ -859,37 +695,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/article/save_user_info.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="300">
-          <caret line="20" column="9" lean-forward="false" selection-start-line="20" selection-start-column="9" selection-end-line="20" selection-end-column="9" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/crawler/news_document_class.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-1645">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/for_debug">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1005">
-          <caret line="67" column="159" lean-forward="false" selection-start-line="67" selection-start-column="0" selection-end-line="67" selection-end-column="159" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/article/models.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="315">
-          <caret line="32" column="43" lean-forward="false" selection-start-line="32" selection-start-column="43" selection-end-line="32" selection-end-column="43" />
-          <folding>
-            <element signature="e#24#52#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -897,6 +706,54 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="307">
           <caret line="57" column="88" lean-forward="false" selection-start-line="57" selection-start-column="38" selection-end-line="57" selection-end-column="88" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/info_matrix.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="240">
+          <caret line="16" column="20" lean-forward="false" selection-start-line="16" selection-start-column="20" selection-end-line="16" selection-end-column="20" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/crawler/models.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/article/save_user_info.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="222">
+          <caret line="20" column="9" lean-forward="false" selection-start-line="20" selection-start-column="9" selection-end-line="20" selection-end-column="9" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/crawler/save_news.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="346">
+          <caret line="189" column="13" lean-forward="false" selection-start-line="189" selection-start-column="13" selection-end-line="189" selection-end-column="13" />
+          <folding>
+            <element signature="e#25#64#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/mysite/wsgi.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="135">
+          <caret line="9" column="0" lean-forward="false" selection-start-line="9" selection-start-column="0" selection-end-line="9" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/mysite/settings.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="300">
+          <caret line="20" column="12" lean-forward="false" selection-start-line="20" selection-start-column="12" selection-end-line="20" selection-end-column="12" />
           <folding />
         </state>
       </provider>
@@ -909,68 +766,62 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/mysite/wsgi.py">
+    <entry file="file://$PROJECT_DIR$/crawler/text_rank.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="135">
-          <caret line="9" column="0" lean-forward="false" selection-start-line="9" selection-start-column="0" selection-end-line="9" selection-end-column="0" />
+        <state relative-caret-position="313">
+          <caret line="177" column="25" lean-forward="true" selection-start-line="177" selection-start-column="25" selection-end-line="177" selection-end-column="25" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/info_matrix.txt">
+    <entry file="file://$PROJECT_DIR$/for_debug">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="240">
-          <caret line="16" column="20" lean-forward="false" selection-start-line="16" selection-start-column="20" selection-end-line="16" selection-end-column="20" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/mysite/settings.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="89">
-          <caret line="20" column="12" lean-forward="false" selection-start-line="20" selection-start-column="12" selection-end-line="20" selection-end-column="12" />
+        <state relative-caret-position="109">
+          <caret line="53" column="117" lean-forward="false" selection-start-line="53" selection-start-column="0" selection-end-line="54" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/article/user_info_class.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="175">
-          <caret line="140" column="17" lean-forward="false" selection-start-line="140" selection-start-column="17" selection-end-line="140" selection-end-column="17" />
+        <state relative-caret-position="258">
+          <caret line="31" column="18" lean-forward="false" selection-start-line="31" selection-start-column="18" selection-end-line="31" selection-end-column="18" />
           <folding>
             <element signature="e#0#13#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/crawler/save_news.py">
+    <entry file="file://$PROJECT_DIR$/article/models.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-216">
-          <caret line="172" column="32" lean-forward="false" selection-start-line="172" selection-start-column="32" selection-end-line="172" selection-end-column="32" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/crawler/models.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
+        <state relative-caret-position="615">
+          <caret line="52" column="34" lean-forward="false" selection-start-line="52" selection-start-column="34" selection-end-line="52" selection-end-column="34" />
+          <folding>
+            <element signature="e#24#52#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/crawler/get_news.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="178">
-          <caret line="100" column="35" lean-forward="false" selection-start-line="100" selection-start-column="35" selection-end-line="100" selection-end-column="35" />
+        <state relative-caret-position="348">
+          <caret line="87" column="0" lean-forward="false" selection-start-line="87" selection-start-column="0" selection-end-line="87" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/article/lists.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="353">
+          <caret line="45" column="46" lean-forward="false" selection-start-line="45" selection-start-column="33" selection-end-line="45" selection-end-column="46" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/article/answers.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="419">
-          <caret line="269" column="39" lean-forward="false" selection-start-line="269" selection-start-column="39" selection-end-line="269" selection-end-column="39" />
+        <state relative-caret-position="-3221">
+          <caret line="287" column="33" lean-forward="false" selection-start-line="287" selection-start-column="33" selection-end-line="287" selection-end-column="33" />
           <folding>
             <element signature="e#26#62#0" expanded="true" />
           </folding>

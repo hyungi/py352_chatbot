@@ -175,7 +175,7 @@ class text_rank:
 
         return textrank_dictionary
 
-    def get_summary(self) :
+    def get_summary(self):
         '''
         반환된 index를 바탕으로 전체 뉴스 기사 중 가장 중요도 높은 문장을 순서대로 n개 저장한 리스트를 반환한다.
         :param text: 뉴스기사 텍스트 (string)
@@ -190,7 +190,9 @@ class text_rank:
         sorted_textrank.sort()
 
         summary = []
-        for idx in sorted_textrank :
+        for idx in sorted_textrank:
             summary.append(article[idx])
 
-        return summary
+        join_summary = " ".join(summary)
+
+        return join_summary

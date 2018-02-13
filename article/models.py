@@ -48,3 +48,6 @@ class NewsRecord(models.Model):
 
     def __str__(self):
         return self.request_title + ", " + self.request_time.strftime("%Y-%m-%d %H:%M")
+
+# 매일 NewsRecord 테이블에서 request_time 이 일주일 이상 지난 tuple은 삭제함
+# raspberry pi 에 올린 후 crontab 활용하자

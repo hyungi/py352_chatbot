@@ -7,11 +7,11 @@ import json
 from crawler.get_news import get_news, get_summary
 from article.models import Requirement, NewsRecord, UserStatus
 from article.lists import press_list, date_list, category_list, gender_list, birth_year_list, region_list, \
-    first_button_list
+    first_button_list, agree_disagree_news_save_list
 from crawler.models import *
 from collections import Counter
 from article.user_info_class import news_record, user_status, user_information_manager
-from article.save_user_info import save_news_record, save_user_status
+from article.save_user_info import save_user_status
 from django.utils import timezone
 import os
 
@@ -23,6 +23,7 @@ date = {}
 category = {}
 press = {}
 user_request = {}
+selected_news_title = {}
 
 user_info_gender = {}
 user_info_birth_year = {}
@@ -31,16 +32,18 @@ user_info_region = {}
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 user_info_manager = user_information_manager(path=os.path.join(BASE_DIR, 'info_matrix.txt'))
 
-
 @csrf_exempt
 def message(request):
     global date
     global category
     global press
     global user_request
+    global selected_news_title
+
     global user_info_gender
     global user_info_birth_year
     global user_info_region
+
     global user_info_manager
 
     '''
@@ -66,6 +69,7 @@ def message(request):
     is_tutorial = check_is_in_tutorial(content)
     is_news_select = check_is_in_news_select(content)
     is_recent_news = check_is_in_recent_news(content)
+    is_save_news_title = check_is_save_news_title(content)
 
     if is_tutorial:
         print('tutorial page')
@@ -87,8 +91,8 @@ def message(request):
     elif is_recent_news:
         print('is_recent_news')
 
-        user_status_instance = UserStatus.objects.get(user_key=user_key)
-        news_requirement = NewsRecord.objects.filter(user_status=user_status_instance).order_by("-request_time")[:10]
+        user_status_object = UserStatus.objects.get(user_key=user_key)
+        news_requirement = NewsRecord.objects.filter(user_status=user_status_object).order_by("-request_time")[:10]
         print('최근에 본 뉴스 보여주기')
         return1 = dict(news_requirement.values_list('request_title', 'request_news_id'))
         result_list = list(return1.keys())
@@ -108,6 +112,7 @@ def message(request):
                                  })
 
     elif is_date:
+        reset_globals(user_key)
         date[user_key] = content
         print("selected day is " + date[user_key] + "일")
         return1 = handle_request(user_key)
@@ -137,7 +142,7 @@ def message(request):
         else:
             print(category_list)
             return JsonResponse({
-                'message': {'text': str(return1) + "여기까지 선택이 완료 되었습니다! 분야를 선택해 주세요"},
+                'message': {'text': str(return1) + "분야를 선택해 주세요"},
                 'keyboard': {'type': 'buttons',
                              'buttons': category_list
                              }
@@ -186,7 +191,7 @@ def message(request):
                 })
 
             return JsonResponse({
-                'message': {'text': str(return1) + "여기까지 선택이 완료 되었습니다! 다른것을 선택해 주세요"},
+                'message': {'text': str(return1) + "다른것을 선택해 주세요"},
                 'keyboard': {'type': 'buttons',
                              'buttons': return_press_list
                              }
@@ -221,7 +226,7 @@ def message(request):
             })
         else:
             return JsonResponse({
-                'message': {'text': str(return1) + "여기까지 선택이 완료 되었습니다! 날짜를 선택해 주세요"},
+                'message': {'text': str(return1) + "날짜를 선택해 주세요"},
                 'keyboard': {'type': 'buttons',
                              'buttons': date_list
                              }
@@ -235,36 +240,72 @@ def message(request):
         if press.get(user_key) is None:
             press[user_key] = NewsRecord.objects.filter(
                 request_title=content).values_list('request_press', flat=True).distinct()[0]
+
         doc_id = str(user_request.get(user_key).get(content))
-
-        title, text, url = get_summary(doc_id, category[user_key])
-
+        selected_news_title[user_key], text, url = get_summary(doc_id, category[user_key])
         print(category.get(user_key))
         print(press.get(user_key))
 
-        news_info = {"document_id": doc_id, "press": press.get(user_key),
-                     "category": category.get(user_key), "title": title,
-                     "request_time": timezone.now()}
-
-        news_record_instance = news_record(**news_info)
-        user_info_manager.update_user_record(user_key, news_record_instance)
-        # save_news_record(user_key, news_record_instance)
-
-        reset_globals(user_key)
-
-        print(title)
+        print(selected_news_title[user_key])
         print(text)
         print(url)
-
+        print(agree_disagree_news_save_list)
         return JsonResponse({
             'message': {
-                "text": "요청하신 뉴스 입니다.\n" + title + "\n" + text + "\n" + url
+                "text": selected_news_title[user_key] + "\n" + text + "\n" + url
             },
             'keyboard': {
                 'type': 'buttons',
-                'buttons': first_button_list
+                'buttons': agree_disagree_news_save_list
             }
         })
+
+    elif is_save_news_title:
+        if content == '뉴스를 저장하겠습니다':
+            print(content)
+            if category.get(user_key) is None:
+                category[user_key] = NewsRecord.objects.filter(
+                    request_title=selected_news_title[user_key]).values_list('request_category', flat=True).distinct()[0]
+            if press.get(user_key) is None:
+                press[user_key] = NewsRecord.objects.filter(
+                    request_title=selected_news_title[user_key]).values_list('request_press', flat=True).distinct()[0]
+
+            doc_id = str(user_request.get(user_key).get(selected_news_title[user_key]))
+            title, text, url = get_summary(doc_id, category[user_key])
+
+            print(category.get(user_key))
+            print(press.get(user_key))
+
+            news_info = {"document_id": doc_id, "press": press.get(user_key),
+                         "category": category.get(user_key), "title": title,
+                         "request_time": timezone.now()}
+
+            news_record_instance = news_record(**news_info)
+            user_info_manager.update_user_record(user_key, news_record_instance)
+
+            reset_globals(user_key)
+
+            return JsonResponse({
+                'message': {
+                    "text": "뉴스가 저장되었습니다. 저장하신 뉴스 정보는 일주일간 보관합니다"
+                },
+                'keyboard': {
+                    'type': 'buttons',
+                    'buttons': first_button_list
+                }
+            })
+        else:
+            print(content)
+            reset_globals(user_key)
+            return JsonResponse({
+                'message': {
+                    'text': '뉴스가 저장되지 않았습니다.'
+                },
+                'keyboard': {
+                    'type': 'buttons',
+                    'buttons': first_button_list
+                }
+            })
 
     elif agree_flag1:
         print("최초 개인 정보 수집에 대한 답변입니다.")
@@ -348,6 +389,9 @@ def message(request):
         print("정의되지 않은 구문")
         reset_globals(user_key)
 
+        similar_list = user_info_manager.get_n_similar_user(user_key, 3)
+        print(similar_list)
+
         return JsonResponse({
             'message': {'text': '죄송합니다 정의되지 않은 응답입니다.'},
             'keyboard': {
@@ -355,6 +399,13 @@ def message(request):
                 'buttons': first_button_list
             }
         })
+
+
+def check_is_save_news_title(content):
+    if content in agree_disagree_news_save_list:
+        return True
+    else:
+        return False
 
 
 def check_is_in_recent_news(content):
@@ -509,6 +560,7 @@ def reset_globals(user_key):
     global category
     global press
     global user_request
+    global selected_news_title
 
     try:
         del press[user_key]
@@ -529,6 +581,11 @@ def reset_globals(user_key):
         del user_request[user_key]
     except Exception as e:
         print("뉴스가 없어서 저장을 못했는데 어떻게 지우냐 멍청아!")
+
+    try:
+        del selected_news_title[user_key]
+    except Exception as e:
+        print('고른 기사가 없어서 못지움')
 
 
 # global result 라는 변수 하나만을 선언해서 result = {'encrypted_user_key':{'press':'조선일보','year':'2018','category':'정치'}} 등으로 처리해보자
@@ -584,7 +641,7 @@ def make_press_list(content, user_key):
 
     try:
         NewsRecord.objects.filter(user_status=UserStatus.objects.get(user_key=user_key)).exists()
-        additional_press_list = Requirement.objects.filter(user_key=user_key).order_by('request_date').values_list(
+        additional_press_list = Requirement.objects.filter(user_key=user_key).order_by('-request_date').values_list(
             'press', flat=True).distinct()
     except Exception as e:
         print(str(e))
@@ -605,6 +662,7 @@ def make_press_list(content, user_key):
         result.append(str(i) + ' (' + str(counter_press_list[i]) + ')')
 
     result.sort()
+    result = ["--------------------"] + result
     additional_press_list = list(convert_to_set)
     for i in range(len(additional_press_list)):
         if additional_press_list[i] in counter_press_list:

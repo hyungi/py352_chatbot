@@ -3,7 +3,8 @@ import pandas as pd
 import numpy as np
 from sklearn.metrics.pairwise import cosine_similarity
 from article.save_user_info import *
-from article.models import UserStatus
+from article.models import UserStatus, NewsRecord
+
 
 class news_record:
     '''
@@ -211,16 +212,26 @@ class user_information_manager:
             return False
 
     def update_user_news_record_list(self, user_key, news_record_instance):
+        """
+        :param user_key:
+        :param news_record_instance:
+        :return: None
+        """
         save_news_record(user_key, news_record_instance)
-        print("in update_user_news_record_list: " + str(news_record_instance))
+        # print("in update_user_news_record_list: " + str(news_record_instance))
         user_info = {'user_key': user_key,
                      'gender': UserStatus.objects.get(user_key=user_key).gender,
                      'birth_year': UserStatus.objects.get(user_key=user_key).birth_year,
                      'location': UserStatus.objects.get(user_key=user_key).location}
         user_status_instance = user_status(**user_info)
         user_status_instance.add_news_record(news_record_instance)
-        # 해당 user_key 의 user_status 객체를 불러와서 news_record_instance 를 업데이트한다.
-        # user_status 객체의 클래스 메소드인 add_news_record(news_record_instance)를 이용한다.
+
+    def get_document_by_user_key(self, user_key):
+        news_record_list = NewsRecord.objects.filter(
+            user_status=UserStatus.objects.get(user_key=user_key)).order_by('-request_time')
+        return_list = list(news_record_list.values_list('request_news_id', flat=True))
+        # user_key를 인자로 받아서, 해당 유저가 조회한 뉴스한 뉴스의 document_id (최신순으로 정렬된) 리스트를 반환한다.
+        return return_list
 
     def update_user_record(self, user_key, news_record_instance):
         '''
@@ -277,7 +288,6 @@ class user_information_manager:
         values_np = np.array(self.user_record.iloc[:, :], dtype=float)
         df_temp.iloc[:, :] = values_np / np.reshape(np.sum(values_np, axis=1), [values_np.shape[0], -1])
         self.user_vector = df_temp
-
 
     def get_n_similar_user(self, user_key, n):
         '''
