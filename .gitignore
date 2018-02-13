@@ -10,3 +10,4 @@ nginx.conf
 pi@210.123.100.153
 runcrawler.py
 for_debug
+info_matrix.txt
