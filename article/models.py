@@ -35,7 +35,7 @@ class UserStatus(models.Model):
     remove_seen_news = models.BooleanField(default=False)
 
     def __str__(self):
-        return self.gender + " " + str(self.birth_year) + " " + self.location
+        return str(self.user_key) + " " + self.gender + " " + str(self.birth_year) + " " + self.location
 
 
 class NewsRecord(models.Model):

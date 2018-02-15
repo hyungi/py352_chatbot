@@ -24,6 +24,7 @@ category = {}
 press = {}
 user_request = {}
 selected_news_title = {}
+news_title_list = {}
 
 user_info_gender = {}
 user_info_birth_year = {}
@@ -32,6 +33,7 @@ user_info_region = {}
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 user_info_manager = user_information_manager(path=os.path.join(BASE_DIR, 'info_matrix.txt'))
 
+
 @csrf_exempt
 def message(request):
     global date
@@ -39,6 +41,7 @@ def message(request):
     global press
     global user_request
     global selected_news_title
+    global news_title_list
 
     global user_info_gender
     global user_info_birth_year
@@ -198,6 +201,19 @@ def message(request):
             })
 
     elif is_press:
+        if content == '--------------------':
+            print('구분자를 선택한 상황임')
+
+            return_press_list = make_press_list(category[user_key], user_key)
+            print(return_press_list)
+
+            return JsonResponse({
+                'message': {'text': '신문사를 다시 골라주세요'},
+                'keyboard': {'type': 'buttons',
+                             'buttons': return_press_list
+                             }
+            })
+
         separator = ' '
         rest = content.rsplit(separator, 1)[0]
         press[user_key] = rest
@@ -215,7 +231,7 @@ def message(request):
                 })
 
             result_list = list(return1.keys())
-
+            news_title_list[user_key] = result_list
             user_request[user_key] = return1
 
             return JsonResponse({
@@ -233,7 +249,6 @@ def message(request):
             })
 
     elif is_news_title:
-
         if category.get(user_key) is None:
             category[user_key] = NewsRecord.objects.filter(
                 request_title=content).values_list('request_category', flat=True).distinct()[0]
@@ -529,7 +544,7 @@ def handle_request(user_key):
 
     if is_full(user_key):
         print("is_full")
-        rq_date = date[user_key][0:4] + "년 " + date[user_key][6:7] + "월 " + date[user_key][9:10] + "일"
+        rq_date = date[user_key][0:4] + "년 " + date[user_key][5:7] + "월 " + date[user_key][8:10] + "일"
         save_request = Requirement(user_key=user_key, press=press[user_key], date=rq_date, category=category[user_key])
         save_request.save()
         response = get_news(press[user_key], date[user_key], category[user_key])
@@ -561,6 +576,7 @@ def reset_globals(user_key):
     global press
     global user_request
     global selected_news_title
+    global news_title_list
 
     try:
         del press[user_key]
@@ -586,6 +602,11 @@ def reset_globals(user_key):
         del selected_news_title[user_key]
     except Exception as e:
         print('고른 기사가 없어서 못지움')
+
+    try:
+        del news_title_list[user_key]
+    except Exception as e:
+        print('뉴스 리스트가 없어서 못 지움')
 
 
 # global result 라는 변수 하나만을 선언해서 result = {'encrypted_user_key':{'press':'조선일보','year':'2018','category':'정치'}} 등으로 처리해보자
@@ -640,31 +661,37 @@ def make_press_list(content, user_key):
     # print(return_press_list)
 
     try:
-        NewsRecord.objects.filter(user_status=UserStatus.objects.get(user_key=user_key)).exists()
-        additional_press_list = Requirement.objects.filter(user_key=user_key).order_by('-request_date').values_list(
-            'press', flat=True).distinct()
+        additional_press_list = list(NewsRecord.objects.filter(
+            user_status=UserStatus.objects.get(user_key=user_key),
+            request_time__gte=timezone.now()-timezone.timedelta(days=7)
+        ).order_by('request_time').values_list('request_press', flat=True).distinct())
     except Exception as e:
         print(str(e))
 
-    convert_to_set = set()
-
-    if len(additional_press_list) > 0:
-        for i in additional_press_list:
-            convert_to_set.add(i)
-
-    print("convert_to_set: " + str(convert_to_set))
-    set(additional_press_list)
-
     counter_press_list = Counter(return_press_list)
     print(counter_press_list)
+
     result = []
     for i in counter_press_list:
         result.append(str(i) + ' (' + str(counter_press_list[i]) + ')')
 
     result.sort()
     result = ["--------------------"] + result
-    additional_press_list = list(convert_to_set)
-    for i in range(len(additional_press_list)):
+
+    additional_press_list = make_unique_list(additional_press_list)
+
+    # if len(set(counter_press_list).intersection(set(additional_press_list))) > 4:
+    #     print('자주본 신문사의 갯수가 5개 이상일 때는 [다른신문사 보기] 로 추가')
+    #     long_additional_press_list = ['--------------------', '다른 신문사']
+    #     for i in reversed(range(len(additional_press_list))):
+    #         if additional_press_list[i] in counter_press_list:
+    #             print('앞에 추가될 신문사' + additional_press_list[i])
+    #             long_additional_press_list = [str(additional_press_list[i]) + " (" + str(
+    #                 counter_press_list.get(additional_press_list[i])) + ")"] + long_additional_press_list
+    #
+    #     return long_additional_press_list
+
+    for i in reversed(range(len(additional_press_list))):
         if additional_press_list[i] in counter_press_list:
             print('앞에 추가될 신문사' + additional_press_list[i])
             result = [str(additional_press_list[i]) + " (" + str(
@@ -675,3 +702,9 @@ def make_press_list(content, user_key):
     # 자주본 신문사의 갯수가 5개 이상일 때는 [다른신문사 보기] 로 추가
     print(result)
     return result
+
+
+# list 를 넣어서 중복되는 것을 제거하는 함수
+def make_unique_list(sequence):
+    seen = set()
+    return [x for x in sequence if not (x in seen or seen.add(x))]

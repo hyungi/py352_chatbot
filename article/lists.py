@@ -34,6 +34,8 @@ else:
     press_list = list(set(press_list))
     press_list.sort()
 
+press_list.append('--------------------')
+
 gender_list = ['남성', '여성']
 
 birth_year_list = []
