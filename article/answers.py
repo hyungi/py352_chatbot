@@ -7,7 +7,7 @@ import json
 from crawler.get_news import get_news, get_summary
 from article.models import Requirement, NewsRecord, UserStatus
 from article.lists import press_list, date_list, category_list, gender_list, birth_year_list, region_list, \
-    first_button_list, agree_disagree_news_save_list
+    first_button_list, agree_disagree_news_save_list, end_of_service_list
 from crawler.models import *
 from collections import Counter
 from article.user_info_class import news_record, user_status, user_information_manager
@@ -73,10 +73,32 @@ def message(request):
     is_news_select = check_is_in_news_select(content)
     is_recent_news = check_is_in_recent_news(content)
     is_save_news_title = check_is_save_news_title(content)
+    is_end_of_service = check_is_in_end_of_service_list(content)
 
-    if is_tutorial:
+    if is_end_of_service:
+        if content == 'stop':
+            reset_globals(user_key)
+            return JsonResponse({'message': {'text': 'you select stop'},
+                                 'keyboard': {'type': 'buttons',
+                                              'buttons': first_button_list}
+                                 })
+        elif content == 'break':
+            reset_globals(user_key)
+            return JsonResponse({'message': {'text': 'you select break'},
+                                 'keyboard': {'type': 'buttons',
+                                              'buttons': date_list}
+                                 })
+        else:
+            return_list = list(user_request[user_key].keys())
+            print(return_list)
+            return JsonResponse({'message': {'text': 'you select continue'},
+                                 'keyboard': {'type': 'buttons',
+                                              'buttons': return_list}
+                                 })
+    elif is_tutorial:
         print('tutorial page')
         button_list = ['동의합니다', '동의하지 않습니다']
+        print(button_list)
 
         return JsonResponse({'message': {'text': '첫 안내 문구'},
                              'keyboard': {'type': 'buttons',
@@ -298,33 +320,42 @@ def message(request):
             news_record_instance = news_record(**news_info)
             user_info_manager.update_user_record(user_key, news_record_instance)
 
-            reset_globals(user_key)
-
             return JsonResponse({
                 'message': {
                     "text": "뉴스가 저장되었습니다. 저장하신 뉴스 정보는 일주일간 보관합니다"
                 },
                 'keyboard': {
                     'type': 'buttons',
-                    'buttons': first_button_list
+                    'buttons': end_of_service_list
                 }
             })
         else:
             print(content)
-            reset_globals(user_key)
             return JsonResponse({
                 'message': {
                     'text': '뉴스가 저장되지 않았습니다.'
                 },
                 'keyboard': {
                     'type': 'buttons',
-                    'buttons': first_button_list
+                    'buttons': end_of_service_list
                 }
             })
 
     elif agree_flag1:
         print("최초 개인 정보 수집에 대한 답변입니다.")
-        if agree_flag2:
+
+        if UserStatus.objects.get(user_key=user_key) is not None:
+            print('이미 입력하신 정보가 있습니다')
+            print(first_button_list)
+            return JsonResponse({
+                'message': {'text': '이미 입력하신 정보가 있습니다.\n[[기본 안내문구]]'},
+                'keyboard': {
+                    'type': 'buttons',
+                    'buttons': first_button_list
+                }
+            })
+
+        elif agree_flag2:
             print("동의합니다")
             print(gender_list)
             return JsonResponse({
@@ -336,17 +367,18 @@ def message(request):
             })
 
         else:
-            print("동의하지 않습니다, 혹은 이미 정보가 있는 상태")
+            print("동의하지 않습니다")
             user_status_save = UserStatus(
-                user_key=user_key
+                 user_key=user_key
             )
             user_status_save.save()
+
             return JsonResponse({
-                'message': {'text': '정보수집에 동의 하지 않으셨거나 이미 입력하신 정보가 있습니다.\n[[기본 안내문구]]'},
-                'keyboard': {
-                    'type': 'buttons',
-                    'buttons': date_list
-                }
+                    'message': {'text': '정보수집에 동의 하지 않으셨습니다.\n[[기본 안내문구]]'},
+                    'keyboard': {
+                        'type': 'buttons',
+                        'buttons': date_list
+                    }
             })
 
     elif is_in_gender:
@@ -414,6 +446,13 @@ def message(request):
                 'buttons': first_button_list
             }
         })
+
+
+def check_is_in_end_of_service_list(content):
+    if content in end_of_service_list:
+        return True
+    else:
+        return False
 
 
 def check_is_save_news_title(content):

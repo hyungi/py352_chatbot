@@ -46,3 +46,6 @@ for i in range(1950, 2010):
 region_list = ['서울', '경기', '인천', '강원', '대전', '충북', '충남', '광주', '전북', '전남', '부산', '울산', '대구', '경북', '경남', '제주', '그 외']
 
 agree_disagree_news_save_list = ['뉴스를 저장하겠습니다', '뉴스를 저장하지 않겠습니다.']
+
+end_of_service_list = ['stop', 'break', 'continue']
+# stop > first_button_list/ break > date_list /continue > news_title_list
