@@ -76,6 +76,47 @@ def get_news(press, date, category):
     return response
 
 
+def get_news_by_id(document_id_list):
+    list_len = len(document_id_list)
+    return_dict = {}
+    print(list_len)
+    for i in range(list_len):
+        print(i)
+        print(document_id_list[i])
+
+        document = (PoliticsDocument.objects.filter(document_id=document_id_list[i]).values('document_id', 'title'))
+        if len(document) > 0:
+            document = list(document)
+            return_dict[document[0]['title']] = document[0]['document_id']
+
+        document = (EconomicsDocument.objects.filter(document_id=document_id_list[i]).values('document_id', 'title'))
+        if len(document) != 0:
+            document = list(document)
+            return_dict[document[0]['title']] = document[0]['document_id']
+
+        document = (SocietyDocument.objects.filter(document_id=document_id_list[i]).values('document_id', 'title'))
+        if len(document) != 0:
+            document = list(document)
+            return_dict[document[0]['title']] = document[0]['document_id']
+
+        document = (CultureLivingDocument.objects.filter(document_id=document_id_list[i]).values('document_id', 'title'))
+        if len(document) != 0:
+            document = list(document)
+            return_dict[document[0]['title']] = document[0]['document_id']
+
+        document = (WorldDocument.objects.filter(document_id=document_id_list[i]).values('document_id', 'title'))
+        if len(document) != 0:
+            document = list(document)
+            return_dict[document[0]['title']] = document[0]['document_id']
+
+        document = (ITScienceDocument.objects.filter(document_id=document_id_list[i]).values('document_id', 'title'))
+        if len(document) != 0:
+            document = list(document)
+            return_dict[document[0]['title']] = document[0]['document_id']
+
+    return return_dict
+
+
 def get_summary(input_document_id, category):
     print(input_document_id)
     document_id = DocumentId.objects.get(document_id=input_document_id)

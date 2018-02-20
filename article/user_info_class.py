@@ -278,7 +278,6 @@ class user_information_manager:
         print("in update_user_record: " + str(news_record_instance))
         self.update_user_news_record_list(user_key, news_record_instance)
 
-
     def regularize_user_record(self):
         '''
         user_record를 정규화하여 user_vector에 반영한다.
@@ -306,7 +305,6 @@ class user_information_manager:
             top_n_index = np.argsort(similarity_vector)[-2:-(2 + n):-1]
             top_n_user = self.user_vector.index[top_n_index]
             return list(top_n_user)
-
 
     def print_user_record(self):
         '''

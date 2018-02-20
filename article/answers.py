@@ -4,7 +4,7 @@
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import json
-from crawler.get_news import get_news, get_summary
+from crawler.get_news import get_news, get_summary, get_news_by_id
 from article.models import Requirement, NewsRecord, UserStatus
 from article.lists import press_list, date_list, category_list, gender_list, birth_year_list, region_list, \
     first_button_list, agree_disagree_news_save_list, end_of_service_list
@@ -13,6 +13,7 @@ from collections import Counter
 from article.user_info_class import news_record, user_status, user_information_manager
 from article.save_user_info import save_user_status
 from django.utils import timezone
+import article.content_based_cf as cb
 import os
 
 '''
@@ -61,6 +62,7 @@ def message(request):
     content = return_json_str['content']
     user_key = return_json_str['user_key']
 
+    # time out error 를 피하기 위한 트릭
     is_press = check_is_in_press_list(content)
     is_date = check_is_in_date_list(content)
     is_category = check_is_in_category_list(content)
@@ -75,7 +77,39 @@ def message(request):
     is_save_news_title = check_is_save_news_title(content)
     is_end_of_service = check_is_in_end_of_service_list(content)
 
-    if is_end_of_service:
+    if content == u'유사 이용자 검색':
+        print('유사 이용자 검색')
+        user_key_list = user_info_manager.get_n_similar_user(user_key, 1) # 임의의 숫자 1
+        print(user_key_list)
+        news_id_list = user_info_manager.get_document_by_user_key(user_key_list[0])
+        print(news_id_list)
+        user_request[user_key] = get_news_by_id(news_id_list)
+        return_list = list(user_request[user_key].keys())
+        print(return_list)
+        return JsonResponse({'message': {'text': '유사 이용자의 뉴스 검색 결과 입니다.'},
+                             'keyboard': {'type': 'buttons',
+                                          'buttons': return_list}
+                             })
+
+    elif content == u'유사 내용 검색':
+        print('유사 내용 검색')
+        searcher = cb.news_searcher("content_base.txt")
+        news_id_list = user_info_manager.get_document_by_user_key(user_key)
+        # 전체 기사에서 찾기..?
+        searcher.add_new_document(news_id_list)
+        search_query = "프로세서" # 임의의 쿼리문
+        print('search_query: ' + search_query)
+        news_id_list = searcher.search_news_document(search_query, 5)
+        print(news_id_list)
+        user_request[user_key] = get_news_by_id(news_id_list)
+        return_list = list(user_request[user_key].keys())
+        print(return_list)
+        return JsonResponse({'message': {'text': '유사 뉴스 검색 결과 입니다.'},
+                            'keyboard': {'type': 'buttons',
+                                         'buttons': return_list}
+                            })
+
+    elif is_end_of_service:
         if content == 'stop':
             reset_globals(user_key)
             return JsonResponse({'message': {'text': 'you select stop'},
