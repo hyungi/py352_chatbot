@@ -378,7 +378,7 @@ def message(request):
     elif agree_flag1:
         print("최초 개인 정보 수집에 대한 답변입니다.")
 
-        if UserStatus.objects.get(user_key=user_key) is not None:
+        if len(UserStatus.objects.filter(user_key=user_key)) != 0:
             print('이미 입력하신 정보가 있습니다')
             print(first_button_list)
             return JsonResponse({

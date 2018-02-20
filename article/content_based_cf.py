@@ -3,6 +3,7 @@ import pickle
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.metrics.pairwise import pairwise_distances
 from crawler.models import DocumentId, DocumentSummary
+from konlpy.tag import Mecab
 
 class news_searcher:
     def __init__(self, path):
@@ -118,16 +119,25 @@ class news_searcher:
         return list(top_n_document)
 
 
+    def stemming_user_query(self, search_query):
+        remove_pos = "[(?P<조사>JK.*)(?P<접속조사>JC.*)(?P<전성어미>ET.*)(?P<종결어미>EF.*)(?P<연결어미>EC.*)(?P<접미사>XS.*)(?P<마침표물음표느낌표>SF.*)(?P<쉼표가운뎃점콜론빗금>SC.*)]"  # mecab
+        mecab = Mecab()
+        stemmed_words = mecab.pos(search_query)
+        stemmed_words = [x[0] for x in stemmed_words if not bool(re.match(remove_pos, x[1]))]
+
+        return ' '.join(stemmed_words)
+
     def search_news_document(self, search_query, n):
         '''
         검색어와 jaccard_similarity가 가장 가까운 document의 id를 원소로 갖는 리스트를 반환한다.
         :param search_query: 찾고자 하는 검색어 (string)
-        :param n: 유사한 document의 수 (integer) #보통 n=5 정도로 하자. 
+        :param n: 유사한 document의 수 (integer) #보통 n=5 정도로 하자.
         :return: 검색어와 가장 유사한 document_id를 원소로 갖는 리스트 (list)
         '''
 
         #search_query를 기존 dtm에 맞는 vector 형태로 변환
-        target_vector = self.vctr.transform([search_query]).toarray()
+        user_query = self.stemming_user_query(search_query)
+        target_vector = self.vctr.transform([user_query]).toarray()
 
         #기존 dtm_index와 dtm_list에 영향을 주지 않기 위해 copy하고 copy된 객체 위에서 jaccard 거리 산출
         search_dtm_index = (self.dtm_index.copy())
@@ -135,8 +145,9 @@ class news_searcher:
         search_dtm = np.append((self.dtm.copy()), target_vector, axis=0)
         search_jaccard_matrix = (1 - pairwise_distances(search_dtm, metric="hamming"))
 
-        #임시로 산출된 jaccard_matrix에서 검색어(search_query)와 가장 유사한 document의 id를 반환
+        #임시로 산출된 jaccard_matrix에서 검색어(user_query)와 가장 유사한 document의 id를 반환
         search_target = search_dtm_index.index("target_index")
         top_n_index = np.argsort(search_jaccard_matrix[search_target])[-2:-(2 + n):-1]
         top_n_document = np.array(self.dtm_index)[np.array(top_n_index)]
+
         return list(top_n_document)
