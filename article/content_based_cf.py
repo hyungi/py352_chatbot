@@ -4,6 +4,7 @@ from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.metrics.pairwise import pairwise_distances
 from crawler.models import DocumentId, DocumentSummary
 from konlpy.tag import Mecab
+import re
 
 class news_searcher:
     def __init__(self, path):

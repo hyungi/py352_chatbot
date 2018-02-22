@@ -6,7 +6,7 @@ from django.utils import timezone
 category_list = ['정치', '경제', '사회', '생활/문화', '세계', 'IT/과학']
 press_list = []
 date_list = []
-first_button_list = ['사용방법 익히기', '뉴스 선택하기', '최근에 본 뉴스 확인하기']
+first_button_list = ['최신 뉴스 보기', 	'뉴스 검색', '최근 본 뉴스', '저장한 뉴스', '뉴스 이용 통계', '사용 방법 보기']
 
 for i in range(0, 7):
     date_list.append((timezone.now() - timezone.timedelta(days=i)).strftime("%Y-%m-%d"))
@@ -46,6 +46,8 @@ for i in range(1950, 2010):
 region_list = ['서울', '경기', '인천', '강원', '대전', '충북', '충남', '광주', '전북', '전남', '부산', '울산', '대구', '경북', '경남', '제주', '그 외']
 
 agree_disagree_news_save_list = ['뉴스를 저장하겠습니다', '뉴스를 저장하지 않겠습니다.']
+
+maintain_remove_news_save_list = ['유지하기', '삭제하기']
 
 end_of_service_list = ['stop', 'break', 'continue']
 # stop > first_button_list/ break > date_list /continue > news_title_list

@@ -226,6 +226,7 @@ class user_information_manager:
         user_status_instance = user_status(**user_info)
         user_status_instance.add_news_record(news_record_instance)
 
+
     def get_document_by_user_key(self, user_key):
         news_record_list = NewsRecord.objects.filter(
             user_status=UserStatus.objects.get(user_key=user_key)).order_by('-request_time')

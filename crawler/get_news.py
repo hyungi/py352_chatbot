@@ -79,10 +79,10 @@ def get_news(press, date, category):
 def get_news_by_id(document_id_list):
     list_len = len(document_id_list)
     return_dict = {}
-    print(list_len)
+    # print(list_len)
     for i in range(list_len):
-        print(i)
-        print(document_id_list[i])
+        # print(i)
+        # print(document_id_list[i])
 
         document = (PoliticsDocument.objects.filter(document_id=document_id_list[i]).values('document_id', 'title'))
         if len(document) > 0:
@@ -119,6 +119,7 @@ def get_news_by_id(document_id_list):
 
 def get_summary(input_document_id, category):
     print(input_document_id)
+    print(category)
     document_id = DocumentId.objects.get(document_id=input_document_id)
 
     if category == "정치":
@@ -144,3 +145,42 @@ def get_summary(input_document_id, category):
     joined_summary_text = "".join(list(summary_document.summary_text))
 
     return document.title, joined_summary_text, document.link
+
+
+def get_category_by_doc_id(input_document_id):
+    print(input_document_id)
+    if len(PoliticsDocument.objects.filter(document_id=input_document_id)) != 0:
+        return '정치'
+    elif len(EconomicsDocument.objects.filter(document_id=input_document_id)) != 0:
+        return '경제'
+    elif len(SocietyDocument.objects.filter(document_id=input_document_id)) != 0:
+        return '사회'
+    elif len(CultureLivingDocument.objects.filter(document_id=input_document_id)) != 0:
+        return '생활/문화'
+    elif len(WorldDocument.objects.filter(document_id=input_document_id)) != 0:
+        return '세계'
+    elif len(ITScienceDocument.objects.filter(document_id=input_document_id)) != 0:
+        return 'IT/과학'
+
+
+def get_press_by_doc_id_category(document_id, category):
+
+    if category == "정치":
+        document = PoliticsDocument.objects.get(document_id=document_id)
+
+    elif category == "경제":
+        document = EconomicsDocument.objects.get(document_id=document_id)
+
+    elif category == "사회":
+        document = SocietyDocument.objects.get(document_id=document_id)
+
+    elif category == "생활/문화":
+        document = CultureLivingDocument.objects.get(document_id=document_id)
+
+    elif category == "세계":
+        document = WorldDocument.objects.get(document_id=document_id)
+
+    elif category == "IT/과학":
+        document = ITScienceDocument.objects.get(document_id=document_id)
+
+    return document.press
