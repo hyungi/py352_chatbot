@@ -4,7 +4,7 @@
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import json
-from crawler.get_news import get_news, get_summary, get_news_by_id, get_category_by_doc_id, get_press_by_doc_id_category
+from crawler.get_news import get_news, get_summary, get_news_by_id, get_category_by_doc_id, get_press_by_doc_id_category, get_latest_news
 from article.models import Requirement, UserStatus, NewsRecord
 from article.lists import press_list, date_list, category_list, gender_list, birth_year_list, region_list, \
     first_button_list, agree_disagree_news_save_list, end_of_service_list, maintain_remove_news_save_list
@@ -98,9 +98,8 @@ def message(request):
         print("is latest news")
         from_number = 10 * (page_number - 1)
         to_number = 10 * page_number
-        news_id_list = DocumentSummary.objects.all().values('document_id')[from_number:to_number]
-        user_request[user_key] = get_news_by_id(list(news_id_list.values_list('document_id', flat=True)))
-        return_list = list(user_request[user_key].keys()) + ['view more']
+        user_request[user_key], return_list = get_latest_news(from_number, to_number)
+        return_list += ['view more']
 
         return JsonResponse({'message': {'text': '최신뉴스 목록 ' + str(page_number) + '페이지 입니다'},
                              'keyboard': {'type': 'buttons',

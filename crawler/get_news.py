@@ -184,3 +184,47 @@ def get_press_by_doc_id_category(document_id, category):
         document = ITScienceDocument.objects.get(document_id=document_id)
 
     return document.press
+
+
+def get_latest_news(from_number, to_number):
+    all_doc = []
+
+    pol_doc = PoliticsDocument.objects.all().values_list(
+        'published_date', 'title', 'document_id',
+    ).order_by('-published_date')
+
+    eco_doc = EconomicsDocument.objects.all().values_list(
+        'published_date', 'title', 'document_id',
+    ).order_by('-published_date')
+
+    soc_doc = SocietyDocument.objects.all().values_list(
+        'published_date', 'title', 'document_id',
+    ).order_by('-published_date')
+
+    cul_doc = CultureLivingDocument.objects.all().values_list(
+        'published_date', 'title', 'document_id',
+    ).order_by('-published_date')
+
+    wol_doc = WorldDocument.objects.all().values_list(
+        'published_date', 'title', 'document_id',
+    ).order_by('-published_date')
+
+    it_doc = ITScienceDocument.objects.all().values_list(
+        'published_date', 'title', 'document_id',
+    ).order_by('-published_date')
+
+    all_doc += list(pol_doc)
+    all_doc += list(eco_doc)
+    all_doc += list(soc_doc)
+    all_doc += list(cul_doc)
+    all_doc += list(wol_doc)
+    all_doc += list(it_doc)
+    all_doc.sort(reverse=True)
+    return_dict = {}
+    return_list = []
+
+    for i in range(from_number, to_number):
+        return_dict[all_doc[i][1]] = all_doc[i][2]
+        return_list += [all_doc[i][1]]
+
+    return return_dict, return_list
