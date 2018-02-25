@@ -68,7 +68,7 @@ def message(request):
     user_key = return_json_str['user_key']
 
     # time out error 를 피하기 위한 트릭
-    is_first_use = check_is_first_use(user_key)
+    is_first_use = check_is_first_use(content, user_key)
     is_latest_news = check_is_latest_new(content)
     is_press = check_is_in_press_list(content)
     is_date = check_is_in_date_list(content)
@@ -171,7 +171,11 @@ def message(request):
                                               'buttons': date_list}
                                  })
         else:
-            return_list = list(user_request[user_key].keys())
+            if prev_select.get(user_key) is not None:
+                return_list = add_index_of_list(list(user_request[user_key].keys()))
+            else:
+                return_list = list(user_request[user_key].keys())
+
             print(return_list)
             return JsonResponse({'message': {'text': 'you select continue'},
                                  'keyboard': {'type': 'buttons',
@@ -351,7 +355,7 @@ def message(request):
                                               'buttons': result_list}
                                  })
         else:
-            return JsonResponse({'message': {'text': str(return1) + "날짜를 선택해 주세요"},
+                return JsonResponse({'message': {'text': str(return1) + "날짜를 선택해 주세요"},
                                  'keyboard': {'type': 'buttons',
                                               'buttons': date_list}
                                  })
@@ -370,7 +374,7 @@ def message(request):
         press[user_key] = get_press_by_doc_id_category(doc_id, category[user_key])
         print(press[user_key])
 
-        selected_news_title[user_key], text, url = get_summary(doc_id, category[user_key])
+        selected_news_title[user_key], text, url, published_date = get_summary(doc_id, category[user_key])
         print(category.get(user_key))
         print(press.get(user_key))
 
@@ -389,6 +393,7 @@ def message(request):
         print(selected_news_title[user_key])
         print(text)
         print(url)
+        print(published_date)
 
         if prev_select.get(user_key) == '최근 본 뉴스' or prev_select.get(user_key) == '저장한 뉴스':
             return_button_list = maintain_remove_news_save_list
@@ -397,9 +402,10 @@ def message(request):
             return_button_list = agree_disagree_news_save_list
 
         print(return_button_list)
-        return JsonResponse({'message': {"text": selected_news_title[user_key] + "\n————————————\n"
-                                                 + category.get(user_key) + ', ' + press.get(user_key) + '\n————————————\n'
-                                                 + text + "\n————————————\n"
+        return JsonResponse({'message': {"text": selected_news_title[user_key] + "\n————————————---\n"
+                                                 + category.get(user_key) + ', ' + press.get(user_key) + ', ' + str(published_date) +
+                                                 '\n—————---———————\n'
+                                                 + text + "\n————————---————\n"
                                                  + url
                                          },
                              'keyboard': {'type': 'buttons',
@@ -546,7 +552,9 @@ def check_is_latest_new(content):
         return False
 
 
-def check_is_first_use(user_key):
+def check_is_first_use(content, user_key):
+    if content in ['동의합니다', '동의하지 않습니다']:
+        return False
     if len(UserStatus.objects.filter(user_key=user_key)) == 0:
         return True
     else:

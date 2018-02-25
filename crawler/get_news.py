@@ -144,7 +144,7 @@ def get_summary(input_document_id, category):
 
     joined_summary_text = "".join(list(summary_document.summary_text))
 
-    return document.title, joined_summary_text, document.link
+    return document.title, joined_summary_text, document.link, document.published_date
 
 
 def get_category_by_doc_id(input_document_id):
