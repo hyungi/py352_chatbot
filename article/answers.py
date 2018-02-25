@@ -4,7 +4,8 @@
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import json
-from crawler.get_news import get_news, get_summary, get_news_by_id, get_category_by_doc_id, get_press_by_doc_id_category, get_latest_news
+from crawler.get_news import get_news, get_summary, get_news_by_id, get_category_by_doc_id, \
+    get_press_by_doc_id_category, get_latest_news
 from article.models import Requirement, UserStatus, NewsRecord
 from article.lists import press_list, date_list, category_list, gender_list, birth_year_list, region_list, \
     first_button_list, agree_disagree_news_save_list, end_of_service_list, maintain_remove_news_save_list
@@ -89,12 +90,15 @@ def message(request):
     if is_first_use:
         print("UserStatus 가 없는 경우에 적용함")
         button_list = ['동의합니다', '동의하지 않습니다']
-        return JsonResponse({'message': {'text': '안녕하세요! 처음 이용하사네요! 저희 서비스는 뉴스 요약문을 제공하는 서비스 입니다.\n'
-                                                 '원활한 서비스 제공을 위해 사용자의 기본적인 개인정보를 수집하고 있습니다! 개인정보 제공에 동의하시나요?'},
+        return JsonResponse({'message': {'text': '안녕하세요. 최신 뉴스를 요약해주는 “호외요”입니다. \n' +
+                                                 '최신 뉴스는 물론, 날짜/관심 분야/신문사별로 원하는 뉴스를 검색하고 스크랩할 수 있는 서비스입니다. \n' +
+                                                 '원활한 서비스 제공을 위해 사용자의 기본 정보를 수집하고 있습니다. 수집한 정보는 맞춤형 뉴스 추천, 이용자 통계 서비스 제공에 사용됩니다. 개인정보 제공에 동의하시나요? \n'
+                                         },
                              'keyboard': {'type': 'buttons',
                                           'buttons': button_list}
                              })
     elif is_latest_news:
+        prev_select[user_key] = '최신 뉴스 보기'
         page_number += 1
         print("is latest news")
         from_number = 10 * (page_number - 1)
@@ -172,8 +176,11 @@ def message(request):
                                               'buttons': date_list}
                                  })
         else:
-            if prev_select.get(user_key) is not None:
+            if prev_select.get(user_key) == '최근 본 뉴스' or prev_select.get(user_key) == '저장한 뉴스':
                 return_list = add_index_of_list(list(user_request[user_key].keys()))
+            elif prev_select.get(user_key) == '최신 뉴스 보기':
+                return_list = list(user_request[user_key].keys())
+                return_list += ['view more']
             else:
                 return_list = list(user_request[user_key].keys())
 
@@ -356,7 +363,7 @@ def message(request):
                                               'buttons': result_list}
                                  })
         else:
-                return JsonResponse({'message': {'text': str(return1) + "날짜를 선택해 주세요"},
+            return JsonResponse({'message': {'text': str(return1) + "날짜를 선택해 주세요"},
                                  'keyboard': {'type': 'buttons',
                                               'buttons': date_list}
                                  })
@@ -396,16 +403,19 @@ def message(request):
         print(url)
         print(published_date)
 
-        if prev_select.get(user_key) == '최근 본 뉴스' or prev_select.get(user_key) == '저장한 뉴스':
+        if prev_select.get(user_key) == '저장한 뉴스':
             return_button_list = maintain_remove_news_save_list
+        elif prev_select.get(user_key) == '최근 본 뉴스':
+            return_button_list = ['continue', 'stop']
         else:
             return_button_list = agree_disagree_news_save_list
 
         print(return_button_list)
-        return JsonResponse({'message': {"text": selected_news_title[user_key] + "\n————————————---\n"
-                                                 + category.get(user_key) + ', ' + press.get(user_key) + ', ' + str(published_date) +
-                                                 '\n—————---———————\n'
-                                                 + text + "\n————————---————\n"
+        return JsonResponse({'message': {"text": selected_news_title[user_key] + "\n————————————------\n"
+                                                 + category.get(user_key) + ', ' + press.get(user_key) + ', ' + str(
+            published_date) +
+                                                 '\n—————---——---—————\n'
+                                                 + text + "\n—————---———---————\n"
                                                  + url
                                          },
                              'keyboard': {'type': 'buttons',
@@ -413,7 +423,7 @@ def message(request):
                              })
 
     elif is_save_news_title:
-        if content == u'뉴스를 저장하겠습니다':
+        if content == u'스크랩 하기':
             print(content)
 
             doc_id = str(user_request.get(user_key).get(selected_news_title[user_key]))
@@ -422,21 +432,34 @@ def message(request):
             news_scrap.is_scraped = True
             news_scrap.save()
 
-            return JsonResponse({'message': {"text": "뉴스가 저장되었습니다. 저장하신 뉴스 정보는 일주일간 보관합니다"},
+            if prev_select.get(user_key) == '저장한 뉴스' or prev_select.get(user_key) == '최신 뉴스 보기':
+                return_button_list = ['continue', 'stop']
+            else:
+                return_button_list = end_of_service_list
+
+            return JsonResponse({'message': {"text": "스크랩 하기 \n 저장하신 뉴스 정보는 일주일간 보관합니다"},
                                  'keyboard': {'type': 'buttons',
-                                              'buttons': end_of_service_list}
+                                              'buttons': return_button_list}
                                  })
-        elif content == u'뉴스를 저장하지 않겠습니다.':
+        elif content == u'하지 않기':
             print(content)
-            return JsonResponse({'message': {'text': '뉴스가 저장되지 않았습니다.'},
+
+            if prev_select.get(user_key) == '저장한 뉴스' or prev_select.get(user_key) == '최신 뉴스 보기':
+                return_button_list = ['continue', 'stop']
+            else:
+                return_button_list = end_of_service_list
+
+            return JsonResponse({'message': {'text': '뉴스를 스크랩 하지 않았습니다.'},
                                  'keyboard': {'type': 'buttons',
-                                              'buttons': end_of_service_list}
+                                              'buttons': return_button_list}
                                  })
         elif content == u'유지하기':
             print(content)
+            return_button_list = ['continue', 'stop']
+
             return JsonResponse({'message': {'text': '뉴스가 유지 되었습니다.'},
                                  'keyboard': {'type': 'buttons',
-                                              'buttons': end_of_service_list}
+                                              'buttons': return_button_list}
                                  })
         elif content == u'삭제하기':
             print(content)
@@ -446,9 +469,11 @@ def message(request):
             news_scrap.is_scraped = False
             news_scrap.save()
 
+            return_button_list = ['continue', 'stop']
+
             return JsonResponse({'message': {'text': '뉴스가 삭제 되었습니다.'},
                                  'keyboard': {'type': 'buttons',
-                                              'buttons': end_of_service_list}
+                                              'buttons': return_button_list}
                                  })
 
     elif agree_flag1:
@@ -466,21 +491,17 @@ def message(request):
             print("동의합니다")
             print(gender_list)
             return JsonResponse(
-                {'message': {'text': '동의해 주셔서 감사합니다. 원활한 서비스 제공을 위해 성별/나이/직업/지역에 대한 기본적인 정보수집을 진행하겠습니다.\n성별을 선택해주세요.'},
+                {'message': {'text': '동의해주셔서 감사합니다. 원활한 맞춤형 추천, 이용자 통계를 위해 성별/나이/지역 정보를 수집합니다. 성별을 선택해주세요.'},
                  'keyboard': {'type': 'buttons',
                               'buttons': gender_list}
                  })
 
         else:
             print("동의하지 않습니다")
-            user_status_save = UserStatus(
-                user_key=user_key
-            )
-            user_status_save.save()
-
-            return JsonResponse({'message': {'text': '정보수집에 동의 하지 않으셨습니다.\n[[기본 안내문구]]'},
+            button_list = ['동의합니다', '동의하지 않습니다']
+            return JsonResponse({'message': {'text': '정보 수집에 동의하지 않으셨습니다. 다음에 다시 이용해주세요!'},
                                  'keyboard': {'type': 'buttons',
-                                              'buttons': date_list}
+                                              'buttons': button_list}
                                  })
 
     elif is_in_gender:
@@ -488,7 +509,7 @@ def message(request):
         user_info_gender[user_key] = content
         print(user_info_gender)
         print(birth_year_list)
-        return JsonResponse({'message': {'text': '감사합니다. 출생년도를 입력해 주시겠어요?'},
+        return JsonResponse({'message': {'text': '출생년도를 입력해주세요.'},
                              'keyboard': {'type': 'buttons',
                                           'buttons': birth_year_list}
                              })
@@ -498,7 +519,7 @@ def message(request):
         user_info_birth_year[user_key] = content
         print(user_info_birth_year)
         print(region_list)
-        return JsonResponse({'message': {'text': '마지막으로 지역을 입력해 주시겠어요?'},
+        return JsonResponse({'message': {'text': '거주 지역을 입력해주세요.'},
                              'keyboard': {'type': 'buttons',
                                           'buttons': region_list}
                              })
@@ -514,14 +535,18 @@ def message(request):
         save_user_status(user_status_instance)
 
         show_result = "성별: " + str(user_info_gender[user_key]) + \
-                      "\n생년: " + str(user_info_birth_year[user_key]) + \
+                      "\n출생년도: " + str(user_info_birth_year[user_key]) + \
                       "\n지역: " + str(user_info_region[user_key])
         del user_info_gender[user_key]
         del user_info_region[user_key]
         del user_info_birth_year[user_key]
         print(show_result)
-
-        return JsonResponse({'message': {'text': show_result + '\n정보 수집이 모두 완료되었습니다. 감사합니다.\n[[기본안내문구]]'},
+        intro = '“호외요”에서 최신순 뉴스 제공, 날짜/관심 분야/신문사별 뉴스 검색과 키워드 뉴스 검색 서비스를 이용하실 수 있습니다. 요약된 뉴스와 원문 링크가 함께 제공되며, ' \
+                '최근 본 뉴스와 스크랩 기능을 통해 이전에 보셨던 뉴스를 최대 20개까지 다시 보실 수 있습니다. 또, 뉴스 이용 취향에 따라 맞춤형 뉴스를 큐레이팅해드리고 있습니다. \n\n' \
+                '덤으로 나의 뉴스 이용 경향을 분석한 결과도 확인하실 수 있어요. \n\n' \
+                '텍스트 입력창에 ‘설정’을 입력해서 개인 설정을 바꾸거나, ‘피드백’을 입력해서 건의사항이나 서비스 평가를 하실 수 있습니다. 그럼, 아직 요약 알고리즘이 개선 중이라 일부 뉴스의 ' \
+                '경우 요약이 불완전할 수 있다는 점 양해 부탁드리며, 이제 본격적으로 서비스를 이용하러 가실까요!! '
+        return JsonResponse({'message': {'text': show_result + '\n정보 수집이 모두 완료되었습니다. 감사합니다.\n' + intro},
                              'keyboard': {'type': 'buttons',
                                           'buttons': first_button_list}
                              })
@@ -856,7 +881,7 @@ def make_press_list(content, user_key):
 
     additional_press_list = make_unique_list(additional_press_list)
 
-    for i in reversed(range(len(additional_press_list))):
+    for i in range(0, 5):
         if additional_press_list[i] in counter_press_list:
             print('앞에 추가될 신문사' + additional_press_list[i])
             result = [str(additional_press_list[i]) + " (" + str(
