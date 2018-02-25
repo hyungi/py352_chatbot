@@ -85,15 +85,7 @@ def message(request):
     is_save_news_title = check_is_save_news_title(content)
     is_end_of_service = check_is_in_end_of_service_list(content)
 
-    if is_first_use:
-        print("UserStatus 가 없는 경우에 적용함")
-        button_list = ['동의합니다', '동의하지 않습니다']
-        return JsonResponse({'message': {'text': '안녕하세요! 처음 이용하사네요! 저희 서비스는 뉴스 요약문을 제공하는 서비스 입니다.\n'
-                                                 '원활한 서비스 제공을 위해 사용자의 기본적인 개인정보를 수집하고 있습니다! 개인정보 제공에 동의하시나요?'},
-                             'keyboard': {'type': 'buttons',
-                                          'buttons': button_list}
-                             })
-    elif is_latest_news:
+    if is_latest_news:
         page_number += 1
         print("is latest news")
         from_number = 10 * (page_number - 1)
@@ -525,6 +517,14 @@ def message(request):
                              'keyboard': {'type': 'buttons',
                                           'buttons': first_button_list}
                              })
+    elif is_first_use:
+        print("UserStatus 가 없는 경우에 적용함")
+        button_list = ['동의합니다', '동의하지 않습니다']
+        return JsonResponse({'message': {'text': '안녕하세요! 처음 이용하사네요! 저희 서비스는 뉴스 요약문을 제공하는 서비스 입니다.\n'
+                                                 '원활한 서비스 제공을 위해 사용자의 기본적인 개인정보를 수집하고 있습니다! 개인정보 제공에 동의하시나요?'},
+                             'keyboard': {'type': 'buttons',
+                                          'buttons': button_list}
+                             })
     else:
         print("정의되지 않은 구문")
         reset_globals(user_key)
@@ -553,8 +553,6 @@ def check_is_latest_new(content):
 
 
 def check_is_first_use(content, user_key):
-    if content in ['동의합니다', '동의하지 않습니다']:
-        return False
     if len(UserStatus.objects.filter(user_key=user_key)) == 0:
         return True
     else:
