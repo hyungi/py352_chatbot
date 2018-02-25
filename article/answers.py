@@ -15,6 +15,7 @@ from article.save_user_info import save_user_status
 from django.utils import timezone
 import article.content_based_cf as cb
 import os
+import collections
 
 '''
 /article/answers.py
@@ -207,7 +208,7 @@ def message(request):
             is_scraped=True
         ).order_by("-request_time")[:20]
         print('저장한 뉴스 보여주기')
-        return1 = dict(news_requirement.values_list('request_title', 'request_news_id'))
+        return1 = collections.OrderedDict(news_requirement.values_list('request_title', 'request_news_id'))
         user_request[user_key] = return1
         print("in_saved_news: " + str(user_request[user_key]))
         result_list = add_index_of_list(list(return1.keys()))
@@ -232,7 +233,7 @@ def message(request):
         news_requirement = NewsRecord.objects.filter(
             user_status=user_status_object,
         ).order_by("-request_time")[:20]
-        return1 = dict(news_requirement.values_list('request_title', 'request_news_id'))
+        return1 = collections.OrderedDict(news_requirement.values_list('request_title', 'request_news_id'))
         user_request[user_key] = return1
         result_list = add_index_of_list(list(return1.keys()))
         print(result_list)
@@ -397,7 +398,6 @@ def message(request):
 
         if prev_select.get(user_key) == '최근 본 뉴스' or prev_select.get(user_key) == '저장한 뉴스':
             return_button_list = maintain_remove_news_save_list
-            del prev_select[user_key]
         else:
             return_button_list = agree_disagree_news_save_list
 
@@ -747,6 +747,7 @@ def reset_globals(user_key):
     global selected_news_title
     global news_title_list
     global page_number
+    global prev_select
 
     try:
         del press[user_key]
@@ -777,6 +778,10 @@ def reset_globals(user_key):
         del news_title_list[user_key]
     except Exception as e:
         print('뉴스 리스트가 없어서 못 지움')
+    try:
+        del prev_select[user_key]
+    except Exception as e:
+        print('이전 선택이 저장 되지 않아 못 지움')
 
     page_number = 0
 
