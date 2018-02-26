@@ -40,7 +40,9 @@ page_number = 0
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 user_info_manager = user_information_manager(path=os.path.join(BASE_DIR, 'info_matrix.txt'))
 
-path = {"dtm_path": "dtm.txt", "matrix_path": "vctr.txt"}
+dtm_path = os.path.join(BASE_DIR, 'dtm.txt')
+matrix_path = os.path.join(BASE_DIR, 'vctr.txt')
+path = {"dtm_path": dtm_path, "matrix_path": matrix_path}
 engine = search_engine_manager(**path)
 
 
