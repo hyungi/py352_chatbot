@@ -6,7 +6,8 @@ from django.utils import timezone
 category_list = ['정치', '경제', '사회', '생활/문화', '세계', 'IT/과학']
 press_list = []
 date_list = []
-first_button_list = ['최신 뉴스 보기', 	'뉴스 검색', '최근 본 뉴스', '저장한 뉴스', '뉴스 이용 통계', '사용 방법 보기']
+first_button_list = ['최신 뉴스 보기', '맞춤형 뉴스 추천', '뉴스 검색', '최근 본 뉴스', '저장한 뉴스', '뉴스 이용 통계', '사용 방법 보기']
+news_select_button_list = ['날짜로 검색', '키워드로 검색']
 
 for i in range(0, 7):
     date_list.append((timezone.now() - timezone.timedelta(days=i)).strftime("%Y-%m-%d"))
@@ -49,5 +50,9 @@ agree_disagree_news_save_list = ['스크랩 하기', '하지 않기']
 
 maintain_remove_news_save_list = ['유지하기', '삭제하기']
 
-end_of_service_list = ['stop', 'break', 'continue']
+end_of_service_list = ['continue', 'break', 'stop']
+
+feedback_list = ['이용 후기', '오류 레포트', '건의사항']
+
+setting_list = ['추천 서비스 이용 여부', '최근 본 뉴스 초기화', '저장된 뉴스 초기화']
 # stop > first_button_list/ break > date_list /continue > news_title_list

@@ -8,7 +8,8 @@ from crawler.get_news import get_news, get_summary, get_news_by_id, get_category
     get_press_by_doc_id_category, get_latest_news
 from article.models import Requirement, UserStatus, NewsRecord
 from article.lists import press_list, date_list, category_list, gender_list, birth_year_list, region_list, \
-    first_button_list, agree_disagree_news_save_list, end_of_service_list, maintain_remove_news_save_list
+    first_button_list, agree_disagree_news_save_list, end_of_service_list, maintain_remove_news_save_list, \
+    news_select_button_list, feedback_list, setting_list
 from crawler.models import *
 from collections import Counter
 from article.user_info_class import news_record, user_status, user_information_manager
@@ -17,6 +18,7 @@ from django.utils import timezone
 import article.content_based_cf as cb
 import os
 import collections
+from article.search_engine_manager import search_engine_manager
 
 '''
 /article/answers.py
@@ -37,6 +39,9 @@ page_number = 0
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 user_info_manager = user_information_manager(path=os.path.join(BASE_DIR, 'info_matrix.txt'))
+
+path = {"dtm_path": "dtm.txt", "matrix_path": "vctr.txt"}
+engine = search_engine_manager(**path)
 
 
 @csrf_exempt
@@ -72,20 +77,35 @@ def message(request):
     # time out error 를 피하기 위한 트릭
     is_first_use = check_is_first_use(content, user_key)
     is_latest_news = check_is_latest_new(content)
+
     is_press = check_is_in_press_list(content)
     is_date = check_is_in_date_list(content)
     is_category = check_is_in_category_list(content)
+
     is_news_title = check_is_news_title(content, user_key)
     agree_flag1, agree_flag2 = check_is_agree_or_disagree(content, user_key)
+
     is_in_gender = check_is_in_gender_list(content)
     is_in_birth_year = check_is_in_birth_year_list(content)
     is_in_region_list = check_is_in_region_list(content)
+
     is_tutorial = check_is_in_tutorial(content)
+
     is_news_select = check_is_in_news_select(content)
     is_saved_news = check_is_saved_news(content)
     is_recent_news = check_is_recent_news(content)
+
     is_save_news_title = check_is_save_news_title(content)
     is_end_of_service = check_is_in_end_of_service_list(content)
+
+    is_news_keyword_search_select = check_is_in_news_keyword_search(content)
+    is_news_date_search_select = check_is_in_news_date_search(content)
+
+    is_feedback_list = check_is_in_feedback_list(content)
+    is_feedback = check_is_feedback(content)
+
+    is_setting_list = check_is_in_setting_list(content)
+    is_setting = check_is_setting(content)
 
     if is_first_use:
         print("UserStatus 가 없는 경우에 적용함")
@@ -97,6 +117,54 @@ def message(request):
                              'keyboard': {'type': 'buttons',
                                           'buttons': button_list}
                              })
+    elif is_setting:
+        print(content)
+        print(setting_list)
+        return JsonResponse({'message': {'text': '설정 메뉴 입니다.'},
+                             'keyboard': {'type': 'buttons',
+                                          'buttons': setting_list}
+                             })
+
+    elif is_setting_list:
+        print(content)
+        print(first_button_list)
+        user_status_instance = UserStatus.objects.get(user_key=user_key)
+
+        if content == setting_list[0]:
+            user_status_instance.recommend_service = False
+            user_status_instance.save()
+        elif content == setting_list[1]:
+            news_record_instance = NewsRecord.objects.get(user_status=user_status_instance)
+            news_record_instance.delete()
+        else:
+            news_record_instance = NewsRecord.objects.get(user_status=user_status_instance)
+            news_record_instance.is_scraped = False
+
+        return JsonResponse({'message': {'text': '설정이 완료되었습니다.'},
+                             'keyboard': {'type': 'buttons',
+                                          'buttons': first_button_list}
+                             })
+
+    elif is_feedback:
+        print(content)
+        print(feedback_list)
+        return JsonResponse({'message': {'text': '피드백 메뉴 입니다.'},
+                             'keyboard': {'type': 'buttons',
+                                          'buttons': feedback_list}
+                             })
+    elif is_feedback_list:
+        print(content)
+        prev_select[user_key] = content
+        return JsonResponse({'message': {'text': '자유롭게 입력해주세요'}})
+
+    elif prev_select.get(user_key) in feedback_list:
+        user_key, prev_select.get(user_key), content
+
+        return JsonResponse({'message': {'text': '피드백이 완료되었습니다.'},
+                             'keyboard': {'type': 'buttons',
+                                          'buttons': first_button_list}
+                             })
+
     elif is_latest_news:
         prev_select[user_key] = '최신 뉴스 보기'
         page_number += 1
@@ -111,55 +179,61 @@ def message(request):
                                           'buttons': return_list}
                              })
 
-    elif content == u'유사 이용자 검색':
-        print('유사 이용자 검색')
-        user_key_list = user_info_manager.get_n_similar_user(user_key, 1)  # 임의의 숫자 1
-        print(user_key_list)
-        news_id_list = user_info_manager.get_document_by_user_key(user_key_list[0])
-        print(news_id_list)
-        user_request[user_key] = get_news_by_id(news_id_list)
-        return_list = list(user_request[user_key].keys())
-        print(return_list)
-        return JsonResponse({'message': {'text': '유사 이용자의 뉴스 검색 결과 입니다.'},
-                             'keyboard': {'type': 'buttons',
-                                          'buttons': return_list}
-                             })
+    elif prev_select.get(user_key) == u'키워드로 검색':
+        print('키워드로 검색')
+        print(content)
+        user_request[user_key] = get_news_by_id(engine.search_news_document(content))
+        result_list = list(user_request[user_key].keys())
+        print(result_list)
+        del prev_select[user_key]
 
-    elif content == u'유사 내용 검색':
-        print('유사 내용 검색')
-        from_date = (timezone.now() - timezone.timedelta(days=3)).strftime('%Y-%m-%d')
-        to_date = timezone.now().strftime('%Y-%m-%d')
-        searcher = cb.news_searcher("content_base.txt")
-        news_id_list = list(
-            PoliticsDocument.objects.filter(crawled_date__range=[from_date, to_date]).values_list('document_id',
-                                                                                                  flat=True))
-        news_id_list += list(
-            EconomicsDocument.objects.filter(crawled_date__range=[from_date, to_date]).values_list('document_id',
-                                                                                                   flat=True))
-        news_id_list += list(
-            SocietyDocument.objects.filter(crawled_date__range=[from_date, to_date]).values_list('document_id',
-                                                                                                 flat=True))
-        news_id_list += list(
-            CultureLivingDocument.objects.filter(crawled_date__range=[from_date, to_date]).values_list('document_id',
-                                                                                                       flat=True))
-        news_id_list += list(
-            WorldDocument.objects.filter(crawled_date__range=[from_date, to_date]).values_list('document_id',
-                                                                                               flat=True))
-        news_id_list += list(
-            ITScienceDocument.objects.filter(crawled_date__range=[from_date, to_date]).values_list('document_id',
-                                                                                                   flat=True))
+        if len(result_list) == 0:
+            return JsonResponse({'message': {'text': '검색 결과가 없습니다.'},
+                                 'keyboard': {'type': 'buttons',
+                                              'buttons': first_button_list}
+                                 })
+
+        else:
+            return JsonResponse({'message': {'text': '검색 결과 입니다'},
+                                 'keyboard': {'type': 'buttons',
+                                              'buttons': result_list}
+                                 })
+
+    elif content == u'맞춤형 뉴스 추천':
+        print('맞춤형 뉴스 추천')
+        user_key_list = user_info_manager.get_n_similar_user(user_key, 1)
+        print(user_key_list)
+
+        # user_based 로는 가장 유사한 유저 뽑아서 그 사람이 본 뉴스 뽑고
+        try:
+            news_id_list = user_info_manager.get_document_by_user_key(user_key_list[0])[0:5]
+        except:
+            news_id_list = []
+
         print(news_id_list)
-        searcher.add_new_document(news_id_list)
-        search_query = "북한 열병식"  # 임의의 쿼리문
-        print('search_query: ' + search_query)
-        news_id_list = searcher.search_news_document(search_query, 10)
+        # page rank 는 이 사람이 가장 최근에 본 뉴스들 가지고 검색해서 보여주자
+        user_status_object = UserStatus.objects.get(user_key=user_key)
+        news_requirement = NewsRecord.objects.filter(
+            user_status=user_status_object,
+        ).order_by("-request_time")[:20]
+
+        # 최종적으로 추려낸 news_id_list 여기서 이미 본건 빼보자
+
+        news_id_list += engine.search_news_document(news_requirement.values_list('request_title', flat=True)[0])
         print(news_id_list)
+
+        for i in news_id_list:
+            if list(NewsRecord.objects.filter(user_status=user_status_object, request_news_id=i)) != 0:
+                news_id_list.remove(i)
+        news_id_list = list(set(news_id_list))
+        print(news_id_list)
+
         user_request[user_key] = get_news_by_id(news_id_list)
-        return_list = list(user_request[user_key].keys())
-        print(return_list)
-        return JsonResponse({'message': {'text': '유사 뉴스 검색 결과 입니다.'},
+        result_list = list(user_request[user_key].keys())
+        print(result_list)
+        return JsonResponse({'message': {'text': '추천뉴스 뉴스입니다.'},
                              'keyboard': {'type': 'buttons',
-                                          'buttons': return_list}
+                                          'buttons': result_list}
                              })
 
     elif is_end_of_service:
@@ -199,7 +273,16 @@ def message(request):
 
     elif is_news_select:
         print('news_select_page')
+        print(news_select_button_list)
+        return JsonResponse({'message': {'text': '어떤 검색을 원하시나요?'},
+                             'keyboard': {'type': 'buttons',
+                                          'buttons': news_select_button_list}
+                             })
+    elif is_news_keyword_search_select:
+        prev_select[user_key] = '키워드로 검색'
+        return JsonResponse({'message': {'text': '키워드를 입력해주세요'}})
 
+    elif is_news_date_search_select:
         return JsonResponse({'message': {'text': '우선 날짜부터 골라주세요!'},
                              'keyboard': {'type': 'buttons',
                                           'buttons': date_list}
@@ -403,12 +486,18 @@ def message(request):
         print(url)
         print(published_date)
 
+        similar_news_id_list = engine.search_news_document(selected_news_title[user_key])
+        similar_news_list = get_news_by_id(similar_news_id_list)
+        user_request[user_key] = similar_news_list
+
         if prev_select.get(user_key) == '저장한 뉴스':
             return_button_list = maintain_remove_news_save_list
         elif prev_select.get(user_key) == '최근 본 뉴스':
             return_button_list = ['continue', 'stop']
         else:
             return_button_list = agree_disagree_news_save_list
+
+        return_button_list = list(similar_news_list.keys()) + return_button_list
 
         print(return_button_list)
         return JsonResponse({'message': {"text": selected_news_title[user_key] + "\n————————————------\n"
@@ -465,9 +554,21 @@ def message(request):
             print(content)
             doc_id = str(user_request.get(user_key).get(selected_news_title[user_key]))
 
-            news_scrap = NewsRecord.objects.get(request_news_id=doc_id)
-            news_scrap.is_scraped = False
-            news_scrap.save()
+            user_status_object = UserStatus.objects.get(user_key=user_key)
+            news_scrap = NewsRecord.objects.filter(
+                user_status=user_status_object,
+                request_news_id=doc_id,
+            )
+            news_scrap.update(is_scraped=False)
+
+            news_requirement = NewsRecord.objects.filter(
+                user_status=user_status_object,
+                is_scraped=True
+            ).order_by("-request_time")[:20]
+
+            user_request[user_key] = collections.OrderedDict(
+                news_requirement.values_list('request_title', 'request_news_id'))
+            print("renew_saved_news: " + str(user_request[user_key]))
 
             return_button_list = ['continue', 'stop']
 
@@ -563,6 +664,34 @@ def message(request):
                              })
 
 
+def check_is_in_setting_list(content):
+    if content in setting_list:
+        return True
+    else:
+        return False
+
+
+def check_is_in_feedback_list(content):
+    if content in feedback_list:
+        return True
+    else:
+        return False
+
+
+def check_is_feedback(content):
+    if content == u'피드백':
+        return True
+    else:
+        return False
+
+
+def check_is_setting(content):
+    if content == u'설정':
+        return True
+    else:
+        return False
+
+
 def check_is_recent_news(content):
     if content == u'최근 본 뉴스':
         return True
@@ -624,6 +753,20 @@ def check_is_in_tutorial(content):
 
 def check_is_in_news_select(content):
     if content == u'뉴스 검색':
+        return True
+    else:
+        return False
+
+
+def check_is_in_news_date_search(content):
+    if content == u'날짜로 검색':
+        return True
+    else:
+        return False
+
+
+def check_is_in_news_keyword_search(content):
+    if content == u'키워드로 검색':
         return True
     else:
         return False
@@ -866,7 +1009,7 @@ def make_press_list(content, user_key):
         additional_press_list = list(NewsRecord.objects.filter(
             user_status=UserStatus.objects.get(user_key=user_key),
             request_time__gte=timezone.now() - timezone.timedelta(days=7)
-        ).order_by('request_time').values_list('request_press', flat=True).distinct())
+        ).order_by('-request_time').values_list('request_press', flat=True).distinct())
     except Exception as e:
         print(str(e))
 
@@ -880,8 +1023,9 @@ def make_press_list(content, user_key):
     result = ["--------------------"] + result
 
     additional_press_list = make_unique_list(additional_press_list)
+    additional_press_list = additional_press_list[0:5]
 
-    for i in range(0, 5):
+    for i in reversed(range(len(additional_press_list))):
         if additional_press_list[i] in counter_press_list:
             print('앞에 추가될 신문사' + additional_press_list[i])
             result = [str(additional_press_list[i]) + " (" + str(
