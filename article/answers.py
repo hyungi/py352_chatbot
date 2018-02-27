@@ -41,7 +41,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 user_info_manager = user_information_manager(path=os.path.join(BASE_DIR, 'info_matrix.txt'))
 
 dtm_path = os.path.join(BASE_DIR, 'dtm.txt')
-matrix_path = os.path.join(BASE_DIR, 'vctr.txt')
+matrix_path = os.path.join(BASE_DIR, 'vctr')
 path = {'dtm_path': dtm_path, 'matrix_path': matrix_path}
 engine = search_engine_manager(**path)
 
@@ -62,7 +62,7 @@ def message(request):
 
     global user_info_manager
     global engine
-    
+
     global page_number
 
 
@@ -494,6 +494,9 @@ def message(request):
         similar_news_list = get_news_by_id(similar_news_id_list)
 
         # 여기 고쳐야함
+        # 추천은 최신 뉴스 보기와 검색에만 있도록 하자
+        # 여기 if 문에서 빼고 다른 분기로 편입
+        # title 을 눌렀다는 것을 확인하기 위해서 user_request 외에 다른 변수에 저장하던지 하자
         user_request[user_key] = similar_news_list
 
         if prev_select.get(user_key) == '저장한 뉴스':

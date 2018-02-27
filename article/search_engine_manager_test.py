@@ -4,7 +4,7 @@ from django.utils import timezone
 from crawler.models import DocumentId
 
 path = {"dtm_path": "dtm.txt",
-        "matrix_path": "vctr.txt"}
+        "matrix_path": "vctr"}
 
 engine = search_engine_manager(**path)  # 두고두고 유지할 파일이니 파일 경로는 이쁘게!
 doc_id_list = list(DocumentId.objects.all().values_list('document_id',flat=True))

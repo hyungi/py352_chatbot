@@ -46,11 +46,12 @@ class search_engine_manager:
 
         # vctr & count_matrix pickle from path directory
         try: #파일이 존재하는 경우
-            with open(self.matrix_path, mode="rb") as fp:
-                self.feature_names, self.count_matrix, self.page_rank_dictionary = pickle.load(fp)
-                print(self.feature_names)
-                print(self.count_matrix)
-                print(self.page_rank_dictionary)
+            with open(self.matrix_path + "1.txt", mode="rb") as fp:
+                self.vctr, self.feature_names = pickle.load(fp)
+            with open(self.matrix_path + "2.txt", mode="rb") as fp:
+                self.count_matrix = pickle.load(fp)
+            with open(self.matrix_path + "3.txt", mode="rb") as fp:
+                self.page_rank_dictionary = pickle.load(fp)
 
             if self.page_rank_dictionary==None: #파일이 존재하지만 저장된 정보가 없을 경우
                 print("Empty Matrixes have been loaded.")
@@ -59,8 +60,12 @@ class search_engine_manager:
 
         except: #파일이 없는 경우 메세지를 띄우고 새로 빈 파일을 생성한다.
             print("There are no existing Matrixes.")
-            with open(self.matrix_path, mode="wb") as fp:
-                pickle.dump([self.feature_names, self.count_matrix, self.page_rank_dictionary], fp)
+            with open(self.matrix_path+"1.txt", mode="wb") as fp:
+                pickle.dump([self.vctr, self.feature_names], fp)
+            with open(self.matrix_path+"2.txt", mode="wb") as fp:
+                pickle.dump(self.count_matrix, fp)
+            with open(self.matrix_path+"3.txt", mode="wb") as fp:
+                pickle.dump(self.page_rank_dictionary, fp)
             print("New Matrixes have been created.")
 
 
@@ -123,8 +128,20 @@ class search_engine_manager:
         문서가 추가될 때마다 count_matrix와 feature_names, page_rank_dictionary를 추가하여 업데이트한다.
         :return: 
         '''
-        self.count_matrix = self.vctr.fit_transform(self.dtm_list).toarray()
+        # vocabulary = set([word for doc in X for word in tokenizer(doc) if word not in stop_words])
+        vocabulary = []
+        for element in self.dtm_list:
+            temp = self.stemming_user_query(element).split(" ")
+            vocabulary = vocabulary + temp
+            vocabulary = list(set(vocabulary))
+        self.vctr = CountVectorizer(vocabulary=vocabulary)
+
+        self.count_matrix = self.vctr.transform(self.dtm_list).toarray()  # 문제 생기면 아래로 바꾸자
+        # self.count_matrix = self.vctr.fit_transform(self.dtm_list).toarray()
         self.feature_names = self.vctr.get_feature_names()
+        # print(self.count_matrix)
+        print(len(self.feature_names))
+        # print(len(self.count_matrix[0]))
 
         tfidf_matrix = self.tfvtr.fit_transform(self.dtm_list).toarray()
         tfidf_mat = np.asarray(tfidf_matrix)
@@ -145,9 +162,12 @@ class search_engine_manager:
         textrank_dictionary = {idx: r[0] for idx, r in zip(self.dtm_index, ranks)}
         self.page_rank_dictionary = textrank_dictionary
 
-        with open(self.matrix_path, mode="wb") as fp:
-            pickle.dump([self.feature_names, self.count_matrix, self.page_rank_dictionary], fp)
-
+        with open(self.matrix_path + "1.txt", mode="wb") as fp:
+            pickle.dump([self.vctr, self.feature_names], fp)
+        with open(self.matrix_path + "2.txt", mode="wb") as fp:
+            pickle.dump(self.count_matrix, fp)
+        with open(self.matrix_path + "3.txt", mode="wb") as fp:
+            pickle.dump(self.page_rank_dictionary, fp)
 
     def stemming_user_query(self, search_query):
         remove_pos = "[(?P<조사>JK.*)(?P<접속조사>JC.*)(?P<전성어미>ET.*)(?P<종결어미>EF.*)(?P<연결어미>EC.*)(?P<접미사>XS.*)(?P<마침표물음표느낌표>SF.*)(?P<쉼표가운뎃점콜론빗금>SC.*)]"  # mecab
@@ -156,7 +176,6 @@ class search_engine_manager:
         stemmed_words = [x[0] for x in stemmed_words if not bool(re.match(remove_pos, x[1]))]
 
         return ' '.join(stemmed_words)
-
 
     def search_news_document(self, search_query, n=5):
         '''
