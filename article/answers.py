@@ -42,7 +42,7 @@ user_info_manager = user_information_manager(path=os.path.join(BASE_DIR, 'info_m
 
 dtm_path = os.path.join(BASE_DIR, 'dtm.txt')
 matrix_path = os.path.join(BASE_DIR, 'vctr.txt')
-path = {"dtm_path": dtm_path, "matrix_path": matrix_path}
+path = {'dtm_path': dtm_path, 'matrix_path': matrix_path}
 engine = search_engine_manager(**path)
 
 
@@ -61,8 +61,10 @@ def message(request):
     global user_info_region
 
     global user_info_manager
-
+    global engine
+    
     global page_number
+
 
     '''
     :param 고객이 버튼을 눌렀을 경우 작동하는 함수로아래와 같은 정보가 전달된다.
@@ -490,6 +492,8 @@ def message(request):
 
         similar_news_id_list = engine.search_news_document(selected_news_title[user_key])
         similar_news_list = get_news_by_id(similar_news_id_list)
+
+        # 여기 고쳐야함
         user_request[user_key] = similar_news_list
 
         if prev_select.get(user_key) == '저장한 뉴스':
