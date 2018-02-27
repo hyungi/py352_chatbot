@@ -28,6 +28,7 @@ date = {}
 category = {}
 press = {}
 user_request = {}
+recommend_news = {}
 selected_news_title = {}
 news_title_list = {}
 prev_select = {}
@@ -51,6 +52,7 @@ def message(request):
     global date
     global category
     global press
+    global recommend_news
     global user_request
     global selected_news_title
     global news_title_list
@@ -64,7 +66,6 @@ def message(request):
     global engine
 
     global page_number
-
 
     '''
     :param 고객이 버튼을 눌렀을 경우 작동하는 함수로아래와 같은 정보가 전달된다.
@@ -456,12 +457,46 @@ def message(request):
                                  })
 
     elif is_news_title:
+        print(content)
+        doc_id = ""
 
-        doc_id = str(user_request.get(user_key).get(content))
-        if doc_id == 'None':
-            rest = content.split(' ', 1)[1]
-            print("rest: " + rest)
-            doc_id = str(user_request.get(user_key).get(rest))
+        separator = ' '
+        rest = ''
+        try:
+            rest = content.split(separator, 1)[1]
+            print(rest)
+        except Exception as e:
+            print(e)
+
+        try:
+            if content in user_request.get(user_key).keys():
+                doc_id = str(user_request.get(user_key).get(content))
+        except:
+            print("content is not in user_request")
+
+        try:
+            if rest in user_request.get(user_key).keys():
+                doc_id = str(user_request.get(user_key).get(rest))
+        except:
+            print("rest is not in user_request")
+
+        try:
+            if content in recommend_news.get(user_key).keys():
+                doc_id = str(recommend_news.get(user_key).get(content))
+        except:
+            print("content is not in recommend_news")
+
+        try:
+            if rest in recommend_news.get(user_key).keys():
+                doc_id = str(recommend_news.get(user_key).get(rest))
+        except:
+            print("rest is not in recommend_news")
+
+        # print(doc_id)
+        # if doc_id == 'None':
+        #     rest = content.split(' ', 1)[1]
+        #     print("rest: " + rest)
+        #     doc_id = str(user_request.get(user_key).get(rest))
 
         print("in_is_news_title: " + doc_id)
         category[user_key] = get_category_by_doc_id(doc_id)
@@ -497,7 +532,7 @@ def message(request):
         # 추천은 최신 뉴스 보기와 검색에만 있도록 하자
         # 여기 if 문에서 빼고 다른 분기로 편입
         # title 을 눌렀다는 것을 확인하기 위해서 user_request 외에 다른 변수에 저장하던지 하자
-        user_request[user_key] = similar_news_list
+        recommend_news[user_key] = similar_news_list
 
         if prev_select.get(user_key) == '저장한 뉴스':
             return_button_list = maintain_remove_news_save_list
@@ -505,14 +540,12 @@ def message(request):
             return_button_list = ['continue', 'stop']
         else:
             return_button_list = agree_disagree_news_save_list
-
-        return_button_list = list(similar_news_list.keys()) + return_button_list
+            return_button_list = list(similar_news_list.keys()) + return_button_list
 
         print(return_button_list)
         return JsonResponse({'message': {"text": selected_news_title[user_key] + "\n————————————------\n"
-                                                 + category.get(user_key) + ', ' + press.get(user_key) + ', ' + str(
-            published_date) +
-                                                 '\n—————---——---—————\n'
+                                                 + category.get(user_key) + ', ' + press.get(user_key) + ', '
+                                                 + str(published_date) + '\n—————---——---—————\n'
                                                  + text + "\n—————---———---————\n"
                                                  + url
                                          },
@@ -845,6 +878,7 @@ def check_is_in_press_list(content):
 # 뉴스를 요청하는 것인지확인
 def check_is_news_title(content, user_key):
     global user_request
+    global recommend_news
     separator = ' '
     rest = ''
     try:
@@ -853,14 +887,32 @@ def check_is_news_title(content, user_key):
     except Exception as e:
         print(e)
 
-    if user_request.get(user_key) is None:
+    if user_request.get(user_key) is None and recommend_news.get(user_key) is None:
         return False
     else:
         print(user_request.get(user_key))
-        if content in user_request.get(user_key).keys():
-            return True
-        elif rest in user_request.get(user_key).keys():
-            return True
+        try:
+            if content in user_request.get(user_key).keys():
+                return True
+        except:
+            print("")
+        try:
+            if rest in user_request.get(user_key).keys():
+                return True
+        except:
+            print("")
+        try:
+            if content in recommend_news.get(user_key).keys():
+                return True
+        except:
+            print("")
+
+        try:
+            if rest in recommend_news.get(user_key).keys():
+                return True
+        except:
+            print("")
+
         else:
             return False
 
