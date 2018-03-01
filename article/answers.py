@@ -41,7 +41,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 user_info_manager = user_information_manager(path=os.path.join(BASE_DIR, 'info_matrix.txt'))
 
 dtm_path = os.path.join(BASE_DIR, 'dtm.txt')
-matrix_path = os.path.join(BASE_DIR, 'vctr')
+matrix_path = os.path.join(BASE_DIR, 'vctr.txt')
 path = {'dtm_path': dtm_path, 'matrix_path': matrix_path}
 engine = search_engine_manager(**path)
 
@@ -297,8 +297,6 @@ def message(request):
         except:
             news_id_list = []
 
-        # news_id_list = engine.search_news_document(news_id_list)
-        print(news_id_list)
         # page rank 는 이 사람이 가장 최근에 본 뉴스들 가지고 검색해서 보여주자
         user_status_object = UserStatus.objects.get(user_key=user_key)
         news_requirement = NewsRecord.objects.filter(
@@ -306,13 +304,22 @@ def message(request):
         ).order_by("-request_time")[:20]
 
         # 최종적으로 추려낸 news_id_list 여기서 이미 본건 빼보자
-        news_id_list += engine.search_news_document(news_requirement.values_list('request_title', flat=True)[0])
-        print(news_id_list)
+        print(timezone.now())
+        news_requirement_list = list(news_requirement.values_list('request_title', flat=True))
+
+        for i in news_requirement_list:
+            news_id_list += engine.search_news_document(i)
+
+        print(timezone.now())
+        news_id_list = list(set(news_id_list))
 
         for i in news_id_list:
             if list(NewsRecord.objects.filter(user_status=user_status_object, request_news_id=i)) != 0:
                 news_id_list.remove(i)
         news_id_list = list(set(news_id_list))
+
+        news_id_list = news_id_list[0:20]
+
         print(news_id_list)
 
         user_request[user_key] = get_news_by_id(news_id_list)
@@ -642,8 +649,8 @@ def message(request):
 
             doc_id = str(user_request.get(user_key).get(selected_news_title[user_key]))
 
-            if doc_id is None:
-                doc_id = str(recommend_news.get(user_key).get.get(selected_news_title[user_key]))
+            if doc_id == 'None':
+                doc_id = str(recommend_news.get(user_key).get(selected_news_title[user_key]))
             print(doc_id)
 
             news_scrap = NewsRecord.objects.get(request_news_id=doc_id)
@@ -687,8 +694,9 @@ def message(request):
             print(content)
             doc_id = str(user_request.get(user_key).get(selected_news_title[user_key]))
 
-            if doc_id is None:
-                doc_id = str(recommend_news.get(user_key).get.get(selected_news_title[user_key]))
+            if doc_id == 'None':
+                doc_id = str(recommend_news.get(user_key).get(selected_news_title[user_key]))
+
             print(doc_id)
 
             user_status_object = UserStatus.objects.get(user_key=user_key)

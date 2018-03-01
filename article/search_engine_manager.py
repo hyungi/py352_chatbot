@@ -13,7 +13,7 @@ class search_engine_manager:
         '''
         page_rank를 이용해 검색 엔진 기능을 제공한다. 새로운 문서가 추가될 때마다 page_rank 관련 테이블들을 사전에 만들어두고,
         검색이 요청되면 최소한의 탐색 시간 안에 결과를 반환할 수 있도록 한다.
-        :param path: document_list(각 document의 tf_vector를 원소로 갖는 list)을 저장할 path (string) 
+        :param path: document_list(각 document의 tf_vector를 원소로 갖는 list)을 저장할 path (string)
         '''
         #path directory setting
         self.dtm_path = path["dtm_path"]
@@ -44,14 +44,10 @@ class search_engine_manager:
                 pickle.dump([self.dtm_index, self.dtm_list], fp)
             print("New Document_Term_Matrix has been created.")
 
-        # vctr & count_matrix pickle from path directory
+        #vctr & count_matrix pickle from path directory
         try: #파일이 존재하는 경우
-            with open(self.matrix_path + "1.txt", mode="rb") as fp:
-                self.vctr, self.feature_names = pickle.load(fp)
-            with open(self.matrix_path + "2.txt", mode="rb") as fp:
-                self.count_matrix = pickle.load(fp)
-            with open(self.matrix_path + "3.txt", mode="rb") as fp:
-                self.page_rank_dictionary = pickle.load(fp)
+            with open(self.matrix_path, mode="rb") as fp:
+                self.vctr, self.feature_names, self.count_matrix, self.page_rank_dictionary = pickle.load(fp)
 
             if self.page_rank_dictionary==None: #파일이 존재하지만 저장된 정보가 없을 경우
                 print("Empty Matrixes have been loaded.")
@@ -60,14 +56,9 @@ class search_engine_manager:
 
         except: #파일이 없는 경우 메세지를 띄우고 새로 빈 파일을 생성한다.
             print("There are no existing Matrixes.")
-            with open(self.matrix_path+"1.txt", mode="wb") as fp:
-                pickle.dump([self.vctr, self.feature_names], fp)
-            with open(self.matrix_path+"2.txt", mode="wb") as fp:
-                pickle.dump(self.count_matrix, fp)
-            with open(self.matrix_path+"3.txt", mode="wb") as fp:
-                pickle.dump(self.page_rank_dictionary, fp)
+            with open(self.matrix_path, mode="wb") as fp:
+                pickle.dump([self.vctr, self.feature_names, self.count_matrix, self.page_rank_dictionary], fp)
             print("New Matrixes have been created.")
-
 
     def get_document_tfvector(self, document_id):
         '''
@@ -90,13 +81,13 @@ class search_engine_manager:
 
         return word_tfidf_dict
 
-
     def add_new_document(self, doucment_id_list):
         '''
         document_id들을 인자로 받아서 해당 document_id의 tf_vector들을 파일에 추가하고, jaccard_similarity_matrix를 업데이트한다.
         :param doucment_id_list: document_id를 원소로 갖는 리스트 (list) 
         :return: None
         '''
+        fit_list = [] # 문제 생기면 지우자
         for document_id in doucment_id_list:
             if document_id not in self.dtm_index:
                 tf_dic = self.get_document_tfvector(document_id)
@@ -105,14 +96,18 @@ class search_engine_manager:
                 tf_list = [x[0] for x in tf_list][:10]  # 상위 10개
                 tf_string = " ".join(tf_list)
 
+                fit_list.append(tf_string) # 문제 생기면 지우자
+
                 self.dtm_index.append(document_id)
                 self.dtm_list.append(tf_string)
             else:
                 print("The document_id", document_id, "is already included in dtm_list.")
 
+        if len(fit_list) != 0 :
+            self.vctr.fit(fit_list)  # 문제 생기면 지우자
+
         self.save_updated_document_list()
         self.save_updated_matrix()
-
 
     def save_updated_document_list(self):
         '''
@@ -122,26 +117,25 @@ class search_engine_manager:
         with open(self.dtm_path, mode="wb") as fp:
             pickle.dump([self.dtm_index, self.dtm_list], fp)
 
-
     def save_updated_matrix(self):
         '''
         문서가 추가될 때마다 count_matrix와 feature_names, page_rank_dictionary를 추가하여 업데이트한다.
-        :return: 
+        :return:
         '''
-        # vocabulary = set([word for doc in X for word in tokenizer(doc) if word not in stop_words])
+        #vocabulary = set([word for doc in X for word in tokenizer(doc) if word not in stop_words])
         vocabulary = []
-        for element in self.dtm_list:
+        for element in self.dtm_list :
             temp = self.stemming_user_query(element).split(" ")
             vocabulary = vocabulary + temp
             vocabulary = list(set(vocabulary))
         self.vctr = CountVectorizer(vocabulary=vocabulary)
 
-        self.count_matrix = self.vctr.transform(self.dtm_list).toarray()  # 문제 생기면 아래로 바꾸자
-        # self.count_matrix = self.vctr.fit_transform(self.dtm_list).toarray()
+        self.count_matrix = self.vctr.transform(self.dtm_list).toarray() #문제 생기면 아래로 바꾸자
+        #self.count_matrix = self.vctr.fit_transform(self.dtm_list).toarray()
         self.feature_names = self.vctr.get_feature_names()
-        # print(self.count_matrix)
+        #print(self.count_matrix)
         print(len(self.feature_names))
-        # print(len(self.count_matrix[0]))
+        #print(len(self.count_matrix[0]))
 
         tfidf_matrix = self.tfvtr.fit_transform(self.dtm_list).toarray()
         tfidf_mat = np.asarray(tfidf_matrix)
@@ -162,12 +156,8 @@ class search_engine_manager:
         textrank_dictionary = {idx: r[0] for idx, r in zip(self.dtm_index, ranks)}
         self.page_rank_dictionary = textrank_dictionary
 
-        with open(self.matrix_path + "1.txt", mode="wb") as fp:
-            pickle.dump([self.vctr, self.feature_names], fp)
-        with open(self.matrix_path + "2.txt", mode="wb") as fp:
-            pickle.dump(self.count_matrix, fp)
-        with open(self.matrix_path + "3.txt", mode="wb") as fp:
-            pickle.dump(self.page_rank_dictionary, fp)
+        with open(self.matrix_path, mode="wb") as fp:
+            pickle.dump([self.vctr, self.feature_names, self.count_matrix, self.page_rank_dictionary], fp)
 
     def stemming_user_query(self, search_query):
         remove_pos = "[(?P<조사>JK.*)(?P<접속조사>JC.*)(?P<전성어미>ET.*)(?P<종결어미>EF.*)(?P<연결어미>EC.*)(?P<접미사>XS.*)(?P<마침표물음표느낌표>SF.*)(?P<쉼표가운뎃점콜론빗금>SC.*)]"  # mecab
@@ -181,7 +171,7 @@ class search_engine_manager:
         '''
         검색어가 포함된 document 중 가장 가까운 높은 page_rank value의 상위 n개 document를 원소로 갖는 리스트를 반환한다.
         :param search_query: 찾고자 하는 검색어 (string)
-        :param n: 유사한 document의 수 (integer) #보통 n=5 정도로 하자. 
+        :param n: 유사한 document의 수 (integer) #보통 n=5 정도로 하자.
         :return: 검색어와 가장 유사한 document_id를 원소로 갖는 리스트 (list)
         '''
 
@@ -191,6 +181,11 @@ class search_engine_manager:
         for query in user_query.split():
             if query in self.feature_names:
                 col_index.append(self.feature_names.index(query))
+
+        if len(col_index) == 0 :
+            empty_dic = dict()
+
+            return empty_dic
 
         target_columns = self.count_matrix[:, col_index]
         target_document_id = np.array(self.dtm_index)[np.sum(target_columns, axis=1) != 0]
