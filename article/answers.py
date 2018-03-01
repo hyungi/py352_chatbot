@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-
+import re
 
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
@@ -44,6 +44,7 @@ dtm_path = os.path.join(BASE_DIR, 'dtm.txt')
 matrix_path = os.path.join(BASE_DIR, 'vctr.txt')
 path = {'dtm_path': dtm_path, 'matrix_path': matrix_path}
 engine = search_engine_manager(**path)
+
 
 # 뉴스 검색란 빼고 break 제거하기
 @csrf_exempt
@@ -434,7 +435,7 @@ def message(request):
         if content == u'직접 입력':
             prev_select[user_key] = '직접 입력'
             print('닐짜 직접 입력')
-            return JsonResponse({'message': {'text': '원하는 날짜를 직접 입력해주세요'}})
+            return JsonResponse({'message': {'text': '원하는 날짜를 2018-03-01 의 형태로 직접 입력해주세요'}})
 
         date[user_key] = content
         print("selected day is " + date[user_key] + "일")
@@ -466,14 +467,17 @@ def message(request):
 
     elif prev_select.get(user_key) == u'직접 입력':
         print('직접 입력한 날짜: ' + str(content))
-        datetime_string = timezone.datetime.strptime(content).strftime('%Y-%m-%d')
-        print('2018-02-01 형태로 변환한 시간 문자열: ' + datetime_string)
-        date[user_key] = datetime_string
-        print(category_list)
-        return JsonResponse({'message': {'text': str(content) + "분야를 선택해 주세요"},
-                             'keyboard': {'type': 'buttons',
-                                          'buttons': category_list + ['back']}
-                             })
+        datetime_format = re.compile(r"\d{4}-\d{2}-\d{2}")
+        if datetime_format.search(content) is not None:
+            date[user_key] = content
+            prev_select[user_key] = ""
+            return JsonResponse({'message': {'text': str(content) + "분야를 선택해 주세요"},
+                                 'keyboard': {'type': 'buttons',
+                                              'buttons': category_list + ['back']}
+                                 })
+
+        else:
+            return JsonResponse({'message': {'text': '날짜를 잘못 입력 하셨습니다. 2018-03-01 의 형태로 다시입력해 주세요'}})
 
     elif is_category:
         category[user_key] = content
@@ -653,7 +657,7 @@ def message(request):
 
             similar_news_list = get_news_by_id(similar_news_id_list)
             recommend_news[user_key] = similar_news_list
-    
+
         if content == u'스크랩 하기':
             print(content)
 
