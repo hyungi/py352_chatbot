@@ -280,7 +280,7 @@ def message(request):
         to_number = 10 * page_number
         user_request[user_key], return_list = get_latest_news(from_number, to_number)
         return_list += ['view more', 'stop']
-
+        print(return_list)
         return JsonResponse({'message': {'text': '최신뉴스 목록 ' + str(page_number) + '페이지 입니다'},
                              'keyboard': {'type': 'buttons',
                                           'buttons': return_list}
@@ -642,6 +642,10 @@ def message(request):
 
             doc_id = str(user_request.get(user_key).get(selected_news_title[user_key]))
 
+            if doc_id is None:
+                doc_id = str(recommend_news.get(user_key).get.get(selected_news_title[user_key]))
+            print(doc_id)
+
             news_scrap = NewsRecord.objects.get(request_news_id=doc_id)
             news_scrap.is_scraped = True
             news_scrap.save()
@@ -682,6 +686,10 @@ def message(request):
         elif content == u'삭제하기':
             print(content)
             doc_id = str(user_request.get(user_key).get(selected_news_title[user_key]))
+
+            if doc_id is None:
+                doc_id = str(recommend_news.get(user_key).get.get(selected_news_title[user_key]))
+            print(doc_id)
 
             user_status_object = UserStatus.objects.get(user_key=user_key)
             news_scrap = NewsRecord.objects.filter(
