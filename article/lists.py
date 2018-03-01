@@ -7,10 +7,12 @@ category_list = ['정치', '경제', '사회', '생활/문화', '세계', 'IT/�
 press_list = []
 date_list = []
 first_button_list = ['최신 뉴스 보기', '맞춤형 뉴스 추천', '뉴스 검색', '최근 본 뉴스', '저장한 뉴스', '뉴스 이용 통계', '사용 방법 보기']
-news_select_button_list = ['날짜로 검색', '키워드로 검색']
+news_select_button_list = ['날짜로 검색', '키워드로 검색', 'stop']
 
 for i in range(0, 7):
     date_list.append((timezone.now() - timezone.timedelta(days=i)).strftime("%Y-%m-%d"))
+
+date_list += ['직접 입력']
 
 try:
     press_list.extend(list(PoliticsDocument.objects.values_list("press", flat=True).distinct()))
@@ -54,5 +56,5 @@ end_of_service_list = ['continue', 'break', 'stop']
 
 feedback_list = ['이용 후기', '오류 레포트', '건의사항']
 
-setting_list = ['추천 서비스 이용 여부', '최근 본 뉴스 초기화', '저장된 뉴스 초기화']
+setting_list = ['추천 서비스 이용 여부', '저장된 뉴스 초기화']
 # stop > first_button_list/ break > date_list /continue > news_title_list

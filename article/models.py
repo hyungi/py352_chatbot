@@ -50,3 +50,8 @@ class NewsRecord(models.Model):
     def __str__(self):
         return self.request_title + ", " + self.request_time.strftime("%Y-%m-%d %H:%M")
 
+
+class FeedBack(models.Model):
+    user_status = models.ForeignKey(UserStatus, on_delete=models.CASCADE, null=True)
+    feedback_type = models.CharField(max_length=50, default="")
+    feedback_content = models.TextField()
