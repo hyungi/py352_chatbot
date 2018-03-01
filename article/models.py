@@ -55,3 +55,4 @@ class FeedBack(models.Model):
     user_status = models.ForeignKey(UserStatus, on_delete=models.CASCADE, null=True)
     feedback_type = models.CharField(max_length=50, default="")
     feedback_content = models.TextField()
+    # 별점을 매길수 있는 필드 추가하기

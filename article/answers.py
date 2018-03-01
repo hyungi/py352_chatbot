@@ -9,7 +9,7 @@ from crawler.get_news import get_news, get_summary, get_news_by_id, get_category
 from article.models import Requirement, UserStatus, NewsRecord, FeedBack
 from article.lists import press_list, date_list, category_list, gender_list, birth_year_list, region_list, \
     first_button_list, agree_disagree_news_save_list, end_of_service_list, maintain_remove_news_save_list, \
-    news_select_button_list, feedback_list, setting_list
+    news_select_button_list, feedback_list, setting_list, news_recomm_service_agree_disagree
 from crawler.models import *
 from collections import Counter
 from article.user_info_class import news_record, user_status, user_information_manager
@@ -45,6 +45,7 @@ matrix_path = os.path.join(BASE_DIR, 'vctr')
 path = {'dtm_path': dtm_path, 'matrix_path': matrix_path}
 engine = search_engine_manager(**path)
 
+# 뉴스 검색란 빼고 break 제거하기
 @csrf_exempt
 def message(request):
     global date
@@ -110,6 +111,8 @@ def message(request):
     is_setting_list = check_is_in_setting_list(content)
     is_setting = check_is_setting(content)
 
+    is_news_recomm_service_setting = check_news_recomm_service_setting(content)
+
     if is_first_use:
         print("UserStatus 가 없는 경우에 적용함")
         button_list = ['동의합니다', '동의하지 않습니다']
@@ -153,10 +156,16 @@ def message(request):
                 return_list = list(user_request[user_key].keys())
 
             print(return_list)
-            return JsonResponse({'message': {'text': 'you select continue'},
-                                 'keyboard': {'type': 'buttons',
-                                              'buttons': return_list}
-                                 })
+            if len(return_list) == 0:
+                return JsonResponse({'message': {'text': 'Sorry, there is no result'},
+                                     'keyboard': {'type': 'buttons',
+                                                  'buttons': first_button_list}
+                                     })
+            else:
+                return JsonResponse({'message': {'text': 'you select continue'},
+                                     'keyboard': {'type': 'buttons',
+                                                  'buttons': return_list}
+                                     })
 
     elif content == u'back':
         if prev_select[user_key] == '카테고리':
@@ -193,6 +202,23 @@ def message(request):
                                  'keyboard': {'type': 'buttons',
                                               'buttons': news_select_button_list}
                                  })
+    elif is_news_recomm_service_setting:
+        if content == u'서비스를 이용하겠습니다':
+            user_status_instance = UserStatus.objects.get(user_key=user_key)
+            user_status_instance.recommend_service = True
+            user_status_instance.save()
+            return_message = '뉴스 추천 서비스 이용 설정이 완료 되었습니다.'
+
+        else:
+            user_status_instance = UserStatus.objects.get(user_key=user_key)
+            user_status_instance.recommend_service = False
+            user_status_instance.save()
+            return_message = '뉴스 추천 서비스 이용안함 설정이 완료 되었습니다.'
+
+        return JsonResponse({'message': {'text': return_message},
+                             'keyboard': {'type': 'buttons',
+                                          'buttons': first_button_list}
+                             })
 
     elif is_setting:
         print(content)
@@ -205,19 +231,19 @@ def message(request):
     elif is_setting_list:
         print(content)
         print(first_button_list)
-        user_status_instance = UserStatus.objects.get(user_key=user_key)
 
         if content == setting_list[0]:
-            user_status_instance.recommend_service = False
-            user_status_instance.save()
-        else:
-            news_record_instance = NewsRecord.objects.get(user_status=user_status_instance)
-            news_record_instance.is_scraped = False
+            return JsonResponse({'message': {'text': '뉴스 추천 서비스 설정메뉴 입니다.'},
+                                 'keyboard': {'type': 'buttons',
+                                              'buttons': news_recomm_service_agree_disagree}
+                                 })
 
-        return JsonResponse({'message': {'text': '설정이 완료되었습니다.'},
-                             'keyboard': {'type': 'buttons',
-                                          'buttons': first_button_list}
-                             })
+        else:
+            reset_is_scraped(user_key)
+            return JsonResponse({'message': {'text': '저장한 뉴스 초기화가 완료되었습니다.'},
+                                 'keyboard': {'type': 'buttons',
+                                              'buttons': first_button_list}
+                                 })
 
     elif is_feedback:
         print(content)
@@ -260,8 +286,8 @@ def message(request):
                                           'buttons': return_list}
                              })
 
-    elif content == u'맞춤형 뉴스 추천':
-        print('맞춤형 뉴스 추천')
+    elif content == u'맞춤형 뉴스 큐레이팅':
+        print(content)
         user_key_list = user_info_manager.get_n_similar_user(user_key, 1)
         print(user_key_list)
 
@@ -299,7 +325,20 @@ def message(request):
 
     elif is_tutorial:
         print('tutorial page')
-        return JsonResponse({'message': {'text': '사용방법 안내 문구'},
+        usage_guide = '안녕하세요. “호외요”를 이용해주셔서 감사합니다.\n-간단한 설정은 “설정”을 타이핑하셔서 조정하실 수 있습니다.\n-이용후기, 오류 레포트, 건의사항 등의 피드백은 “피드백”을 타이핑하셔서 보내실 수 있습니다.' \
+                      '\n\n1. 최신 뉴스 보기\n최신 뉴스를 바로 보실 수 있는 메뉴입니다. \n최근에 본 뉴스는 메인 메뉴의 ‘최근 본 뉴스’에 저장되고, 별도로 스크랩하여 메인 메뉴의 ‘저장한 뉴스’에서 다시 확인하실 수 있습니다. 뉴스 조회 후 관련된 뉴스를 추천해드립니다.' \
+                      '\n(최신 뉴스는 매일 07:00, 15:00, 22:00에 업데이트됩니다.)\n(뉴스 추천 여부는 ‘설정’을 타이핑하시면 설정이 가능합니다.)' \
+                      '\n\n2. 맞춤형 뉴스 큐레이팅\n사용자의 뉴스 사용 경향(언론사/카테고리, 평소 조회한 뉴스 등)에 따라 맞춤형 뉴스를 추천해드립니다.' \
+                      '\n\n3. 뉴스 검색' \
+                      '\n-날짜로 검색 : 보고자 하는 뉴스의 날짜/카테고리/언론사에 따라 원하는 뉴스를 검색하실 수 있습니다.\n-키워드로 검색 : 원하는 내용의 뉴스를 키워드로 검색하실 수 있습니다.' \
+                      '\n\n4. 최근 본 뉴스' \
+                      '\n최근에 조회한 뉴스 목록을 최대 20개까지 유지하고 확인하실 수 있습니다.' \
+                      '\n\n5. 저장한 뉴스' \
+                      '\n뉴스 서비스를 이용하시다가 스크랩한 뉴스를 확인하실 수 있습니다. 각 뉴스를 클릭하시면 내용 조회와 유지, 삭제가 가능하며, ‘설정’을 타이핑하시면 전체 목록을 삭제하실 수 있습니다.' \
+                      '\n\n6. 뉴스 이용 통계' \
+                      '\n회원님의 평소 뉴스 이용 경향(언론사/카테고리, 관심 있게 본 뉴스)을 시각화하여 확인하실 수 있습니다.\n(연령대별 통계는 현재 서비스 준비 중입니다.)'
+        print(usage_guide)
+        return JsonResponse({'message': {'text': usage_guide},
                              'keyboard': {'type': 'buttons',
                                           'buttons': first_button_list}
                              })
@@ -342,13 +381,13 @@ def message(request):
         if len(result_list) > 0:
             return JsonResponse({'message': {'text': '저장했던 뉴스입니다.'},
                                  'keyboard': {'type': 'buttons',
-                                              'buttons': result_list}
+                                              'buttons': result_list + ['stop']}
                                  })
         else:
             print('최근에 본 뉴스가 없을 경우')
             return JsonResponse({'message': {'text': '저장하신 뉴스가 없습니다'},
                                  'keyboard': {'type': 'buttons',
-                                              'buttons': end_of_service_list}
+                                              'buttons': first_button_list}
                                  })
     elif is_recent_news:
         print('is_recent_news')
@@ -366,13 +405,13 @@ def message(request):
         if len(result_list) > 0:
             return JsonResponse({'message': {'text': '최근에 보신 뉴스입니다.'},
                                  'keyboard': {'type': 'buttons',
-                                              'buttons': result_list}
+                                              'buttons': result_list + ['stop']}
                                  })
         else:
             print('최근에 본 뉴스가 없을 경우')
             return JsonResponse({'message': {'text': '최근에 보신 뉴스가 없습니다'},
                                  'keyboard': {'type': 'buttons',
-                                              'buttons': end_of_service_list}
+                                              'buttons': first_button_list}
                                  })
 
     elif is_date:
@@ -411,7 +450,7 @@ def message(request):
                                               'buttons': category_list + ['back']}
                                  })
 
-    elif prev_select[user_key] == u'직접 입력':
+    elif prev_select.get(user_key) == u'직접 입력':
         print('직접 입력한 날짜: ' + str(content))
         datetime_string = timezone.datetime.strptime(content).strftime('%Y-%m-%d')
         print('2018-02-01 형태로 변환한 시간 문자열: ' + datetime_string)
@@ -618,7 +657,7 @@ def message(request):
                                  'keyboard': {'type': 'buttons',
                                               'buttons': return_button_list}
                                  })
-        elif content == u'하지 않기':
+        elif content == u'하지 않음':
             print(content)
 
             if prev_select.get(user_key) == '저장한 뉴스':
@@ -1181,3 +1220,20 @@ def add_index_of_list(input_list):
     for i in range(len(input_list)):
         return_list += [str(i + 1) + '. ' + str(input_list[i])]
     return return_list
+
+
+def reset_is_scraped(user_key):
+    user_status_instance = UserStatus.objects.get(user_key=user_key)
+    news_record_instance = NewsRecord.objects.filter(user_status=user_status_instance)
+
+    for i in news_record_instance:
+        news_record_object = NewsRecord.objects.get(user_status=user_status_instance, request_news_id=i.request_news_id)
+        news_record_object.is_scraped = False
+        news_record_object.save()
+
+
+def check_news_recomm_service_setting(content):
+    if content in news_recomm_service_agree_disagree:
+        return True
+    else:
+        return False
