@@ -157,7 +157,7 @@ def message(request):
 
             print(return_list)
             if len(return_list) == 0:
-                return JsonResponse({'message': {'text': 'Sorry, there is no result'},
+                return JsonResponse({'message': {'text': '저장된 뉴스가 없습니다'},
                                      'keyboard': {'type': 'buttons',
                                                   'buttons': first_button_list}
                                      })
@@ -225,7 +225,7 @@ def message(request):
         print(setting_list)
         return JsonResponse({'message': {'text': '설정 메뉴 입니다.'},
                              'keyboard': {'type': 'buttons',
-                                          'buttons': setting_list}
+                                          'buttons': setting_list + ['stop']}
                              })
 
     elif is_setting_list:
@@ -235,7 +235,7 @@ def message(request):
         if content == setting_list[0]:
             return JsonResponse({'message': {'text': '뉴스 추천 서비스 설정메뉴 입니다.'},
                                  'keyboard': {'type': 'buttons',
-                                              'buttons': news_recomm_service_agree_disagree}
+                                              'buttons': news_recomm_service_agree_disagree + ['stop']}
                                  })
 
         else:
@@ -248,9 +248,9 @@ def message(request):
     elif is_feedback:
         print(content)
         print(feedback_list)
-        return JsonResponse({'message': {'text': '피드백 메뉴 입니다.'},
+        return JsonResponse({'message': {'text': '피드백 메뉴 입니다'},
                              'keyboard': {'type': 'buttons',
-                                          'buttons': feedback_list}
+                                          'buttons': feedback_list + ['stop']}
                              })
     elif is_feedback_list:
         print(content)
@@ -266,7 +266,7 @@ def message(request):
         feedback_instance.save()
 
         print(user_key, prev_select.get(user_key), content)
-
+        reset_globals(user_key)
         return JsonResponse({'message': {'text': '피드백이 완료되었습니다.'},
                              'keyboard': {'type': 'buttons',
                                           'buttons': first_button_list}
@@ -312,10 +312,17 @@ def message(request):
 
         print(timezone.now())
         news_id_list = list(set(news_id_list))
+        #
+        # for i in news_id_list:
+        #     if list(NewsRecord.objects.filter(user_status=user_status_object, request_news_id=i)) != 0:
+        #         news_id_list.remove(i)
 
-        for i in news_id_list:
-            if list(NewsRecord.objects.filter(user_status=user_status_object, request_news_id=i)) != 0:
-                news_id_list.remove(i)
+        news_record_instance = NewsRecord.objects.filter(user_status=UserStatus.objects.get(user_key=user_key))
+
+        for i in news_record_instance:
+            if i.request_news_id in news_id_list:
+                news_id_list.remove(i.request_news_id)
+
         news_id_list = list(set(news_id_list))
 
         news_id_list = news_id_list[0:20]
@@ -615,15 +622,6 @@ def message(request):
         print(url)
         print(published_date)
 
-        similar_news_id_list = engine.search_news_document(selected_news_title[user_key])
-        similar_news_list = get_news_by_id(similar_news_id_list)
-
-        # 여기 고쳐야함
-        # 추천은 최신 뉴스 보기와 검색에만 있도록 하자
-        # 여기 if 문에서 빼고 다른 분기로 편입
-        # title 을 눌렀다는 것을 확인하기 위해서 user_request 외에 다른 변수에 저장하던지 하자
-        recommend_news[user_key] = similar_news_list
-
         if prev_select.get(user_key) == '저장한 뉴스':
             return_button_list = maintain_remove_news_save_list
         elif prev_select.get(user_key) == '최근 본 뉴스':
@@ -657,18 +655,36 @@ def message(request):
             news_scrap.is_scraped = True
             news_scrap.save()
 
+            if UserStatus.objects.get(user_key=user_key).recommend_service is True:
+                similar_news_id_list = engine.search_news_document(selected_news_title[user_key])
+
+                news_record_instance = NewsRecord.objects.filter(user_status=UserStatus.objects.get(user_key=user_key))
+
+                for i in news_record_instance:
+                    if i.request_news_id in similar_news_id_list:
+                        similar_news_id_list.remove(i.request_news_id)
+
+                similar_news_list = get_news_by_id(similar_news_id_list)
+                recommend_news[user_key] = similar_news_list
+
             if prev_select.get(user_key) == '저장한 뉴스':
                 return_button_list = ['continue', 'stop']
             elif prev_select.get(user_key) == '최신 뉴스 보기':
-                return_button_list = list(recommend_news[user_key].keys()) + ['continue', 'stop']
+                if recommend_news.get(user_key) is not None:
+                    return_button_list = list(recommend_news.get(user_key).keys()) + ['continue', 'stop']
+                else:
+                    return_button_list = ['continue', 'stop']
             else:
-                return_button_list = list(recommend_news[user_key].keys()) + end_of_service_list
+                if recommend_news.get(user_key) is not None:
+                    return_button_list = list(recommend_news.get(user_key).keys()) + end_of_service_list
+                else:
+                    return_button_list = end_of_service_list
 
             return JsonResponse({'message': {"text": "스크랩 하기 \n 저장하신 뉴스 정보는 일주일간 보관합니다"},
                                  'keyboard': {'type': 'buttons',
                                               'buttons': return_button_list}
                                  })
-        elif content == u'하지 않음':
+        elif content == u'스크랩 하지 않음':
             print(content)
 
             if prev_select.get(user_key) == '저장한 뉴스':
