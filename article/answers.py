@@ -642,6 +642,18 @@ def message(request):
                              })
 
     elif is_save_news_title:
+        if UserStatus.objects.get(user_key=user_key).recommend_service is True:
+            similar_news_id_list = engine.search_news_document(selected_news_title[user_key])
+
+            news_record_instance = NewsRecord.objects.filter(user_status=UserStatus.objects.get(user_key=user_key))
+
+            for i in news_record_instance:
+                if i.request_news_id in similar_news_id_list:
+                    similar_news_id_list.remove(i.request_news_id)
+
+            similar_news_list = get_news_by_id(similar_news_id_list)
+            recommend_news[user_key] = similar_news_list
+    
         if content == u'스크랩 하기':
             print(content)
 
@@ -654,18 +666,6 @@ def message(request):
             news_scrap = NewsRecord.objects.get(request_news_id=doc_id)
             news_scrap.is_scraped = True
             news_scrap.save()
-
-            if UserStatus.objects.get(user_key=user_key).recommend_service is True:
-                similar_news_id_list = engine.search_news_document(selected_news_title[user_key])
-
-                news_record_instance = NewsRecord.objects.filter(user_status=UserStatus.objects.get(user_key=user_key))
-
-                for i in news_record_instance:
-                    if i.request_news_id in similar_news_id_list:
-                        similar_news_id_list.remove(i.request_news_id)
-
-                similar_news_list = get_news_by_id(similar_news_id_list)
-                recommend_news[user_key] = similar_news_list
 
             if prev_select.get(user_key) == '저장한 뉴스':
                 return_button_list = ['continue', 'stop']
