@@ -7,6 +7,42 @@ from .models import *
 
 '''
 
+all_doc = []
+
+pol_doc = PoliticsDocument.objects.all().values_list(
+    'published_date', 'title', 'document_id',
+).order_by('-published_date')
+
+eco_doc = EconomicsDocument.objects.all().values_list(
+    'published_date', 'title', 'document_id',
+).order_by('-published_date')
+
+soc_doc = SocietyDocument.objects.all().values_list(
+    'published_date', 'title', 'document_id',
+).order_by('-published_date')
+
+cul_doc = CultureLivingDocument.objects.all().values_list(
+    'published_date', 'title', 'document_id',
+).order_by('-published_date')
+
+wol_doc = WorldDocument.objects.all().values_list(
+    'published_date', 'title', 'document_id',
+).order_by('-published_date')
+
+it_doc = ITScienceDocument.objects.all().values_list(
+    'published_date', 'title', 'document_id',
+).order_by('-published_date')
+
+all_doc += list(pol_doc)
+all_doc += list(eco_doc)
+all_doc += list(soc_doc)
+all_doc += list(cul_doc)
+all_doc += list(wol_doc)
+all_doc += list(it_doc)
+all_doc.sort(reverse=True)
+
+print('latest_news_set is loaded')
+
 
 def get_news(press, date, category):
     year = int(date[0:4])
@@ -187,39 +223,7 @@ def get_press_by_doc_id_category(document_id, category):
 
 
 def get_latest_news(from_number, to_number):
-    all_doc = []
-
-    pol_doc = PoliticsDocument.objects.all().values_list(
-        'published_date', 'title', 'document_id',
-    ).order_by('-published_date')
-
-    eco_doc = EconomicsDocument.objects.all().values_list(
-        'published_date', 'title', 'document_id',
-    ).order_by('-published_date')
-
-    soc_doc = SocietyDocument.objects.all().values_list(
-        'published_date', 'title', 'document_id',
-    ).order_by('-published_date')
-
-    cul_doc = CultureLivingDocument.objects.all().values_list(
-        'published_date', 'title', 'document_id',
-    ).order_by('-published_date')
-
-    wol_doc = WorldDocument.objects.all().values_list(
-        'published_date', 'title', 'document_id',
-    ).order_by('-published_date')
-
-    it_doc = ITScienceDocument.objects.all().values_list(
-        'published_date', 'title', 'document_id',
-    ).order_by('-published_date')
-
-    all_doc += list(pol_doc)
-    all_doc += list(eco_doc)
-    all_doc += list(soc_doc)
-    all_doc += list(cul_doc)
-    all_doc += list(wol_doc)
-    all_doc += list(it_doc)
-    all_doc.sort(reverse=True)
+    global all_doc
     return_dict = {}
     return_list = []
 
