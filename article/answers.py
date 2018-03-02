@@ -31,6 +31,7 @@ recommend_news = {}
 selected_news_title = {}
 news_title_list = {}
 prev_select = {}
+feedback_select ={}
 
 user_info_gender = {}
 user_info_birth_year = {}
@@ -56,6 +57,7 @@ def message(request):
     global selected_news_title
     global news_title_list
     global prev_select
+    global feedback_select
 
     global user_info_gender
     global user_info_birth_year
@@ -107,6 +109,7 @@ def message(request):
 
     is_feedback_first_depth = check_is_in_feedback_first_depth(content)
     is_feedback_second_depth = check_is_in_feedback_second_depth(content, user_key)
+    is_feedback_third_depth = check_is_in_feedback_third_depth(user_key)
     is_feedback = check_is_feedback(content)
 
     is_setting_list = check_is_in_setting_list(content)
@@ -272,8 +275,23 @@ def message(request):
 
     elif is_feedback_second_depth:
         print(content)
-        prev_select[user_key] = content
+        feedback_select[user_key] = content
         return JsonResponse({'message': {'text': '자유롭게 입력해주세요'}})
+
+    elif is_feedback_third_depth:
+        print(content)
+        feedback_instance = FeedBack(
+            user_status=UserStatus.objects.get(user_key=user_key),
+            feedback_type=prev_select.get(user_key),
+            second_depth=feedback_select.get(user_key),
+            feedback_content=content,
+        )
+        feedback_instance.save()
+
+        return JsonResponse({'message': {'text': '피드백이 완료되었습니다.'},
+                             'keyboard': {'type': 'buttons',
+                                          'buttons': first_button_list}
+                             })
 
     elif prev_select.get(user_key) in feedback_list:
         feedback_instance = FeedBack(
@@ -889,8 +907,8 @@ def check_is_in_setting_list(content):
 
 
 def check_is_in_feedback_third_depth(user_key):
-    global prev_select
-    if prev_select.get(user_key) in stars_list or prev_select.get(user_key) in first_button_list or prev_select.get(user_key) == u'건의사항':
+    global feedback_select
+    if feedback_select.get(user_key) in stars_list or feedback_select.get(user_key) in first_button_list or prev_select.get(user_key) == u'건의사항':
         return True
     else:
         return False
