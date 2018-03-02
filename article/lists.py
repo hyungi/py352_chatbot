@@ -58,4 +58,5 @@ feedback_list = ['이용 후기', '오류 레포트', '건의사항']
 
 setting_list = ['추천 서비스 이용 여부', '저장된 뉴스 초기화']
 news_recomm_service_agree_disagree = ['서비스를 이용하겠습니다', '서비스를 이용하지 않겠습니다']
+stars_list = ['5', '4', '3', '2', '1']
 # stop > first_button_list/ break > date_list /continue > news_title_list

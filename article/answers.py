@@ -9,7 +9,7 @@ from crawler.get_news import get_news, get_summary, get_news_by_id, get_category
 from article.models import Requirement, UserStatus, NewsRecord, FeedBack
 from article.lists import press_list, date_list, category_list, gender_list, birth_year_list, region_list, \
     first_button_list, agree_disagree_news_save_list, end_of_service_list, maintain_remove_news_save_list, \
-    news_select_button_list, feedback_list, setting_list, news_recomm_service_agree_disagree
+    news_select_button_list, feedback_list, setting_list, news_recomm_service_agree_disagree, stars_list
 from crawler.models import *
 from collections import Counter
 from article.user_info_class import news_record, user_status, user_information_manager
@@ -46,7 +46,6 @@ path = {'dtm_path': dtm_path, 'matrix_path': matrix_path}
 engine = search_engine_manager(**path)
 
 
-# 뉴스 검색란 빼고 break 제거하기
 @csrf_exempt
 def message(request):
     global date
@@ -106,7 +105,8 @@ def message(request):
     is_news_keyword_search_select = check_is_in_news_keyword_search(content)
     is_news_date_search_select = check_is_in_news_date_search(content)
 
-    is_feedback_list = check_is_in_feedback_list(content)
+    is_feedback_first_depth = check_is_in_feedback_first_depth(content)
+    is_feedback_second_depth = check_is_in_feedback_second_depth(content, user_key)
     is_feedback = check_is_feedback(content)
 
     is_setting_list = check_is_in_setting_list(content)
@@ -118,7 +118,7 @@ def message(request):
         print("UserStatus 가 없는 경우에 적용함")
         button_list = ['동의합니다', '동의하지 않습니다']
         return JsonResponse({'message': {'text': '안녕하세요. 최신 뉴스를 요약해주는 “호외요”입니다. \n' +
-                                                 '최신 뉴스는 물론, 날짜/관심 분야/신문사별로 원하는 뉴스를 검색하고 스크랩할 수 있는 서비스입니다. \n' +
+                                                 '최신 뉴스는 물론, 날짜/관심 분야/언론사별로 원하는 뉴스를 검색하고 스크랩할 수 있는 서비스입니다. \n' +
                                                  '원활한 서비스 제공을 위해 사용자의 기본 정보를 수집하고 있습니다. 수집한 정보는 맞춤형 뉴스 추천, 이용자 통계 서비스 제공에 사용됩니다. 개인정보 제공에 동의하시나요? \n'
                                          },
                              'keyboard': {'type': 'buttons',
@@ -142,8 +142,9 @@ def message(request):
                                                   'buttons': date_list + ['stop']}
                                      })
         else:
-            if prev_select.get(user_key) == '최근 본 뉴스' or prev_select.get(user_key) == '저장한 뉴스':
+            if prev_select.get(user_key) == '최근 본 뉴스' or prev_select.get(user_key) == '저장한 뉴스' or prev_select.get(user_key) == '맞춤형 뉴스 큐레이팅':
                 return_list = add_index_of_list(list(user_request[user_key].keys()))
+                return_list += ['stop']
             elif prev_select.get(user_key) == '최신 뉴스 보기':
                 return_list = list(user_request[user_key].keys())
                 return_list += ['view more', 'stop']
@@ -247,7 +248,29 @@ def message(request):
                              'keyboard': {'type': 'buttons',
                                           'buttons': feedback_list + ['stop']}
                              })
-    elif is_feedback_list:
+    elif is_feedback_first_depth:
+        if content == u'이용 후기':
+            prev_select[user_key] = content
+            print('별점 요청')
+            return JsonResponse({'message': {'text': '서비스 만족도가 어느정도 인가요?(5점 만점)'},
+                                 'keyboard': {'type': 'buttons',
+                                              'buttons': stars_list}
+                                 })
+
+        elif content == u'오류 레포트':
+            prev_select[user_key] = content
+            print('오류 발생 지점 확인')
+
+            return JsonResponse({'message': {'text': '어떤 서비스에서 오류가 발생 하셨나요?'},
+                                 'keyboard': {'type': 'buttons',
+                                              'buttons': first_button_list}
+                                 })
+        else:
+            print('건의사항 메뉴임')
+            prev_select[user_key] = content
+            return JsonResponse({'message': {'text': '건의 사항을 자유롭게 입력해주세요'}})
+
+    elif is_feedback_second_depth:
         print(content)
         prev_select[user_key] = content
         return JsonResponse({'message': {'text': '자유롭게 입력해주세요'}})
@@ -282,6 +305,7 @@ def message(request):
                              })
 
     elif content == u'맞춤형 뉴스 큐레이팅':
+        prev_select[user_key] = '맞춤형 뉴스 큐레이팅'
         print(content)
         user_key_list = user_info_manager.get_n_similar_user(user_key, 1)
         print(user_key_list)
@@ -502,7 +526,7 @@ def message(request):
 
             if len(return_press_list) is 0:
                 reset_globals(user_key)
-                return JsonResponse({'message': {'text': '날짜와 카테고리에 맞는 신문사가 없습니다. 다시 골라 주세요'},
+                return JsonResponse({'message': {'text': '날짜와 카테고리에 맞는 언론사가 없습니다. 다시 골라 주세요'},
                                      'keyboard': {'type': 'buttons',
                                                   'buttons': date_list}
                                      })
@@ -519,7 +543,7 @@ def message(request):
             return_press_list = make_press_list(category[user_key], user_key)
             print(return_press_list)
 
-            return JsonResponse({'message': {'text': '신문사를 다시 골라주세요'},
+            return JsonResponse({'message': {'text': '언론사를 다시 골라주세요'},
                                  'keyboard': {'type': 'buttons',
                                               'buttons': return_press_list + ['back']}
                                  })
@@ -598,7 +622,7 @@ def message(request):
         print(category.get(user_key))
         print(press.get(user_key))
 
-        if len(NewsRecord.objects.filter(request_news_id=doc_id)) == 0:
+        if len(NewsRecord.objects.filter(user_status__exact=UserStatus.objects.get(user_key=user_key), request_news_id=doc_id)) == 0:
             news_info = {"document_id": doc_id, "press": press.get(user_key),
                          "category": category.get(user_key), "title": selected_news_title[user_key],
                          "request_time": timezone.now().strftime("%Y-%m-%d %H:%M")}
@@ -606,7 +630,10 @@ def message(request):
             news_record_instance = news_record(**news_info)
             user_info_manager.update_user_record(user_key, news_record_instance)
         else:
-            news_record_update = NewsRecord.objects.get(request_news_id=doc_id)
+            news_record_update = NewsRecord.objects.get(
+                user_status__exact=UserStatus.objects.get(user_key=user_key),
+                request_news_id=doc_id,
+            )
             news_record_update.request_time = timezone.now().strftime("%Y-%m-%d %H:%M")
             news_record_update.save()
 
@@ -660,7 +687,11 @@ def message(request):
         if content == u'스크랩 하기':
             print(content)
 
-            news_scrap = NewsRecord.objects.get(request_title=selected_news_title[user_key])
+            user_status_instance = UserStatus.objects.get(user_key=user_key)
+            news_scrap = NewsRecord.objects.get(
+                user_status__exact=user_status_instance,
+                request_title=selected_news_title[user_key],
+            )
             news_scrap.is_scraped = True
             news_scrap.save()
 
@@ -807,7 +838,7 @@ def message(request):
         del user_info_region[user_key]
         del user_info_birth_year[user_key]
         print(show_result)
-        intro = '“호외요”에서 최신순 뉴스 제공, 날짜/관심 분야/신문사별 뉴스 검색과 키워드 뉴스 검색 서비스를 이용하실 수 있습니다. 요약된 뉴스와 원문 링크가 함께 제공되며, ' \
+        intro = '“호외요”에서 최신순 뉴스 제공, 날짜/관심 분야/언론사별 뉴스 검색과 키워드 뉴스 검색 서비스를 이용하실 수 있습니다. 요약된 뉴스와 원문 링크가 함께 제공되며, ' \
                 '최근 본 뉴스와 스크랩 기능을 통해 이전에 보셨던 뉴스를 최대 20개까지 다시 보실 수 있습니다. 또, 뉴스 이용 취향에 따라 맞춤형 뉴스를 큐레이팅해드리고 있습니다. \n\n' \
                 '덤으로 나의 뉴스 이용 경향을 분석한 결과도 확인하실 수 있어요. \n\n' \
                 '텍스트 입력창에 ‘설정’을 입력해서 개인 설정을 바꾸거나, ‘피드백’을 입력해서 건의사항이나 서비스 평가를 하실 수 있습니다. 그럼, 아직 요약 알고리즘이 개선 중이라 일부 뉴스의 ' \
@@ -857,7 +888,23 @@ def check_is_in_setting_list(content):
         return False
 
 
-def check_is_in_feedback_list(content):
+def check_is_in_feedback_third_depth(user_key):
+    global prev_select
+    if prev_select.get(user_key) in stars_list or prev_select.get(user_key) in first_button_list or prev_select.get(user_key) == u'건의사항':
+        return True
+    else:
+        return False
+
+
+def check_is_in_feedback_second_depth(content, user_key):
+    global prev_select
+    if prev_select.get(user_key) in feedback_list[0:2] and (content in stars_list or content in first_button_list):
+        return True
+    else:
+        return False
+
+
+def check_is_in_feedback_first_depth(content):
     if content in feedback_list:
         return True
     else:
