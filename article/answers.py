@@ -288,6 +288,8 @@ def message(request):
         )
         feedback_instance.save()
 
+        reset_globals(user_key)
+
         return JsonResponse({'message': {'text': '피드백이 완료되었습니다.'},
                              'keyboard': {'type': 'buttons',
                                           'buttons': first_button_list}
@@ -1187,6 +1189,7 @@ def reset_globals(user_key):
     global page_number
     global prev_select
     global recommend_news
+    global feedback_select
 
     try:
         del press[user_key]
@@ -1221,6 +1224,10 @@ def reset_globals(user_key):
         del prev_select[user_key]
     except Exception as e:
         print('이전 선택이 저장 되지 않아 못 지움')
+    try:
+        del feedback_select[user_key]
+    except Exception as e:
+        print('피드백 이전에 저장 되지 않아 못지움')
 
     page_number = 0
 
