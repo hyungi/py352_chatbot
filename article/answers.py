@@ -271,6 +271,7 @@ def message(request):
         else:
             print('건의사항 메뉴임')
             prev_select[user_key] = content
+            feedback_select[user_key] = content
             return JsonResponse({'message': {'text': '건의 사항을 자유롭게 입력해주세요'}})
 
     elif is_feedback_second_depth:
@@ -280,6 +281,7 @@ def message(request):
 
     elif is_feedback_third_depth:
         print(content)
+
         feedback_instance = FeedBack(
             user_status=UserStatus.objects.get(user_key=user_key),
             feedback_type=prev_select.get(user_key),

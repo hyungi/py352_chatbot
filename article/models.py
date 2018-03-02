@@ -56,4 +56,6 @@ class FeedBack(models.Model):
     feedback_type = models.CharField(max_length=50, default="")
     second_depth = models.CharField(max_length=50, default="건의사항")
     feedback_content = models.TextField()
-    # 별점을 매길수 있는 필드 추가하기
+
+    def __str__(self):
+        return self.feedback_type + self.feedback_content
