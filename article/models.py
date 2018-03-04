@@ -58,4 +58,4 @@ class FeedBack(models.Model):
     feedback_content = models.TextField()
 
     def __str__(self):
-        return self.feedback_type + self.feedback_content
+        return "피드백 타입: " + self.feedback_type + ", 피드백 내용: " + self.feedback_content

@@ -128,13 +128,13 @@ def message(request):
                                           'buttons': button_list}
                              })
     elif is_end_of_service:
-        if content == 'stop':
+        if content == '메인 메뉴로':
             reset_globals(user_key)
-            return JsonResponse({'message': {'text': 'you select stop'},
+            return JsonResponse({'message': {'text': '메인 메뉴로 돌아갑니다.'},
                                  'keyboard': {'type': 'buttons',
                                               'buttons': first_button_list}
                                  })
-        elif content == 'break':
+        elif content == '다시 검색하기':
             if prev_select.get(user_key) == '키워드로 검색':
                 prev_select[user_key] = '키워드로 검색'
                 return JsonResponse({'message': {'text': '키워드를 입력해주세요'}})
@@ -142,15 +142,15 @@ def message(request):
             elif prev_select.get(user_key) == u'날짜로 검색':
                 return JsonResponse({'message': {'text': '날짜를 골라주세요'},
                                      'keyboard': {'type': 'buttons',
-                                                  'buttons': date_list + ['stop']}
+                                                  'buttons': date_list + ['메인 메뉴로']}
                                      })
         else:
             if prev_select.get(user_key) == '최근 본 뉴스' or prev_select.get(user_key) == '저장한 뉴스' or prev_select.get(user_key) == '맞춤형 뉴스 큐레이팅':
                 return_list = add_index_of_list(list(user_request[user_key].keys()))
-                return_list += ['stop']
+                return_list += ['메인 메뉴로']
             elif prev_select.get(user_key) == '최신 뉴스 보기':
                 return_list = list(user_request[user_key].keys())
-                return_list += ['view more', 'stop']
+                return_list += ['더 보기', '메인 메뉴로']
             else:
                 return_list = list(user_request[user_key].keys()) + end_of_service_list
 
@@ -161,12 +161,12 @@ def message(request):
                                                   'buttons': first_button_list}
                                      })
             else:
-                return JsonResponse({'message': {'text': 'you select continue'},
+                return JsonResponse({'message': {'text': '목록으로 돌아갑니다.'},
                                      'keyboard': {'type': 'buttons',
                                                   'buttons': return_list}
                                      })
 
-    elif content == u'back':
+    elif content == u'뒤로 가기':
         if prev_select[user_key] == '카테고리':
             try:
                 del category[user_key]
@@ -178,7 +178,7 @@ def message(request):
                 prev_select[user_key] = '직접 입력'
             return JsonResponse({'message': {'text': "카테고리를 선택해 주세요"},
                                  'keyboard': {'type': 'buttons',
-                                              'buttons': category_list + ['back']}
+                                              'buttons': category_list + ['뒤로 가기']}
                                  })
 
         elif prev_select[user_key] == '정해준 날짜 고름':
@@ -189,7 +189,7 @@ def message(request):
             prev_select[user_key] = '날짜로 검색'
             return JsonResponse({'message': {'text': "날짜를 선택해 주세요"},
                                  'keyboard': {'type': 'buttons',
-                                              'buttons': date_list + ['back']}
+                                              'buttons': date_list + ['뒤로 가기']}
                                  })
 
         elif prev_select[user_key] == '직접 입력':
@@ -224,7 +224,7 @@ def message(request):
         print(setting_list)
         return JsonResponse({'message': {'text': '설정 메뉴 입니다.'},
                              'keyboard': {'type': 'buttons',
-                                          'buttons': setting_list + ['stop']}
+                                          'buttons': setting_list + ['메인 메뉴로']}
                              })
 
     elif is_setting_list:
@@ -234,7 +234,7 @@ def message(request):
         if content == setting_list[0]:
             return JsonResponse({'message': {'text': '뉴스 추천 서비스 설정메뉴 입니다.'},
                                  'keyboard': {'type': 'buttons',
-                                              'buttons': news_recomm_service_agree_disagree + ['stop']}
+                                              'buttons': news_recomm_service_agree_disagree + ['메인 메뉴로']}
                                  })
 
         else:
@@ -249,7 +249,7 @@ def message(request):
         print(feedback_list)
         return JsonResponse({'message': {'text': '피드백 메뉴 입니다'},
                              'keyboard': {'type': 'buttons',
-                                          'buttons': feedback_list + ['stop']}
+                                          'buttons': feedback_list + ['메인 메뉴로']}
                              })
     elif is_feedback_first_depth:
         if content == u'이용 후기':
@@ -319,7 +319,7 @@ def message(request):
         from_number = 10 * (page_number - 1)
         to_number = 10 * page_number
         user_request[user_key], return_list = get_latest_news(from_number, to_number)
-        return_list += ['view more', 'stop']
+        return_list += ['더 보기', '메인 메뉴로']
         print(return_list)
         return JsonResponse({'message': {'text': '최신뉴스 목록 ' + str(page_number) + '페이지 입니다'},
                              'keyboard': {'type': 'buttons',
@@ -368,7 +368,7 @@ def message(request):
         print(news_id_list)
 
         user_request[user_key] = get_news_by_id(news_id_list)
-        result_list = list(user_request[user_key].keys()) + ['stop']
+        result_list = list(user_request[user_key].keys()) + ['메인 메뉴로']
         print(result_list)
         return JsonResponse({'message': {'text': '추천뉴스 뉴스입니다.'},
                              'keyboard': {'type': 'buttons',
@@ -411,7 +411,7 @@ def message(request):
         prev_select[user_key] = '날짜로 검색'
         return JsonResponse({'message': {'text': '날짜를 골라주세요'},
                              'keyboard': {'type': 'buttons',
-                                          'buttons': date_list + ['back']}
+                                          'buttons': date_list + ['뒤로 가기']}
                              })
 
     elif is_saved_news:
@@ -433,7 +433,7 @@ def message(request):
         if len(result_list) > 0:
             return JsonResponse({'message': {'text': '저장했던 뉴스입니다.'},
                                  'keyboard': {'type': 'buttons',
-                                              'buttons': result_list + ['stop']}
+                                              'buttons': result_list + ['메인 메뉴로']}
                                  })
         else:
             print('최근에 본 뉴스가 없을 경우')
@@ -457,7 +457,7 @@ def message(request):
         if len(result_list) > 0:
             return JsonResponse({'message': {'text': '최근에 보신 뉴스입니다.'},
                                  'keyboard': {'type': 'buttons',
-                                              'buttons': result_list + ['stop']}
+                                              'buttons': result_list + ['메인 메뉴로']}
                                  })
         else:
             print('최근에 본 뉴스가 없을 경우')
@@ -499,7 +499,7 @@ def message(request):
             print(category_list)
             return JsonResponse({'message': {'text': str(return1) + "분야를 선택해 주세요"},
                                  'keyboard': {'type': 'buttons',
-                                              'buttons': category_list + ['back']}
+                                              'buttons': category_list + ['뒤로 가기']}
                                  })
 
     elif prev_select.get(user_key) == u'직접 입력':
@@ -510,7 +510,7 @@ def message(request):
             prev_select[user_key] = ""
             return JsonResponse({'message': {'text': str(content) + "분야를 선택해 주세요"},
                                  'keyboard': {'type': 'buttons',
-                                              'buttons': category_list + ['back']}
+                                              'buttons': category_list + ['뒤로 가기']}
                                  })
 
         else:
@@ -555,7 +555,7 @@ def message(request):
 
             return JsonResponse({'message': {'text': str(return1) + "다른것을 선택해 주세요"},
                                  'keyboard': {'type': 'buttons',
-                                              'buttons': return_press_list + ['back']}
+                                              'buttons': return_press_list + ['뒤로 가기']}
                                  })
 
     elif is_press:
@@ -567,7 +567,7 @@ def message(request):
 
             return JsonResponse({'message': {'text': '언론사를 다시 골라주세요'},
                                  'keyboard': {'type': 'buttons',
-                                              'buttons': return_press_list + ['back']}
+                                              'buttons': return_press_list + ['뒤로 가기']}
                                  })
 
         prev_select[user_key] = '신문사'
@@ -592,7 +592,7 @@ def message(request):
             prev_select[user_key] = '날짜로 검색'
             return JsonResponse({'message': {'text': '선택이 모두 완료되었습니다. 관심있는 기사가 있으신가요?'},
                                  'keyboard': {'type': 'buttons',
-                                              'buttons': result_list + ['break', 'stop']}
+                                              'buttons': result_list + ['다시 검색하기', '메인 메뉴로']}
                                  })
         else:
             return JsonResponse({'message': {'text': str(return1) + "날짜를 선택해 주세요"},
@@ -667,7 +667,7 @@ def message(request):
         if prev_select.get(user_key) == '저장한 뉴스':
             return_button_list = maintain_remove_news_save_list
         elif prev_select.get(user_key) == '최근 본 뉴스':
-            return_button_list = ['continue', 'stop']
+            return_button_list = ['목록으로', '메인 메뉴로']
         else:
             return_button_list = agree_disagree_news_save_list
             # return_button_list = list(similar_news_list.keys()) + return_button_list
@@ -718,12 +718,12 @@ def message(request):
             news_scrap.save()
 
             if prev_select.get(user_key) == '저장한 뉴스':
-                return_button_list = ['continue', 'stop']
-            elif prev_select.get(user_key) == '최신 뉴스 보기':
+                return_button_list = ['목록으로', '메인 메뉴로']
+            elif prev_select.get(user_key) == '최신 뉴스 보기' or prev_select.get(user_key) == '맞춤형 뉴스 큐레이팅':
                 if recommend_news.get(user_key) is not None:
-                    return_button_list = list(recommend_news.get(user_key).keys()) + ['continue', 'stop']
+                    return_button_list = list(recommend_news.get(user_key).keys()) + ['목록으로', '메인 메뉴로']
                 else:
-                    return_button_list = ['continue', 'stop']
+                    return_button_list = ['목록으로', '메인 메뉴로']
             else:
                 if recommend_news.get(user_key) is not None:
                     return_button_list = list(recommend_news.get(user_key).keys()) + end_of_service_list
@@ -739,12 +739,12 @@ def message(request):
             print(content)
 
             if prev_select.get(user_key) == '저장한 뉴스':
-                return_button_list = ['continue', 'stop']
-            elif prev_select.get(user_key) == '최신 뉴스 보기':
+                return_button_list = ['목록으로', '메인 메뉴로']
+            elif prev_select.get(user_key) == '최신 뉴스 보기' or prev_select.get(user_key) == '맞춤형 뉴스 큐레이팅':
                 if recommend_news.get(user_key) is not None:
-                    return_button_list = list(recommend_news.get(user_key).keys()) + ['continue', 'stop']
+                    return_button_list = list(recommend_news.get(user_key).keys()) + ['목록으로', '메인 메뉴로']
                 else:
-                    return_button_list = ['continue', 'stop']
+                    return_button_list = ['목록으로', '메인 메뉴로']
             else:
                 if recommend_news.get(user_key) is not None:
                     return_button_list = list(recommend_news.get(user_key).keys()) + end_of_service_list
@@ -757,7 +757,7 @@ def message(request):
                                  })
         elif content == u'유지하기':
             print(content)
-            return_button_list = ['continue', 'stop']
+            return_button_list = ['목록으로', '메인 메뉴로']
 
             return JsonResponse({'message': {'text': '뉴스가 유지 되었습니다.'},
                                  'keyboard': {'type': 'buttons',
@@ -788,7 +788,7 @@ def message(request):
                 news_requirement.values_list('request_title', 'request_news_id'))
             print("renew_saved_news: " + str(user_request[user_key]))
 
-            return_button_list = ['continue', 'stop']
+            return_button_list = ['목록으로', '메인 메뉴로']
 
             return JsonResponse({'message': {'text': '뉴스가 삭제 되었습니다.'},
                                  'keyboard': {'type': 'buttons',
@@ -884,7 +884,7 @@ def message(request):
                                  })
 
         else:
-            result_list += ['break', 'stop']
+            result_list += ['다시 검색하기', '메인 메뉴로']
             return JsonResponse({'message': {'text': '검색 결과 입니다'},
                                  'keyboard': {'type': 'buttons',
                                               'buttons': result_list}
@@ -955,7 +955,7 @@ def check_is_recent_news(content):
 
 
 def check_is_latest_new(content):
-    if content == u'최신 뉴스 보기' or content == u'view more':
+    if content == u'최신 뉴스 보기' or content == u'더 보기':
         return True
     else:
         return False

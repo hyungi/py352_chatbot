@@ -52,7 +52,7 @@ agree_disagree_news_save_list = ['스크랩 하기', '스크랩 하지 않음']
 
 maintain_remove_news_save_list = ['유지하기', '삭제하기']
 
-end_of_service_list = ['continue', 'break', 'stop']
+end_of_service_list = ['목록으로', '다시 검색하기', '메인 메뉴로']
 
 feedback_list = ['이용 후기', '오류 레포트', '건의사항']
 
