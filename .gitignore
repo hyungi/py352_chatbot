@@ -10,6 +10,7 @@ nginx.conf
 pi@210.123.100.153
 runcrawler.py
 for_debug
+*.txt
 info_matrix.txt
 temp2.txt
 renew_summary.py
