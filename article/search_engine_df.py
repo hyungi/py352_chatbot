@@ -6,8 +6,7 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 import collections
 from konlpy.tag import Mecab
 import re
-
-from crawler.models import DocumentId, DocumentSummary
+from crawler.models import DocumentSummary, DocumentId
 
 
 class search_engine_manager:
@@ -15,7 +14,7 @@ class search_engine_manager:
         '''
         page_rank를 이용해 검색 엔진 기능을 제공한다. 새로운 문서가 추가될 때마다 page_rank 관련 테이블들을 사전에 만들어두고,
         검색이 요청되면 최소한의 탐색 시간 안에 결과를 반환할 수 있도록 한다.
-        :param path: document_list(각 document의 tf_vector를 원소로 갖는 list)을 저장할 path (string)
+        :param path: document_list(각 document의 tf_vector를 원소로 갖는 list)을 저장할 path (string) 
         '''
         # path directory setting
         self.docu_info_path = path["docu_info_path"]
@@ -35,18 +34,69 @@ class search_engine_manager:
                 self.docu_info_dic = pickle.load(fp)
 
             if len(self.docu_info_dic) == 0:  # 파일이 존재하지만 저장된 정보가 없을 경우
-                print("Empty Document_Term_Matrix has been loaded.")
+                print("Empty Document_info file has been loaded.")
             else:  # 정보가 이미 저장된 파일이 존재하는 경우
                 self.docu_index_list = list(np.array(list(self.docu_info_dic.keys())))
                 self.docu_id_list = list(np.array(list(self.docu_info_dic.values()))[:, 0])
                 self.docu_string_list = list(np.array(list(self.docu_info_dic.values()))[:, 1])
-                print("Document_Term_Matrix has been loaded successfully.")
+                print("Document_info file has been loaded successfully.")
 
         except:  # 파일이 없는 경우 메세지를 띄우고 새로 빈 파일을 생성한다.
-            print("There is no existing Document_Term_Matrix.")
+            print("There is no existing Document_info file.")
             with open(self.docu_info_path + ".txt", mode="wb") as fp:
                 pickle.dump(self.docu_info_dic, fp)
-            print("New Document_Term_Matrix has been created.")
+            print("New Document_info file has been created.")
+
+        pointer = len(self.docu_info_dic)
+
+        if pointer%self.batch_size == 0 and pointer/self.batch_size != 0 :
+            file_index = int(m.floor(pointer / self.batch_size))
+        else :
+            file_index = int(m.floor(pointer / self.batch_size)) + 1
+
+        #self.check_id_list = []
+        if len(self.docu_info_dic) != 0 :
+            print("Start to check division file...")
+            if self.check_division(file_index) :
+                print("Division files are maintained and loaded successfully.")
+            else :
+                print("Check Error.")
+
+
+    def check_division(self, file_index):
+        if file_index <= 0 : return True
+
+        file_dir = self.division_path + "_" + str(file_index) + ".txt"
+        temp_max_range = min(file_index*self.batch_size, len(self.docu_info_dic))
+        temp = [self.docu_info_dic[i] for i in range(((file_index - 1)*self.batch_size), temp_max_range)]
+
+        temp_docu_id_list = list(np.array(temp)[:,0])
+        temp_docu_string_list = list(np.array(temp)[:,1])
+
+        try :
+            with open(file_dir, mode="rb") as fp :
+                _, _, _, _, temp_page_rank_dic = pickle.load(fp)
+
+            if len(temp_page_rank_dic) == len(temp_docu_id_list) :
+                return True
+            else :
+                print("file_index:", file_index, "\tlength compare error.")
+                print("temp_fn len:", len(temp_feature_name), "\ttemp_dil len:", len(temp_docu_id_list))
+                print("docu_info_dic len:", len(self.docu_info_dic),"\tstart v:",((file_index - 1)*self.batch_size), "\ttemp_mr:", temp_max_range)
+                return False
+        except :
+            #self.check_id_list = self.check_id_list + temp_docu_id_list
+            if self.check_division(file_index - 1) :
+                temp_feature_name, temp_count_matrix, temp_page_rank_dic = self.get_matrix_info(temp_docu_id_list, temp_docu_string_list)
+                temp_set = [temp_docu_id_list, temp_docu_string_list, temp_feature_name, temp_count_matrix, temp_page_rank_dic]
+
+                with open(file_dir, mode="wb") as fp:
+                    pickle.dump(temp_set, fp)
+
+                return True
+            else :
+                print("file_index:",file_index, "\tdivision dfs error.")
+                return False
 
     def get_document_tfstring(self, document_id):
         '''
@@ -57,6 +107,7 @@ class search_engine_manager:
         query_result = DocumentSummary.objects.filter(
             document_id=DocumentId.objects.get(document_id=document_id)).values_list(
             'word_tfidf', flat=True)
+
         string1 = str(list(query_result))
         list1 = string1[3:-3].split(',')
         word_tfidf_dict = {}
@@ -76,12 +127,15 @@ class search_engine_manager:
     def add_new_document(self, document_id_list):
         '''
         document_id들을 인자로 받아서 해당 document_id의 tf_vector들을 파일에 추가하고, jaccard_similarity_matrix를 업데이트한다.
-        :param doucment_id_list: document_id를 원소로 갖는 리스트 (list)
+        :param doucment_id_list: document_id를 원소로 갖는 리스트 (list) 
         :return: None
         '''
 
         pointer = len(self.docu_info_dic)
-        file_index = int(m.floor(pointer / self.batch_size)) + 1
+        if pointer%self.batch_size == 0 and pointer/self.batch_size != 0 :
+            file_index = int(m.floor(pointer / self.batch_size))
+        else :
+            file_index = int(m.floor(pointer / self.batch_size)) + 1
 
         temp_docu_id_list = []
         temp_docu_string_list = []
@@ -127,17 +181,17 @@ class search_engine_manager:
 
                 file_index += 1
 
-        with open(self.docu_info_path + ".txt", mode="wb") as fp:
-            pickle.dump(self.docu_info_dic, fp)
+        if len(temp_docu_id_list) != 0 :
+            with open(self.docu_info_path + ".txt", mode="wb") as fp:
+                pickle.dump(self.docu_info_dic, fp)
 
-        file_dir = self.division_path + "_" + str(file_index) + ".txt"
-        temp_feature_name, temp_count_matrix, temp_page_rank_dic = self.get_matrix_info(temp_docu_id_list,
-                                                                                        temp_docu_string_list)
+            file_dir = self.division_path + "_" + str(file_index) + ".txt"
+            temp_feature_name, temp_count_matrix, temp_page_rank_dic = self.get_matrix_info(temp_docu_id_list, temp_docu_string_list)
 
-        # temp_docu_id_list, temp_docu_string_list, temp_feature_name, temp_count_matrix, temp_page_rank_dic
-        temp_set = [temp_docu_id_list, temp_docu_string_list, temp_feature_name, temp_count_matrix, temp_page_rank_dic]
-        with open(file_dir, mode="wb") as fp:
-            pickle.dump(temp_set, fp)
+            # temp_docu_id_list, temp_docu_string_list, temp_feature_name, temp_count_matrix, temp_page_rank_dic
+            temp_set = [temp_docu_id_list, temp_docu_string_list, temp_feature_name, temp_count_matrix, temp_page_rank_dic]
+            with open(file_dir, mode="wb") as fp:
+                pickle.dump(temp_set, fp)
 
 
     def get_matrix_info(self, temp_docu_id_list, temp_string_list):
@@ -185,7 +239,14 @@ class search_engine_manager:
         user_query = self.stemming_user_query(search_query)
 
         pointer = len(self.docu_info_dic)
-        file_index = int(m.floor(pointer / self.batch_size)) + 1
+        if pointer == 0 :
+            print("There is no document added. Please add the document list.")
+            return None
+
+        if pointer%self.batch_size == 0 and pointer/self.batch_size != 0 :
+            file_index = int(m.floor(pointer / self.batch_size))
+        else :
+            file_index = int(m.floor(pointer / self.batch_size)) + 1
 
         search_document_id_list = []
         search_document_string_list = []
@@ -194,50 +255,39 @@ class search_engine_manager:
             file_dir = self.division_path + "_" + str(file_index) + ".txt"
             # temp_docu_id_list, temp_docu_string_list, temp_feature_name, temp_count_matrix, temp_page_rank_dic
             with open(file_dir, mode="rb") as fp:
-                temp_docu_id_list, temp_docu_string_list, temp_feature_name, temp_count_matrix, temp_page_rank_dic = pickle.load(
-                    fp)
+                temp_docu_id_list, temp_docu_string_list, temp_feature_name, temp_count_matrix, temp_page_rank_dic = pickle.load(fp)
 
-            division_top_n_list = self.get_top_n_from_division(user_query, temp_docu_id_list, temp_docu_string_list,
-                                                               temp_feature_name, temp_count_matrix,
-                                                               temp_page_rank_dic)  # 각 division에서 해당 쿼리에 가장 유사한 10개의 document_id의 리스트 반환
+            division_top_n_list = self.get_top_n_from_division(user_query, temp_docu_id_list, temp_docu_string_list, temp_feature_name, temp_count_matrix, temp_page_rank_dic)  # 각 division에서 해당 쿼리에 가장 유사한 10개의 document_id의 리스트 반환
             division_top_n_string = [self.docu_string_list[self.docu_id_list.index(id)] for id in division_top_n_list]
             search_document_id_list = search_document_id_list + division_top_n_list
             search_document_string_list = search_document_string_list + division_top_n_string
 
-        while len(search_document_id_list) > 2000:
+        while len(search_document_id_list) > 2000 :
             temp_docu_id_list = search_document_id_list[0:2000]
             temp_docu_string_list = search_document_string_list[0:2000]
             search_document_id_list = search_document_id_list[2000:len(search_document_id_list)]
             search_document_string_list = search_document_string_list[2000:len(search_document_string_list)]
 
-            try:
-                temp_feature_name, temp_count_matrix, temp_page_rank_dic = self.get_matrix_info(temp_docu_id_list,
-                                                                                                temp_docu_string_list)
-                reduced_docu_id_list = self.get_top_n_from_division(user_query, temp_docu_id_list, temp_docu_string_list,
-                                                                    temp_feature_name, temp_count_matrix,
-                                                                    temp_page_rank_dic)
-                reduced_docu_string_list = [self.docu_string_list[self.docu_id_list.index(id)] for id in
-                                            reduced_docu_id_list]
-            except:
+            try :
+                temp_feature_name, temp_count_matrix, temp_page_rank_dic = self.get_matrix_info(temp_docu_id_list, temp_docu_string_list)
+                reduced_docu_id_list = self.get_top_n_from_division(user_query, temp_docu_id_list, temp_docu_string_list, temp_feature_name, temp_count_matrix, temp_page_rank_dic)
+                reduced_docu_string_list = [self.docu_string_list[self.docu_id_list.index(id)] for id in reduced_docu_id_list]
+            except :
                 reduced_docu_id_list = []
                 reduced_docu_string_list = []
             search_document_id_list = search_document_id_list + reduced_docu_id_list
             search_document_string_list = search_document_string_list + reduced_docu_string_list
 
-        if len(search_document_id_list) != 0:
-            search_feature_name, search_count_matrix, search_page_rank_dic = self.get_matrix_info(search_document_id_list,
-                                                                                                  search_document_string_list)
-            search_result = self.get_top_n_from_division(user_query, search_document_id_list, search_document_string_list,
-                                                         search_feature_name, search_count_matrix, search_page_rank_dic,
-                                                         n=result_n)
+        if len(search_document_id_list) != 0 :
+            search_feature_name, search_count_matrix, search_page_rank_dic = self.get_matrix_info(search_document_id_list, search_document_string_list)
+            search_result = self.get_top_n_from_division(user_query, search_document_id_list, search_document_string_list, search_feature_name, search_count_matrix, search_page_rank_dic, n=result_n)
             return search_result
-        else:
+        else :
             print("There is no matched result.")
             return None
 
 
-    def get_top_n_from_division(self, user_query, temp_docu_id_list, temp_docu_string_list, temp_feature_name,
-                                temp_count_matrix, temp_page_rank_dic, n=10):
+    def get_top_n_from_division(self, user_query, temp_docu_id_list, temp_docu_string_list, temp_feature_name, temp_count_matrix, temp_page_rank_dic, n=10):
         col_index = []
         for query in user_query.split():
             if query in temp_feature_name:

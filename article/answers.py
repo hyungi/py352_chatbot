@@ -50,13 +50,13 @@ path = {'dtm_path': dtm_path, 'matrix_path': matrix_path}
 engine = search_engine_manager(**path)
 
 # 검색엔진
-docu_info_path = os.path.join(BASE_DIR, '/search/docu_info')
-division_path = os.path.join(BASE_DIR, '/search/division')
+docu_info_path = os.path.join(BASE_DIR, './search/docu_info')
+division_path = os.path.join(BASE_DIR, './search/division')
 df_path = {"docu_info_path": docu_info_path,
            "division_path": division_path}
 df_engine = sedf.search_engine_manager(**df_path)
 
-df_engine.add_new_document(get_latest_news_id_list(0, 5000))
+df_engine.add_new_document(get_latest_news_id_list(0, 10000))
 
 
 @csrf_exempt
