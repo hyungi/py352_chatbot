@@ -5,7 +5,7 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import json
 from crawler.get_news import get_news, get_summary, get_news_by_id, get_category_by_doc_id, \
-    get_press_by_doc_id_category, get_latest_news
+    get_press_by_doc_id_category, get_latest_news, get_latest_news_id_list
 from article.models import Requirement, UserStatus, NewsRecord, FeedBack
 from article.lists import press_list, date_list, category_list, gender_list, birth_year_list, region_list, \
     first_button_list, agree_disagree_news_save_list, end_of_service_list, maintain_remove_news_save_list, \
@@ -18,6 +18,8 @@ from django.utils import timezone
 import os
 import collections
 from article.search_engine_manager import search_engine_manager
+import article.search_engine_df as sedf
+
 
 '''
 /article/answers.py
@@ -41,10 +43,20 @@ page_number = 0
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 user_info_manager = user_information_manager(path=os.path.join(BASE_DIR, 'info_matrix.txt'))
 
+# 추천
 dtm_path = os.path.join(BASE_DIR, 'dtm.txt')
 matrix_path = os.path.join(BASE_DIR, 'vctr.txt')
 path = {'dtm_path': dtm_path, 'matrix_path': matrix_path}
 engine = search_engine_manager(**path)
+
+# 검색엔진
+docu_info_path = os.path.join(BASE_DIR, '/search/docu_info')
+division_path = os.path.join(BASE_DIR, '/search/division')
+df_path = {"docu_info_path": docu_info_path,
+           "division_path": division_path}
+df_engine = sedf.search_engine_manager(**df_path)
+
+df_engine.add_new_document(get_latest_news_id_list(0, 5000))
 
 
 @csrf_exempt
@@ -65,6 +77,7 @@ def message(request):
 
     global user_info_manager
     global engine
+    global df_engine
 
     global page_number
 

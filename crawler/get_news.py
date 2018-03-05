@@ -232,3 +232,13 @@ def get_latest_news(from_number, to_number):
         return_list += [all_doc[i][1]]
 
     return return_dict, return_list
+
+
+def get_latest_news_id_list(from_number, to_number):
+    global all_doc
+    return_list = []
+
+    for i in range(from_number, to_number):
+        return_list += [all_doc[i][2]]
+
+    return return_list
