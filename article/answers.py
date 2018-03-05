@@ -44,10 +44,10 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 user_info_manager = user_information_manager(path=os.path.join(BASE_DIR, 'info_matrix.txt'))
 
 # 추천
-dtm_path = os.path.join(BASE_DIR, 'dtm.txt')
-matrix_path = os.path.join(BASE_DIR, 'vctr.txt')
-path = {'dtm_path': dtm_path, 'matrix_path': matrix_path}
-engine = search_engine_manager(**path)
+# dtm_path = os.path.join(BASE_DIR, 'dtm.txt')
+# matrix_path = os.path.join(BASE_DIR, 'vctr.txt')
+# path = {'dtm_path': dtm_path, 'matrix_path': matrix_path}
+# engine = search_engine_manager(**path)
 
 # 검색엔진
 docu_info_path = os.path.join(BASE_DIR, './search/docu_info')
@@ -76,7 +76,7 @@ def message(request):
     global user_info_region
 
     global user_info_manager
-    global engine
+    # global engine
     global df_engine
 
     global page_number
@@ -376,7 +376,7 @@ def message(request):
         news_requirement_list = list(news_requirement.values_list('request_title', flat=True))
 
         for i in news_requirement_list:
-            news_id_list += engine.search_news_document(i)
+            news_id_list += df_engine.recommend_news_document(i)
 
         print(timezone.now())
         news_id_list = list(set(news_id_list))
@@ -700,7 +700,7 @@ def message(request):
             # return_button_list = list(similar_news_list.keys()) + return_button_list
 
         if UserStatus.objects.get(user_key=user_key).recommend_service is True:
-            similar_news_id_list = engine.search_news_document(selected_news_title[user_key])
+            similar_news_id_list = df_engine.recommend_news_document(selected_news_title[user_key])
 
             news_record_instance = NewsRecord.objects.filter(user_status=UserStatus.objects.get(user_key=user_key))
 
@@ -900,7 +900,7 @@ def message(request):
     elif prev_select.get(user_key) == u'키워드로 검색':
         print('키워드로 검색')
         print(content)
-        user_request[user_key] = get_news_by_id(engine.search_news_document(content))
+        user_request[user_key] = get_news_by_id(df_engine.search_news_document(content))
         result_list = list(user_request[user_key].keys())
         print(result_list)
         if len(result_list) == 0:
