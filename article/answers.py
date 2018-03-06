@@ -900,12 +900,18 @@ def message(request):
     elif prev_select.get(user_key) == u'키워드로 검색':
         print('키워드로 검색')
         print(content)
-        user_request[user_key] = get_news_by_id(df_engine.search_news_document(content))
+        try:
+            user_request[user_key] = get_news_by_id(df_engine.search_news_document(content))
+
+        except TypeError:
+            user_request[user_key] = {}
+
         result_list = list(user_request[user_key].keys())
         print(result_list)
+
         if len(result_list) == 0:
             reset_globals(user_key)
-            return JsonResponse({'message': {'text': '검색 결과가 없습니다.'},
+            return JsonResponse({'message': {'text': '검색된 결과가 없습니다.'},
                                  'keyboard': {'type': 'buttons',
                                               'buttons': first_button_list}
                                  })
@@ -916,6 +922,14 @@ def message(request):
                                  'keyboard': {'type': 'buttons',
                                               'buttons': result_list}
                                  })
+
+    elif content == u'뉴스 이용 통계':
+        print("현재 준비 중인 서비스입니다.")
+        reset_globals(user_key)
+        return JsonResponse({'message': {'text': "현재 준비 중인 서비스입니다."},
+                             'keyboard': {'type': 'buttons',
+                                          'buttons': first_button_list}
+                             })
 
     else:
         print("정의되지 않은 구문")
