@@ -17,10 +17,6 @@ import os, json
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-# Setting Cron jobs
-CRONJOBS = [
-    ('5,15,25,35,45,55 * * * *', 'crawler.saveNews.start_crawling', '>> /Users/seonghyeongi/python_projects/scheduled_job.log')
-]
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.0/howto/deployment/checklist/

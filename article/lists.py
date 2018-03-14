@@ -6,7 +6,7 @@ from django.utils import timezone
 category_list = ['정치', '경제', '사회', '생활/문화', '세계', 'IT/과학']
 press_list = []
 date_list = []
-first_button_list = ['최신 뉴스 보기', '맞춤형 뉴스 큐레이팅', '뉴스 검색', '최근 본 뉴스', '저장한 뉴스', '뉴스 이용 통계', '사용 방법 보기']
+first_button_list = ['최신 뉴스 보기', '맞춤형 뉴스 큐레이팅', '뉴스 검색', '최근 본 뉴스', '저장한 뉴스', '메일링 서비스 신청하기', '사용 방법 보기']
 news_select_button_list = ['날짜로 검색', '키워드로 검색', 'stop']
 
 for i in range(0, 7):

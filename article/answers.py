@@ -19,6 +19,7 @@ import os
 import collections
 from article.search_engine_manager import search_engine_manager
 import article.search_engine_df as sedf
+import sqlite3
 
 
 '''
@@ -42,12 +43,6 @@ page_number = 0
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 user_info_manager = user_information_manager(path=os.path.join(BASE_DIR, 'info_matrix.txt'))
-
-# 추천
-# dtm_path = os.path.join(BASE_DIR, 'dtm.txt')
-# matrix_path = os.path.join(BASE_DIR, 'vctr.txt')
-# path = {'dtm_path': dtm_path, 'matrix_path': matrix_path}
-# engine = search_engine_manager(**path)
 
 # 검색엔진
 docu_info_path = os.path.join(BASE_DIR, './search/docu_info')
@@ -129,6 +124,15 @@ def message(request):
     is_setting = check_is_setting(content)
 
     is_news_recomm_service_setting = check_news_recomm_service_setting(content)
+
+    if content == u'메일링 서비스 신청하기':
+        print(content)
+        print('news4meal.com')
+        reset_globals(user_key)
+        return JsonResponse({'message': {'text': '메일링 서비스 링크 입니다.\n' + 'news4meal.com'},
+                             'keyboard': {'type': 'buttons',
+                                          'buttons': first_button_list}
+                             })
 
     if is_first_use:
         print("UserStatus 가 없는 경우에 적용함")

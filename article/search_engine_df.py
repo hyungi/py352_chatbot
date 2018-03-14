@@ -236,7 +236,6 @@ class search_engine_manager:
 
         return ' '.join(stemmed_words)
 
-
     def search_news_document(self, search_query, result_n=5):
         user_query = self.stemming_user_query(search_query)
 
